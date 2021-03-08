@@ -17,6 +17,7 @@ public class Craft extends JPanel {
 
 
     private static final long serialVersionUID = 1L;
+    private static JFrame frame;
 
 
     public static void CreateLight(BranchGroup TG) {// create light method
@@ -152,11 +153,18 @@ public class Craft extends JPanel {
     }
 
     /* the main entrance of the application via 'MyGUI()' of "CommonXY.java" */
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("The CRAFT");
-        frame.getContentPane().add(new Craft());
-        frame.setSize(600, 600);    // set the size of the JFrame
-        frame.setVisible(true);
+
+    public static class MyGUI extends JFrame {
+        private static final long serialVersionUID = 1L;
+        public MyGUI(String title) {
+            JFrame frame = new JFrame("The CRAFT");
+            frame.getContentPane().add(new Craft());
+            frame.setSize(1920, 1080);    // set the size of the JFrame
+            frame.setVisible(true);
+            pack();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // will exit the program on close
+
+        }
     }
 
 }
