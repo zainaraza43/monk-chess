@@ -1,6 +1,7 @@
 package Launcher;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -10,34 +11,30 @@ public class Launcher extends JPanel {
     private ImageIcon background;
     private JLabel mylabel, textlabel;
     private Font font;
-    private JPanel textPanel;
+    private JPanel textPanel ,background_p;
 
 
     public Launcher(){
-
-
         JFrame jFrame = new JFrame("MonkeCraft");
         jFrame.setSize(1000, 600);
-
-        JPanel panel = new JPanel();
-        loadImage(panel);
-        jFrame.add(panel);
-
+        Frame(jFrame);
+    }
+    public void Frame(JFrame frame){
         textPanel = new JPanel();
-        fontLoader(textPanel);
-        jFrame.add(textPanel);
+        textPanel.add(fontLoader(textPanel));
+        textPanel.add(loadImage());
 
-        jFrame.setResizable(false);
-        jFrame.setVisible(true);
-        jFrame.setLocationRelativeTo(null);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        frame.add(textPanel);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
 
-    public void fontLoader(JPanel jpanel){
+    public JLabel fontLoader(JPanel panel){
         try{
-            font = Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/Minecrafter_3.ttf")).deriveFont(100f);
+            font = Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/Minecrafter_3.ttf")).deriveFont(70f);
             GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
             graphicsEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/Minecrafter_3.ttf")));
         }
@@ -45,17 +42,20 @@ public class Launcher extends JPanel {
 
         }
 
-
-        textlabel = new JLabel("MONKECRAFT");
+        textlabel = new JLabel("MONKECRAFT");// new label
         textlabel.setFont(font);
         textlabel.setForeground(new Color(102, 99, 99));
-        jpanel.add(textlabel);
+        textlabel.setLayout(null);
+        textlabel.setBounds(0,0,1000,600);// set label bounds, position and width/height
+        return textlabel;
     }
 
-    public void loadImage(JPanel panel){
-        background = new ImageIcon("Assets/Launcher/Background.jpg");
-        mylabel = new JLabel(background);
-        panel.add(mylabel);
+    public JLabel loadImage(){
+        background = new ImageIcon("Assets/Launcher/Background.jpg");// load background
+        mylabel  = new JLabel(background); // new label
+        mylabel.setLayout(null);
+        mylabel.setBounds(0,0,1000,600);// set label bounds, position and width/height
+        return mylabel;
     }
 
     public static void main(String[] args) {

@@ -12,7 +12,6 @@ import org.jogamp.java3d.utils.universe.SimpleUniverse;
 import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.jogamp.vecmath.*;
 
-import java.awt.*;
 
 public class Craft extends JPanel {
 
