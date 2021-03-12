@@ -157,7 +157,7 @@ public class Craft extends JPanel {
     public static class MyGUI extends JFrame {
         private static final long serialVersionUID = 1L;
         public MyGUI(String title) {
-            JFrame frame = new JFrame("The CRAFT");
+            JFrame frame = new JFrame("MONKECRAFT");
             frame.getContentPane().add(new Craft());
             frame.setSize(1920, 1080);    // set the size of the JFrame
             frame.setVisible(true);
