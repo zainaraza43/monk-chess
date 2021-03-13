@@ -1,7 +1,7 @@
 package Launcher;
 
 
-import com.company.Craft;
+import com.Main.MONKEECRAFT;
 
 import javax.swing.*;
 import java.awt.*;
@@ -112,7 +112,7 @@ public class Launcher extends JPanel implements ActionListener {
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            new Craft.MyGUI("CRAFT"); // call the game
+                            new MONKEECRAFT.MyGUI("CRAFT"); // call the game
                         }
                     });
                 }

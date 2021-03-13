@@ -1,6 +1,5 @@
-package com.company;
+package com.Main;
 
-import javax.swing.*;
 import java.awt.*;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
@@ -13,8 +12,20 @@ import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.jogamp.vecmath.*;
 
 
-public class Craft extends JPanel {
+public class MONKEECRAFT extends JPanel {
 
+    public static final Color3f Red = new Color3f(1.0f, 0.0f, 0.0f);
+    public static final Color3f Green = new Color3f(0.0f, 1.0f, 0.0f);
+    public static final Color3f Blue = new Color3f(0.0f, 0.0f, 1.0f);
+    public static final Color3f Yellow = new Color3f(1.0f, 1.0f, 0.0f);
+    public static final Color3f Cyan = new Color3f(0.0f, 1.0f, 1.0f);
+    public static final Color3f Orange = new Color3f(1.0f, 0.5f, 0.0f);
+    public static final Color3f Magenta = new Color3f(1.0f, 0.0f, 1.0f);
+    public static final Color3f White = new Color3f(1.0f, 1.0f, 1.0f);
+    public static final Color3f Grey = new Color3f(0.5f, 0.5f, 0.5f);
+    public static final Color3f[] Clrs = {Blue, Green, Red, Yellow,
+            Cyan, Orange, Magenta, Grey};
+    public final static int clr_num = 8;
 
     private static final long serialVersionUID = 1L;
     private static JFrame frame;
@@ -41,38 +52,31 @@ public class Craft extends JPanel {
 
     }
 
-    public static Material setMaterial(Color3f color) {
-        int SH = 128;
-        Material material = new Material();//create an empty material
-        material.setAmbientColor(new Color3f(0.6f, 0.6f, 0.6f));//set ambientcolor and other properties such as
-
-        material.setEmissiveColor(new Color3f(0.0f, 0.0f, 0.0f));//set EmissiveColor
-        material.setDiffuseColor(color);//set Diffuse color
-        material.setSpecularColor(new Color3f(0.6f, 0.6f, 0.6f));
-        material.setShininess(SH);//set Shininess
-        material.setLightingEnable(true);
-        return material;//return the material
+    public static Material setMaterial(Color3f clr) {
+        int SH = 128;               // 10
+        Material ma = new Material();
+        Color3f c = new Color3f(0.6f*clr.x, 0.6f*clr.y, 0.6f*clr.z);
+        ma.setAmbientColor(c);
+        ma.setEmissiveColor(new Color3f(0, 0, 0));
+        ma.setDiffuseColor(c);
+        ma.setSpecularColor(clr);
+        ma.setShininess(SH);
+        ma.setLightingEnable(true);
+        return ma;
     }
 
-    private static Shape3D Axis(Color3f yColor, float len) {
-        LineArray larr = new LineArray(6, LineArray.COLOR_3 | LineArray.COORDINATES);// create a linArray for the
-        //three lines we will be adding
-        larr.setCoordinate(0, new Point3f(0, 0, 0));//start at the origin
-        larr.setColor(0, CommonsGG.Green);
-        larr.setCoordinate(1, new Point3f(len, 0, 0));//and extend to the length given , repeat process for all lines
-        //making length for x,y and z.
-        larr.setColor(1, CommonsGG.Green);
-        larr.setCoordinate(2, new Point3f(0, 0, 0));
-        larr.setColor(2, CommonsGG.Red);
-        larr.setCoordinate(3, new Point3f(0, 0, len));
-        larr.setColor(3, CommonsGG.Red);
-        larr.setCoordinate(4, new Point3f(0, 0, 0));
-        larr.setColor(4, yColor);
-        larr.setCoordinate(5, new Point3f(0, len, 0));
-        larr.setColor(5, yColor);
-        return new Shape3D(larr);// return our created lineArray
+    private static Shape3D generateAxis(Color3f yColor, float length) { // function to generate x, y, z axes
+        LineArray lineArray = new LineArray(6, LineArray.COLOR_3 | LineArray.COORDINATES);
+        Point3f[] coors = {new Point3f(length, 0,0), new Point3f(0,length,0), new Point3f(0,0,length)}; // array of the coordinates
+        Color3f[] cols = {Green, yColor, Red}; // array of colors
+        for (int i = 0; i < 6; i +=2){
+            lineArray.setCoordinate(i, new Point3f(0,0,0)); // will make point at origin
+            lineArray.setColor(i, cols[i % cols.length]); // will set the origin color % by length to get correct color and stay within size
+            lineArray.setCoordinate(i + 1, coors[i % coors.length]); // will get the second point for x, y, z
+            lineArray.setColor(i+ 1, cols[i % cols.length]); // will set the color for the point
+        }
+        return new Shape3D(lineArray);
     }
-
 
     private KeyNavigatorBehavior keyNavigation(SimpleUniverse simple_U) {
         //function for moving around using keys , can be used to move any direction
@@ -113,10 +117,10 @@ public class Craft extends JPanel {
         float[] dist = {4.0f, 7.5f, 12f};// dist given in the lab
         Switch ST = new Switch();
         ST.setCapability(Switch.ALLOW_SWITCH_WRITE);
-        ST.addChild(gen_sphere(CommonsGG.Green, 0.75f, 60));
-        ST.addChild(gen_sphere(CommonsGG.Blue, 0.6f, 45));
-        ST.addChild(gen_sphere(CommonsGG.Orange, 0.5f, 30));
-        ST.addChild(gen_sphere(CommonsGG.Red, 0.35f, 15));
+        ST.addChild(gen_sphere(Green, 0.75f, 60));
+        ST.addChild(gen_sphere(Blue, 0.6f, 45));
+        ST.addChild(gen_sphere(Orange, 0.5f, 30));
+        ST.addChild(gen_sphere(Red, 0.35f, 15));
         DistanceLOD distanceLOD = new DistanceLOD(dist, new Point3f());
         distanceLOD.addSwitch(ST);//add the switches to the DistanceLOD
         BoundingSphere view_bounds = new BoundingSphere(new Point3d(), 100.0);
@@ -128,12 +132,11 @@ public class Craft extends JPanel {
 
         PLight(sceneBG);
         CreateLight(sceneBG);
-        String str = "Ghanem";
-        sceneBG.addChild(Axis(CommonsGG.Blue, .8f));
+        sceneBG.addChild(generateAxis(Yellow, 0.5f));
 
     }
 
-    public Craft(){// contructor for lab7
+    public MONKEECRAFT(){// contructor for lab7
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         Canvas3D canvas_3D = new Canvas3D(config);//define a canvas
         SimpleUniverse su = new SimpleUniverse(canvas_3D);   //define simpile universe and put canvas in it
@@ -158,7 +161,7 @@ public class Craft extends JPanel {
         private static final long serialVersionUID = 1L;
         public MyGUI(String title) {
             JFrame frame = new JFrame("MONKECRAFT");
-            frame.getContentPane().add(new Craft());
+            frame.getContentPane().add(new MONKEECRAFT());
             frame.setSize(1920, 1080);    // set the size of the JFrame
             frame.setVisible(true);
             pack();
