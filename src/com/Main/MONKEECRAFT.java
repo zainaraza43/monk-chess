@@ -1,15 +1,36 @@
 package com.Main;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.util.Iterator;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 
+import com.Behavior.MouseBeh;
+import com.jogamp.newt.event.MouseAdapter;
 import org.jogamp.java3d.*;
+import org.jogamp.java3d.loaders.IncorrectFormatException;
+import org.jogamp.java3d.loaders.ParsingErrorException;
+import org.jogamp.java3d.loaders.Scene;
+import org.jogamp.java3d.loaders.objectfile.ObjectFile;
 import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
+import org.jogamp.java3d.utils.behaviors.mouse.*;
+import org.jogamp.java3d.utils.behaviors.vp.OrbitBehavior;
+import org.jogamp.java3d.utils.geometry.ColorCube;
 import org.jogamp.java3d.utils.geometry.Sphere;
+import org.jogamp.java3d.utils.image.TextureLoader;
+import org.jogamp.java3d.utils.scenegraph.io.state.org.jogamp.java3d.utils.behaviors.mouse.MouseBehaviorState;
+import org.jogamp.java3d.utils.universe.PlatformGeometry;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
+import org.jogamp.java3d.utils.universe.Viewer;
 import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.jogamp.vecmath.*;
+import org.omg.CORBA.Object;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 
 public class MONKEECRAFT extends JPanel {
@@ -40,6 +61,17 @@ public class MONKEECRAFT extends JPanel {
 
     }
 
+
+    private static Background generateBackground(){ // will return a background
+        Background background = new Background(); // make a background
+        background.setImageScaleMode(Background.SCALE_FIT_MAX); // scale it to max
+        TextureLoader loader = new TextureLoader("Assets/Background/background.jpg", null); // load the image
+        background.setApplicationBounds(new BoundingSphere(new Point3d(), 1000d)); // set the bounds
+        background.setImage(loader.getImage()); // set the image
+        return background;
+    }
+
+
     public static void PLight(BranchGroup State) {
         PointLight light = new PointLight();//define a pointLight
         light.setEnable(true);//enable the light
@@ -49,6 +81,15 @@ public class MONKEECRAFT extends JPanel {
         BoundingSphere bounds = new BoundingSphere(new Point3d(), 1000.0);
         light.setInfluencingBounds(bounds);
         State.addChild(light);//add the light to the branch group
+
+        DirectionalLight directionalLight = new DirectionalLight(true ,White, new Vector3f(-0.3f, 0.2f, -1.0f));
+        directionalLight.setInfluencingBounds(new BoundingSphere(new Point3d(), 1000d));
+        State.addChild(directionalLight);
+
+        DirectionalLight directionalLight1 = new DirectionalLight(true ,White, new Vector3f(0.3f, -0.2f, 1.0f));
+        directionalLight1.setInfluencingBounds(new BoundingSphere(new Point3d(), 1000d));
+        State.addChild(directionalLight1);
+
 
     }
 
@@ -84,9 +125,41 @@ public class MONKEECRAFT extends JPanel {
         ViewingPlatform view_platfm = simple_U.getViewingPlatform();
         TransformGroup view_TG = view_platfm.getViewPlatformTransform();
         KeyNavigatorBehavior keyNavBeh = new KeyNavigatorBehavior(view_TG);
-        BoundingSphere view_bounds = new BoundingSphere(new Point3d(), 20.0);
+        BoundingSphere view_bounds = new BoundingSphere(new Point3d(), 1000.0);
         keyNavBeh.setSchedulingBounds(view_bounds);
         return keyNavBeh;
+    }
+
+    private MouseBeh mouseNavigation(SimpleUniverse su){
+        Viewer viewer = su.getViewer();
+        TransformGroup view = viewer.getViewingPlatform().getViewPlatformTransform();
+        MouseBeh mouseBeh = new MouseBeh(view);
+        mouseBeh.setCapability(MouseBeh.INVERT_INPUT);
+        mouseBeh.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
+        return mouseBeh;
+    }
+
+    private static BranchGroup createGround() throws FileNotFoundException {
+        BranchGroup branchGroup = new BranchGroup();
+        TransformGroup tg = new TransformGroup();
+        Transform3D transform3D = new Transform3D();
+
+        transform3D.setTranslation(new Vector3f(0, -7.0f, 0));
+        transform3D.setScale(100);
+        tg.setTransform(transform3D);
+        int flags = ObjectFile.RESIZE | ObjectFile.TRIANGULATE | ObjectFile.STRIPIFY;
+        ObjectFile f = new ObjectFile(flags);
+        File file = new File("Assets/Background/back.obj");
+        Scene s = null;
+        try{
+            s = f.load(file.toURI().toURL());
+        }catch (FileNotFoundException | ParsingErrorException | IncorrectFormatException | MalformedURLException e) {
+            System.err.println(e);
+            System.exit(1);
+        }
+        tg.addChild(s.getSceneGroup());
+        branchGroup.addChild(tg);
+        return branchGroup;
     }
 
     private static void defineViewer(SimpleUniverse simple_U, Point3d eye) {
@@ -110,43 +183,90 @@ public class MONKEECRAFT extends JPanel {
         return new Sphere(rad, Sphere.GENERATE_NORMALS, divisions, ap);// generate new sphere and apply appearance to it, use rad for the radius
     }
 
+    public static TransformGroup addCubes(){
+        TransformGroup sceneTg = new TransformGroup();
+        Vector3f [] points = new Vector3f[6];
+        points[4] = new Vector3f(0, 4, 0);
+        points[5] = new Vector3f(0, -4, 0);
+        float x, z, r = 4.0f;
+        for(int i = 0; i < 6; i ++){
+            if(i < 4){
+                double a = (Math.PI / 2) * i;
+                x = (float) Math.cos(a) * r;
+                z = (float) Math.sin(a) * r;
+                points[i] = new Vector3f(x, 0, z);
+            }
+            Transform3D transform3D = new Transform3D();
+            transform3D.setTranslation(points[i]);
+            TransformGroup tmp = new TransformGroup(transform3D);
+            tmp.addChild(new ColorCube(0.35));
+            sceneTg.addChild(tmp);
+        }
+        return sceneTg;
+    }
+
+
+    public static RotationInterpolator rotateBehavior(TransformGroup rotTG, Alpha rotAlpha) {
+        rotTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        Transform3D yAxis = new Transform3D();                        // y-axis is the default
+        RotationInterpolator rot_beh = new RotationInterpolator(
+                rotAlpha, rotTG, yAxis, 0.0f, (float) Math.PI * 2.0f);  // 360 degrees of rotation
+        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
+        rot_beh.setSchedulingBounds(bounds);
+        return rot_beh;
+    }
+
+
     /* a function to create and return the scene BranchGroup */
-    public static void createScene(BranchGroup sceneBG) {
+    public static void createScene(BranchGroup sceneBG, SimpleUniverse su) {
         // create 'objsBG' for content
-        TransformGroup sceneTG = new TransformGroup();       // create a TransformGroup (TG)
-        float[] dist = {4.0f, 7.5f, 12f};// dist given in the lab
-        Switch ST = new Switch();
-        ST.setCapability(Switch.ALLOW_SWITCH_WRITE);
-        ST.addChild(gen_sphere(Green, 0.75f, 60));
-        ST.addChild(gen_sphere(Blue, 0.6f, 45));
-        ST.addChild(gen_sphere(Orange, 0.5f, 30));
-        ST.addChild(gen_sphere(Red, 0.35f, 15));
-        DistanceLOD distanceLOD = new DistanceLOD(dist, new Point3f());
-        distanceLOD.addSwitch(ST);//add the switches to the DistanceLOD
-        BoundingSphere view_bounds = new BoundingSphere(new Point3d(), 100.0);
-
-        distanceLOD.setSchedulingBounds(view_bounds);
-        sceneBG.addChild(sceneTG);
-        sceneTG.addChild(distanceLOD);
-        sceneTG.addChild(ST);
-
+        TransformGroup sceneTG = su.getViewingPlatform().getViewPlatformTransform();
         PLight(sceneBG);
         CreateLight(sceneBG);
-        sceneBG.addChild(generateAxis(Yellow, 0.5f));
+        try {
+            sceneBG.addChild(createGround());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        sceneBG.addChild(generateBackground());
+        sceneBG.addChild(generateAxis(Yellow, 1f));
+        sceneBG.addChild(addCubes());
+        BoundingSphere mouseBounds = new BoundingSphere(new Point3d(), 10d);
+
+        MouseTranslate mouseTranslate = new MouseTranslate(MouseTranslate.INVERT_INPUT);
+        mouseTranslate.setTransformGroup(sceneTG);
+        mouseTranslate.setSchedulingBounds(mouseBounds);
+        sceneBG.addChild(mouseTranslate);
+
+        MouseZoom mouseZoom = new MouseZoom(MouseZoom.INVERT_INPUT);
+        mouseZoom.setTransformGroup(sceneTG);
+        mouseZoom.setSchedulingBounds(mouseBounds);
+        sceneBG.addChild(mouseZoom);
+
+
 
     }
+
+
+
 
     public MONKEECRAFT(){// contructor for lab7
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         Canvas3D canvas_3D = new Canvas3D(config);//define a canvas
+
+        OrbitBehavior orbitBehavior = new OrbitBehavior(canvas_3D, OrbitBehavior.REVERSE_ROTATE);
+        orbitBehavior.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
         SimpleUniverse su = new SimpleUniverse(canvas_3D);   //define simpile universe and put canvas in it
-        // enable audio device
-        defineViewer(su, new Point3d(1.35, 0.35, 2.0));    // set the viewer's location
+//        defineViewer(su, new Point3d(1.35, 0.35, 2.0));    // set the viewer's location
+        su.getViewingPlatform().setViewPlatformBehavior(orbitBehavior);
+
+        orbitBehavior.setRotXFactor(2);
+        orbitBehavior.setRotYFactor(2);
 
         BranchGroup scene = new BranchGroup();
-        createScene(scene);                           // add contents to the scene branch
+        createScene(scene, su);                           // add contents to the scene branch
         scene.addChild(keyNavigation(su));                   // allow key navigation
-
+        scene.addChild(mouseNavigation(su));
         scene.compile();                                     // compile the BranchGroup
         su.addBranchGraph(scene);                            // attach the scene to SimpleUniverse
 
@@ -162,13 +282,14 @@ public class MONKEECRAFT extends JPanel {
         public MyGUI(String title) {
             JFrame frame = new JFrame("MONKECRAFT");
             frame.getContentPane().add(new MONKEECRAFT());
-            frame.setSize(1920, 1080);    // set the size of the JFrame
+            frame.setSize(850, 700);    // set the size of the JFrame
+            frame.setResizable(false);
+            frame.setLocationRelativeTo(null);
             frame.setVisible(true);
             pack();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // will exit the program on close
 
         }
     }
-
 }
 
