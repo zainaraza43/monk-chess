@@ -1,2 +1,2 @@
-# minecraft-clone
-Java3D version of Minecraft
+# monk chess
+Java3D version of chess
