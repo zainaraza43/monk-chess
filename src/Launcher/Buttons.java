@@ -17,8 +17,9 @@ public class Buttons{
     public Buttons(){
 //        button = new keeptoo.KButton();
         button = new KButton();
-        color = new Color(0, 0, 0);
+        color = new Color(255, 255, 255);
         image = new ImageIcon("Assets/Launcher/button.jpg");
+
     }
 
     public Buttons(int x, int y, int width, int height, String label, Font font){
@@ -32,15 +33,22 @@ public class Buttons{
     }
 
     public void makeButton(ActionListener listener){ // will make a button
-        button.setBackground(color); // set the background color .... note not working
+        //button.setBackground(color); // set the background color .... note not working
         button.setBounds(x, y, width, height); // set the button bounds
-        button.setkFillButton(true);
-        button.setkBorderRadius(20); // set button radius .... note fix this
         button.setFont(font);
         button.setText(label);
         button.addActionListener(listener);
         button.setFocusable(false);
-
+        button.setkBackGroundColor(new Color(0, 0, 0));
+        button.setkBorderRadius(0);
+        button.setkBackGroundColor(new Color(0,0,0));
+        button.setkStartColor(new Color(75,75,75));
+        button.setkEndColor(new Color(75,75,75));
+        button.setkForeGround(new Color(255,255,255));
+        button.setkHoverForeGround(new Color(255,255,255));
+        button.setkHoverEndColor(new Color(75,75,75));
+        button.setkHoverColor(new Color(75,75,75));
+        button.setkHoverStartColor(new Color(75,75,75));
     }
 
     public int getHeight() {

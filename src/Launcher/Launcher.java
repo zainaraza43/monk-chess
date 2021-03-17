@@ -1,6 +1,7 @@
 package Launcher;
 
 
+import com.Behavior.MouseBeh;
 import com.Main.MONKEECRAFT;
 
 import javax.swing.*;
@@ -13,15 +14,17 @@ import java.util.ArrayList;
 
 public class Launcher extends JPanel implements ActionListener {
     private ImageIcon background;
-    private JLabel mylabel, textlabel, backlabel;
-    private Font font, fontOver, fontBack;
+    private JLabel mylabel, textlabel, backlabel,smalllabel;
+    private Font font, fontOver, fontBack,button_font,fontsmall;
     private JPanel Panel;
     private Buttons jbuttons;
     private ArrayList<Buttons> buttons = new ArrayList<>();
     private JFrame jFrame;
+    private MouseBeh mouse;
 
 
     public Launcher(){
+        //MouseBeh mouse = new MouseBeh();
         jFrame = new JFrame("MonkeCraft");
         jFrame.setSize(1000, 600);
         ImageIcon imageIcon = new ImageIcon("Assets/Launcher/icon.png"); // setting the image icon
@@ -29,6 +32,7 @@ public class Launcher extends JPanel implements ActionListener {
         Frame(jFrame);
     }
     public void Frame(JFrame frame){
+
         Panel = new JPanel();
         Panel.setBounds(0, 0, 1000, 600);
         LayoutManager overlay = new OverlayLayout(Panel);
@@ -44,6 +48,7 @@ public class Launcher extends JPanel implements ActionListener {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
     }
 
@@ -63,20 +68,30 @@ public class Launcher extends JPanel implements ActionListener {
     public void fontLoader(JPanel jPanel){ // will load the fonts in
         fontOver = ttfFontloader(70f);
         fontBack = ttfFontloader(70f);
+        fontsmall = ttfFontloader(25f);
+
+        smalllabel = new JLabel("FUCK JAVA3D EDITION", JLabel.CENTER); // make a label and center it also the top font
+        smalllabel.setFont(fontsmall);
+        smalllabel.setAlignmentX(0.5f); // align
+        smalllabel.setAlignmentY(0.2f);
+        smalllabel.setForeground(new Color(255, 255, 255)); // set the color
 
         textlabel = new JLabel("MONKECRAFT", JLabel.CENTER); // make a label and center it also the top font
         textlabel.setFont(fontOver);
         textlabel.setAlignmentX(0.5f); // align
+        textlabel.setAlignmentY(0.8f);
         textlabel.setForeground(new Color(127, 129, 133)); // set the color
 
         backlabel = new JLabel("MONKECRAFT", JLabel.CENTER); // make back font and center it
         backlabel.setFont(fontBack);
         backlabel.setAlignmentX(0.49f); // align it so that a shadow effect shows
-        backlabel.setAlignmentY(0.45f);
+        backlabel.setAlignmentY(0.75f);
         backlabel.setForeground(new Color(0, 0, 0)); // set the back color to black
 
+        jPanel.add(smalllabel);
         jPanel.add(textlabel);
         jPanel.add(backlabel);
+
     }
 
     public JLabel loadImage(){ // will load in the background image
@@ -89,9 +104,15 @@ public class Launcher extends JPanel implements ActionListener {
     }
 
     public void makeButtons(JFrame jframe){
+        try {
+            button_font = Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/minecraft.ttf")).deriveFont(20f);
+        }
+        catch (IOException | FontFormatException e){
+
+        }
         String [] options = {"SINGLE PLAYER", "MULTIPLAYER", "EXIT"};
         for(int i = 0; i < 3; i ++){
-            jbuttons = new Buttons(0, 250 + (i * 60), 260 + (2 * options[i].length()), 40, options[i], ttfFontloader(20f));
+            jbuttons = new Buttons(0, 250 + (i * 60), 260 + (2 * options[i].length()), 40, options[i],button_font);
             jbuttons.setX(540 - jbuttons.getWidth() / 2);
             jbuttons.makeButton(this); // make the button and add actionListener to each button
             buttons.add(jbuttons); // add the buton to ArrayList
