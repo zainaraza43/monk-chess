@@ -2,7 +2,7 @@ package Launcher;
 
 
 import com.Behavior.MouseBeh;
-import com.Main.MONKEECRAFT;
+import com.Main.MONKEECHESS;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,9 +55,9 @@ public class Launcher extends JPanel implements ActionListener {
     public Font ttfFontloader(float size){ // will load in the ttf font
 
         try{
-            font = Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/Minecrafter_3.ttf")).deriveFont(size);
+            font = Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/RockFont.ttf")).deriveFont(size);
             GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            graphicsEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/Minecrafter_3.ttf")));
+            graphicsEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/RockFont.ttf")));
         }
         catch (IOException | FontFormatException e){
 
@@ -66,39 +66,39 @@ public class Launcher extends JPanel implements ActionListener {
     }
 
     public void fontLoader(JPanel jPanel){ // will load the fonts in
-        fontOver = ttfFontloader(70f);
-        fontBack = ttfFontloader(70f);
+        fontOver = ttfFontloader(55f);
+        fontBack = ttfFontloader(75f);
         fontsmall = ttfFontloader(25f);
 
         smalllabel = new JLabel("FUCK JAVA3D EDITION", JLabel.CENTER); // make a label and center it also the top font
         smalllabel.setFont(fontsmall);
-        smalllabel.setAlignmentX(0.5f); // align
+        smalllabel.setAlignmentX(0.09f); // align
         smalllabel.setAlignmentY(0.2f);
         smalllabel.setForeground(new Color(255, 255, 255)); // set the color
 
-        textlabel = new JLabel("MONKECRAFT", JLabel.CENTER); // make a label and center it also the top font
+        textlabel = new JLabel("MONKEECHESS", JLabel.CENTER); // make a label and center it also the top font
         textlabel.setFont(fontOver);
-        textlabel.setAlignmentX(0.5f); // align
-        textlabel.setAlignmentY(0.8f);
-        textlabel.setForeground(new Color(127, 129, 133)); // set the color
+        textlabel.setAlignmentX(0.2f); // align
+        textlabel.setAlignmentY(1.0f);
+        textlabel.setForeground(new Color(236, 202, 21)); // set the color
 
-        backlabel = new JLabel("MONKECRAFT", JLabel.CENTER); // make back font and center it
-        backlabel.setFont(fontBack);
-        backlabel.setAlignmentX(0.49f); // align it so that a shadow effect shows
-        backlabel.setAlignmentY(0.75f);
-        backlabel.setForeground(new Color(0, 0, 0)); // set the back color to black
+//        backlabel = new JLabel("MONKECRAFT", JLabel.CENTER); // make back font and center it
+//        backlabel.setFont(fontBack);
+//        backlabel.setAlignmentX(0.49f); // align it so that a shadow effect shows
+//        backlabel.setAlignmentY(0.75f);
+//        backlabel.setForeground(new Color(0, 0, 0)); // set the back color to black
 
         jPanel.add(smalllabel);
         jPanel.add(textlabel);
-        jPanel.add(backlabel);
+//        jPanel.add(backlabel);
 
     }
 
     public JLabel loadImage(){ // will load in the background image
         background = new ImageIcon("Assets/Launcher/Background.jpg");// load background
         mylabel  = new JLabel(background, JLabel.CENTER); // new label
-        mylabel.setAlignmentX(0.5f);
-        mylabel.setAlignmentY(0.2f);
+        mylabel.setAlignmentX(0.55f);
+        mylabel.setAlignmentY(0.25f);
 
         return mylabel;
     }
@@ -113,7 +113,7 @@ public class Launcher extends JPanel implements ActionListener {
         String [] options = {"SINGLE PLAYER", "MULTIPLAYER", "EXIT"};
         for(int i = 0; i < 3; i ++){
             jbuttons = new Buttons(0, 250 + (i * 60), 260 + (2 * options[i].length()), 40, options[i],button_font);
-            jbuttons.setX(540 - jbuttons.getWidth() / 2);
+            jbuttons.setX(690 - jbuttons.getWidth() / 2);
             jbuttons.makeButton(this); // make the button and add actionListener to each button
             buttons.add(jbuttons); // add the buton to ArrayList
             jframe.add(jbuttons.getButton()); // add the buttons to the frame
@@ -133,7 +133,7 @@ public class Launcher extends JPanel implements ActionListener {
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            new MONKEECRAFT.MyGUI("CRAFT"); // call the game
+                            new MONKEECHESS.MyGUI("CRAFT"); // call the game
                         }
                     });
                 }
