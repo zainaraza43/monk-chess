@@ -37,7 +37,7 @@ public class MONKEECHESS extends JPanel {
     private static Background generateBackground(){ // will return a background
         Background background = new Background(); // make a background
         background.setImageScaleMode(Background.SCALE_FIT_MAX); // scale it to max
-        TextureLoader loader = new TextureLoader("Assets/Background/background.jpg", null); // load the image
+        TextureLoader loader = new TextureLoader("Assets/Background/jungle.jpg", null); // load the image
         background.setApplicationBounds(new BoundingSphere(new Point3d(), 1000d)); // set the bounds
         background.setImage(loader.getImage()); // set the image
         return background;
@@ -104,15 +104,16 @@ public class MONKEECHESS extends JPanel {
         }
         BranchGroup objectBG = scene.getSceneGroup();
         Shape3D chessBoard = (Shape3D) objectBG.getChild(0);
-        Appearance app = new Appearance();
-        app.setTransparencyAttributes(AppearanceSetter.setTransparency(TransparencyAttributes.FASTEST, 0.2f));
-        app.setMaterial(AppearanceSetter.setMaterial(White)); // will call the appearanceSetter class
-        chessBoard.setAppearance(app);
-        chessBoard.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
+        chessBoardAppearance(chessBoard);
         rotationGroup.addChild(objectBG);
         objectTG.addChild(rotationGroup);
         return objectTG;
-
+    }
+    public static void chessBoardAppearance(Shape3D board){
+        Appearance app = AppearanceSetter.texturedApp("chess");
+        app.setTransparencyAttributes(AppearanceSetter.setTransparency(TransparencyAttributes.FASTEST, 0.2f));
+        board.setAppearance(app);
+        board.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
     }
 
 
@@ -124,7 +125,6 @@ public class MONKEECHESS extends JPanel {
         sceneBG.addChild(generateBackground());
         sceneBG.addChild(generateAxis(Yellow, 1f));
         sceneBG.addChild(chessBoard());
-
     }
 
     public static void addLights(BranchGroup sceneBG, Color3f clr) {
@@ -148,7 +148,6 @@ public class MONKEECHESS extends JPanel {
         scene.addChild(keyNavigation(su));                   // allow key navigation
         scene.compile();                                     // compile the BranchGroup
         su.addBranchGraph(scene);                            // attach the scene to SimpleUniverse
-
         setLayout(new BorderLayout());
         add("Center", canvas_3D);
         setVisible(true);

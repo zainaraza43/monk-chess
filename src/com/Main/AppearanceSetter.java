@@ -12,17 +12,18 @@ import org.jogamp.vecmath.Vector3d;
 public class AppearanceSetter{
 
     public static Texture setTexture(String name){
-        TextureLoader loader = new TextureLoader("Assets/" + name + ".jpg", null); // load in the image
+        TextureLoader loader = new TextureLoader("Assets/" + "Textures/" + name + ".jpg", null); // load in the image
         ImageComponent2D imageComponent2D = loader.getImage(); //get image
         if(imageComponent2D == null){ // if image is not found
             System.out.println("Error opening image");
         }
+
         Texture2D texture2D = new Texture2D(Texture.BASE_LEVEL, Texture.RGBA, imageComponent2D.getWidth(), imageComponent2D.getHeight());
         texture2D.setImage(0, imageComponent2D); //set the image on the texture
         return texture2D; // return the texture with the image
     }
 
-    private static Appearance texturedApp(String name){
+    public static Appearance texturedApp(String name){
         Appearance appearance = new Appearance();
         appearance.setTexture(setTexture(name));
 
@@ -35,7 +36,7 @@ public class AppearanceSetter{
         appearance.setTextureAttributes(ta);
 
         int angle = 0;
-        Vector3d scale = new Vector3d(1f, 1f, 1f);
+        float scale = 8f;
         Transform3D td = new Transform3D();
         td.rotZ((angle / 90.0f) * Math.PI / 2);
         td.setScale(scale);
