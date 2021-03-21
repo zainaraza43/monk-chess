@@ -1,28 +1,18 @@
 package com.Main;
-
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
-
-import com.Behavior.MouseBeh;
 import org.jogamp.java3d.*;
-import org.jogamp.java3d.loaders.IncorrectFormatException;
-import org.jogamp.java3d.loaders.ParsingErrorException;
 import org.jogamp.java3d.loaders.Scene;
 import org.jogamp.java3d.loaders.objectfile.ObjectFile;
 import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
-import org.jogamp.java3d.utils.behaviors.mouse.*;
-import org.jogamp.java3d.utils.behaviors.vp.OrbitBehavior;
-import org.jogamp.java3d.utils.geometry.ColorCube;
-import org.jogamp.java3d.utils.geometry.Sphere;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
 import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.jogamp.vecmath.*;
-
 
 public class MONKEECHESS extends JPanel {
 
@@ -43,17 +33,6 @@ public class MONKEECHESS extends JPanel {
     private static JFrame frame;
 
 
-    public static void addLights(BranchGroup sceneBG, Color3f clr) {
-        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
-        AmbientLight amLgt = new AmbientLight(new Color3f(0.2f, 0.2f, 0.2f));
-        amLgt.setInfluencingBounds(bounds);
-        sceneBG.addChild(amLgt);
-        Point3f pt  = new Point3f(2.0f, 2.0f, 2.0f);
-        Point3f atn = new Point3f(1.0f, 0.0f, 0.0f);
-        PointLight ptLight = new PointLight(clr, pt, atn);
-        ptLight.setInfluencingBounds(bounds);
-        sceneBG.addChild(ptLight);
-    }
 
     private static Background generateBackground(){ // will return a background
         Background background = new Background(); // make a background
@@ -62,19 +41,6 @@ public class MONKEECHESS extends JPanel {
         background.setApplicationBounds(new BoundingSphere(new Point3d(), 1000d)); // set the bounds
         background.setImage(loader.getImage()); // set the image
         return background;
-    }
-
-    public static Material setMaterial(Color3f clr) {
-        int SH = 128;               // 10
-        Material ma = new Material();
-        Color3f c = new Color3f(0.6f*clr.x, 0.6f*clr.y, 0.6f*clr.z);
-        ma.setAmbientColor(c);
-        ma.setEmissiveColor(new Color3f(0, 0, 0));
-        ma.setDiffuseColor(c);
-        ma.setSpecularColor(clr);
-        ma.setShininess(SH);
-        ma.setLightingEnable(true);
-        return ma;
     }
 
     private static Shape3D generateAxis(Color3f yColor, float length) { // function to generate x, y, z axes
@@ -123,15 +89,15 @@ public class MONKEECHESS extends JPanel {
     }
 
     public static TransformGroup chessBoard(){
-        TransformGroup objectTG = new TransformGroup();
+        TransformGroup objectTG = new TransformGroup(); // transformGroup to return
 
-        Transform3D rotation3D = new Transform3D();
+        Transform3D rotation3D = new Transform3D(); // rotationTransform3D
         rotation3D.setScale(8);
         TransformGroup rotationGroup = new TransformGroup(rotation3D);
         ObjectFile objectFile = new ObjectFile(ObjectFile.STRIPIFY | ObjectFile.TRIANGULATE | ObjectFile.RESIZE);
         Scene scene = null;
         try{
-            scene = objectFile.load(new File("Assets/Background/back.obj").toURI().toURL());
+            scene = objectFile.load(new File("Assets/Objects/ChessBoard/back.obj").toURI().toURL());
         }catch (FileNotFoundException | MalformedURLException e) {
             System.err.println(e);
             System.exit(1);
@@ -139,10 +105,10 @@ public class MONKEECHESS extends JPanel {
         BranchGroup objectBG = scene.getSceneGroup();
         Shape3D chessBoard = (Shape3D) objectBG.getChild(0);
         Appearance app = new Appearance();
-        TransparencyAttributes ta = new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.2f);
-        app.setTransparencyAttributes(ta);
-        app.setMaterial(setMaterial(White));
+        app.setTransparencyAttributes(AppearanceSetter.setTransparency(TransparencyAttributes.FASTEST, 0.2f));
+        app.setMaterial(AppearanceSetter.setMaterial(White)); // will call the appearanceSetter class
         chessBoard.setAppearance(app);
+        chessBoard.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
         rotationGroup.addChild(objectBG);
         objectTG.addChild(rotationGroup);
         return objectTG;
@@ -161,14 +127,22 @@ public class MONKEECHESS extends JPanel {
 
     }
 
+    public static void addLights(BranchGroup sceneBG, Color3f clr) {
+        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
+        AmbientLight amLgt = new AmbientLight(new Color3f(0.2f, 0.2f, 0.2f));
+        amLgt.setInfluencingBounds(bounds);
+        sceneBG.addChild(amLgt);
+        Point3f pt  = new Point3f(2.0f, 2.0f, 2.0f);
+        Point3f atn = new Point3f(1.0f, 0.0f, 0.0f);
+        PointLight ptLight = new PointLight(clr, pt, atn);
+        ptLight.setInfluencingBounds(bounds);
+        sceneBG.addChild(ptLight);
+    }
     public MONKEECHESS(){
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         Canvas3D canvas_3D = new Canvas3D(config);//define a canvas
-
         SimpleUniverse su = new SimpleUniverse(canvas_3D);   //define simpile universe and put canvas in it
         defineViewer(su, new Point3d(0, 20, 20.0));    // set the viewer's location
-
-
         BranchGroup scene = new BranchGroup();
         createScene(scene, su);                           // add contents to the scene branch
         scene.addChild(keyNavigation(su));                   // allow key navigation
@@ -180,12 +154,10 @@ public class MONKEECHESS extends JPanel {
         setVisible(true);
     }
 
-    /* the main entrance of the application via 'MyGUI()' of "CommonXY.java" */
-
     public static class MyGUI extends JFrame {
         private static final long serialVersionUID = 1L;
         public MyGUI(String title) {
-            JFrame frame = new JFrame("MONKECHESS");
+            JFrame frame = new JFrame(title);
             frame.getContentPane().add(new MONKEECHESS());
             frame.setSize(850, 700);    // set the size of the JFrame
             frame.setResizable(false);

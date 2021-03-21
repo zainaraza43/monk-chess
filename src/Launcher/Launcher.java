@@ -1,7 +1,6 @@
 package Launcher;
 
 
-import com.Behavior.MouseBeh;
 import com.Main.MONKEECHESS;
 
 import javax.swing.*;
@@ -20,12 +19,10 @@ public class Launcher extends JPanel implements ActionListener {
     private Buttons jbuttons;
     private ArrayList<Buttons> buttons = new ArrayList<>();
     private JFrame jFrame;
-    private MouseBeh mouse;
 
 
     public Launcher(){
-        //MouseBeh mouse = new MouseBeh();
-        jFrame = new JFrame("MonkeCraft");
+        jFrame = new JFrame("MONKEECHESS");
         jFrame.setSize(1000, 600);
         ImageIcon imageIcon = new ImageIcon("Assets/Launcher/icon.png"); // setting the image icon
         jFrame.setIconImage(imageIcon.getImage());
@@ -82,15 +79,8 @@ public class Launcher extends JPanel implements ActionListener {
         textlabel.setAlignmentY(1.0f);
         textlabel.setForeground(new Color(236, 202, 21)); // set the color
 
-//        backlabel = new JLabel("MONKECRAFT", JLabel.CENTER); // make back font and center it
-//        backlabel.setFont(fontBack);
-//        backlabel.setAlignmentX(0.49f); // align it so that a shadow effect shows
-//        backlabel.setAlignmentY(0.75f);
-//        backlabel.setForeground(new Color(0, 0, 0)); // set the back color to black
-
         jPanel.add(smalllabel);
         jPanel.add(textlabel);
-//        jPanel.add(backlabel);
 
     }
 
@@ -133,7 +123,7 @@ public class Launcher extends JPanel implements ActionListener {
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            new MONKEECHESS.MyGUI("CRAFT"); // call the game
+                            new MONKEECHESS.MyGUI("MONKEECHESS"); // call the game
                         }
                     });
                 }
