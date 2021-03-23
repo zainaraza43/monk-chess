@@ -100,8 +100,8 @@ public class Launcher extends JPanel implements ActionListener {
         catch (IOException | FontFormatException e){
 
         }
-        String [] options = {"SINGLE PLAYER", "MULTIPLAYER", "EXIT"};
-        for(int i = 0; i < 3; i ++){
+        String [] options = {"SINGLE PLAYER", "MULTIPLAYER", "OPTIONS", "EXIT"};
+        for(int i = 0; i < 4; i ++){
             jbuttons = new Buttons(0, 250 + (i * 60), 260 + (2 * options[i].length()), 40, options[i],button_font);
             jbuttons.setX(690 - jbuttons.getWidth() / 2);
             jbuttons.makeButton(this); // make the button and add actionListener to each button
@@ -129,6 +129,10 @@ public class Launcher extends JPanel implements ActionListener {
                 }
                 if(buttons.getButton().getText().equals("MULTIPLAYER")){ // if multiplayer is pressed
                     System.out.println("hello");
+                }
+
+                if(buttons.getButton().getText().equals("OPTIONS")){ // if multiplayer is pressed
+                    System.out.println("options");
                 }
                 if(buttons.getButton().getText().equals("EXIT")){ // if exit is pressed
                     System.exit(0); // exit

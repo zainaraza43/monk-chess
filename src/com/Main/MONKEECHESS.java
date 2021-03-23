@@ -31,13 +31,14 @@ public class MONKEECHESS extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private static JFrame frame;
+    private static ChessBoard chessBoard;
 
 
 
     private static Background generateBackground(){ // will return a background
         Background background = new Background(); // make a background
         background.setImageScaleMode(Background.SCALE_FIT_MAX); // scale it to max
-        TextureLoader loader = new TextureLoader("Assets/Background/jungle.jpg", null); // load the image
+        TextureLoader loader = new TextureLoader("Assets/Background/background.jpg", null); // load the image
         background.setApplicationBounds(new BoundingSphere(new Point3d(), 1000d)); // set the bounds
         background.setImage(loader.getImage()); // set the image
         return background;
@@ -88,35 +89,6 @@ public class MONKEECHESS extends JPanel {
         return rot_beh;
     }
 
-    public static TransformGroup chessBoard(){
-        TransformGroup objectTG = new TransformGroup(); // transformGroup to return
-
-        Transform3D rotation3D = new Transform3D(); // rotationTransform3D
-        rotation3D.setScale(8);
-        TransformGroup rotationGroup = new TransformGroup(rotation3D);
-        ObjectFile objectFile = new ObjectFile(ObjectFile.STRIPIFY | ObjectFile.TRIANGULATE | ObjectFile.RESIZE);
-        Scene scene = null;
-        try{
-            scene = objectFile.load(new File("Assets/Objects/ChessBoard/back.obj").toURI().toURL());
-        }catch (FileNotFoundException | MalformedURLException e) {
-            System.err.println(e);
-            System.exit(1);
-        }
-        BranchGroup objectBG = scene.getSceneGroup();
-        Shape3D chessBoard = (Shape3D) objectBG.getChild(0);
-        chessBoardAppearance(chessBoard);
-        rotationGroup.addChild(objectBG);
-        objectTG.addChild(rotationGroup);
-        return objectTG;
-    }
-    public static void chessBoardAppearance(Shape3D board){
-        Appearance app = AppearanceSetter.texturedApp("chess");
-        app.setTransparencyAttributes(AppearanceSetter.setTransparency(TransparencyAttributes.FASTEST, 0.2f));
-        board.setAppearance(app);
-        board.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
-    }
-
-
     /* a function to create and return the scene BranchGroup */
     public static void createScene(BranchGroup sceneBG, SimpleUniverse su) {
         // create 'objsBG' for content
@@ -124,7 +96,8 @@ public class MONKEECHESS extends JPanel {
         addLights(sceneBG, White);
         sceneBG.addChild(generateBackground());
         sceneBG.addChild(generateAxis(Yellow, 1f));
-        sceneBG.addChild(chessBoard());
+        chessBoard = new ChessBoard("chess");
+        chessBoard.createScene(sceneBG);
     }
 
     public static void addLights(BranchGroup sceneBG, Color3f clr) {

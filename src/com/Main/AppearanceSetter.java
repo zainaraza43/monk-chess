@@ -4,15 +4,18 @@
 
 package com.Main;
 
+import com.jogamp.opengl.util.texture.TextureCoords;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Vector3d;
+import org.jogamp.vecmath.Vector3f;
+import org.jogamp.vecmath.Vector4f;
 
 public class AppearanceSetter{
 
     public static Texture setTexture(String name){
-        TextureLoader loader = new TextureLoader("Assets/" + "Textures/" + name + ".jpg", null); // load in the image
+        TextureLoader loader = new TextureLoader("Assets/" + name + ".jpg", null); // load in the image
         ImageComponent2D imageComponent2D = loader.getImage(); //get image
         if(imageComponent2D == null){ // if image is not found
             System.out.println("Error opening image");
@@ -36,7 +39,7 @@ public class AppearanceSetter{
         appearance.setTextureAttributes(ta);
 
         int angle = 0;
-        float scale = 8f;
+        float scale = 4f;
         Transform3D td = new Transform3D();
         td.rotZ((angle / 90.0f) * Math.PI / 2);
         td.setScale(scale);
