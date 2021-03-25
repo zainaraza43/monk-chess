@@ -10,7 +10,7 @@ import org.jogamp.java3d.loaders.Scene;
 import org.jogamp.java3d.loaders.objectfile.ObjectFile;
 import org.jogamp.java3d.utils.behaviors.mouse.MouseTranslate;
 import org.jogamp.java3d.utils.image.TextureLoader;
-import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.*;
 
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -27,14 +27,17 @@ public class ChessBoard {
         this.sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
     }
 
-    public void createScene(BranchGroup sceneBG){
+    public void createScene(TransformGroup sceneTG){
         createChessBoard(this.sceneTG);
+        this.sceneTG.addChild(addSides());
         BoundingSphere mouseBounds = new BoundingSphere(new Point3d(), 1000d);
         mouseRotation = new MouseRotation(this.sceneTG);
         mouseRotation.setSchedulingBounds(mouseBounds);
-        sceneBG.addChild(mouseRotation);
+        sceneTG.addChild(mouseRotation);
 
-        sceneBG.addChild(this.sceneTG);
+        ChessPieces chessPieces = new ChessPieces(this.sceneTG);
+        chessPieces.CreatePieces();
+        sceneTG.addChild(this.sceneTG);
     }
 
     public void createChessBoard(TransformGroup objectTG){
@@ -54,6 +57,44 @@ public class ChessBoard {
         setAppearance(chessBoard);
         rotationGroup.addChild(branchGroup);
         objectTG.addChild(rotationGroup);
+    }
+
+    private static Shape3D generateRectangle(Color3f color, Point3f size){ // function to generate rectangle
+        QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
+        Point3f [] point3fs = new Point3f[4];
+        point3fs[0] = new Point3f(-size.x, -size.y, size.z); // first point  and
+        point3fs[1] = new Point3f(size.x  , -size.y  , size.z); // second point  and
+        point3fs[2] = new Point3f(size.x  ,  size.y  , size.z); // third point  and
+        point3fs[3] = new Point3f(-size.x  , size.y  , size.z); // last point in  and
+        for (int i = 0; i < 4; i ++) {
+            quadArray.setCoordinate(i, point3fs[i]); // loop through and set the coordinates
+            quadArray.setColor(i, color); //set the color
+        }
+        return new Shape3D(quadArray);
+    }
+
+    public TransformGroup addSides(){
+        TransformGroup base = new TransformGroup();
+        float x, z;
+        Point3f [] point3fs = new Point3f[4];
+        for (int i = 0; i < 4; i ++){
+            double a = Math.PI / 2 * i;
+            x = (float) Math.cos(a) * 8.5f;
+            z = (float) Math.sin(a) * 8.5f;
+            point3fs[i] = new Point3f(x, 0, z);
+            Transform3D transform3D = new Transform3D();
+            transform3D.rotX(-Math.PI / 2);
+            transform3D.setTranslation(new Vector3d(point3fs[i]));
+            TransformGroup tg = new TransformGroup(transform3D);
+            if(i % 2 == 0){
+                tg.addChild(generateRectangle(MONKEECHESS.Grey, new Point3f(0.5f, 9, 0)));
+            }else{
+
+                tg.addChild(generateRectangle(MONKEECHESS.Grey, new Point3f(8, 0.5f, 0)));
+            }
+            base.addChild(tg);
+        }
+        return base;
     }
 
     public void setAppearance(Shape3D board){
@@ -78,6 +119,7 @@ public class ChessBoard {
 
     public static Appearance texturedApp(String name){
         Appearance appearance = new Appearance();
+        appearance.setMaterial(setMaterial(MONKEECHESS.White));
         appearance.setTexture(setTexture(name));
 
         PolygonAttributes polygonAttributes = new PolygonAttributes();
@@ -99,5 +141,18 @@ public class ChessBoard {
 
     public static TransparencyAttributes setTransparency(int mode, float value){
         return new TransparencyAttributes(mode, value);
+    }
+
+    public static Material setMaterial(Color3f clr) {
+        int SH = 128;               // 10
+        Material ma = new Material();
+        Color3f c = new Color3f(0.6f*clr.x, 0.6f*clr.y, 0.6f*clr.z);
+        ma.setAmbientColor(c);
+        ma.setEmissiveColor(new Color3f(0, 0, 0));
+        ma.setDiffuseColor(c);
+        ma.setSpecularColor(clr);
+        ma.setShininess(SH);
+        ma.setLightingEnable(true);
+        return ma;
     }
 }

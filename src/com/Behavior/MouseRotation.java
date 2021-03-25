@@ -11,8 +11,8 @@ public class MouseRotation extends Behavior {
     private WakeupCondition wakeupCondition;
     private TransformGroup targetTG;
     private boolean mouseClicked;
-    private double xFactor, yFactor;
-    private int xPrev, yPrev;
+    private double xFactor;
+    private int xPrev;
     private Transform3D currTrans, transformX, transformY;
 
 
@@ -22,10 +22,8 @@ public class MouseRotation extends Behavior {
         this.transformX = new Transform3D(); //transformGroup for rotating in the x
         this.transformY = new Transform3D(); // transformGrpup for rotating in the y
         this.xPrev = 0;
-        this.yPrev = 0;
         this.mouseClicked = true;
         this.xFactor = 0.002;
-        this.yFactor = 0.002;
     }
 
     @Override
@@ -54,17 +52,15 @@ public class MouseRotation extends Behavior {
     }
 
     public void processMouseEvent(AWTEvent[] events) {
-        int mouseX, mouseY;
+        int mouseX;
         for (AWTEvent e : events) {
             MouseEvent mouseEvent = (MouseEvent) e;
             mouseX = mouseEvent.getX();
-            mouseY = mouseEvent.getY();
             if (mouseEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
-                processDrag(mouseX, mouseY);
+                processDrag(mouseX);
             }
             else if(mouseEvent.getID() == MouseEvent.MOUSE_PRESSED){
                 this.xPrev = mouseX;
-                this.yPrev = mouseY;
             }
             else if (mouseEvent.getID() == MouseEvent.MOUSE_RELEASED) {
                 mouseClicked = false;
@@ -72,33 +68,26 @@ public class MouseRotation extends Behavior {
         }
     }
 
-    public void processDrag(int mouseX, int mouseY) {
+    public void processDrag(int mouseX) {
         if (mouseClicked) {
             mouseClicked = false;
         } else {
             int dx = mouseX - this.xPrev;
-            int dy = mouseY - this.yPrev;
-            transformX.rotX(dy * yFactor);
             transformY.rotY(dx * xFactor);
             this.targetTG.getTransform(currTrans);
             Matrix4d mat = new Matrix4d();
             this.currTrans.get(mat);
             currTrans.setTranslation(new Vector3d(0, 0, 0));
-            currTrans.mul(currTrans, transformX);
             currTrans.mul(currTrans, transformY);
             Vector3d newTrans = new Vector3d(mat.m03, mat.m13, mat.m23);
             this.currTrans.setTranslation(newTrans);
             this.targetTG.setTransform(currTrans);
         }
         this.xPrev = mouseX;
-        this.yPrev = mouseY;
     }
 
     public void setxFactor(double xFactor) {
         this.xFactor = xFactor;
     }
 
-    public void setyFactor(double yFactor) {
-        this.yFactor = yFactor;
-    }
 }

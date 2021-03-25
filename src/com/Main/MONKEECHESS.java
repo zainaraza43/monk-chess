@@ -27,6 +27,7 @@ public class MONKEECHESS extends JPanel {
     public static final Color3f Magenta = new Color3f(1.0f, 0.0f, 1.0f);
     public static final Color3f White = new Color3f(1.0f, 1.0f, 1.0f);
     public static final Color3f Grey = new Color3f(0.5f, 0.5f, 0.5f);
+    public static final Color3f Black = new Color3f(0, 0, 0);
     public static final Color3f[] Clrs = {Blue, Green, Red, Yellow,
             Cyan, Orange, Magenta, Grey};
     public final static int clr_num = 8;
@@ -65,7 +66,7 @@ public class MONKEECHESS extends JPanel {
         ViewingPlatform view_platfm = simple_U.getViewingPlatform();
         TransformGroup view_TG = view_platfm.getViewPlatformTransform();
         KeyNavigatorBehavior keyNavBeh = new KeyNavigatorBehavior(view_TG);
-        BoundingSphere view_bounds = new BoundingSphere(new Point3d(), 10000.0);
+        BoundingSphere view_bounds = new BoundingSphere(new Point3d(), 1000.0);
         keyNavBeh.setSchedulingBounds(view_bounds);
         return keyNavBeh;
     }
@@ -73,8 +74,8 @@ public class MONKEECHESS extends JPanel {
     private MouseZoom mouseZoom(SimpleUniverse simpleUniverse) {
         ViewingPlatform view_platfm = simpleUniverse.getViewingPlatform();
         TransformGroup view_TG = view_platfm.getViewPlatformTransform();
-        MouseZoom mouseZoom = new MouseZoom(view_TG, simpleUniverse);
-        mouseZoom.setSchedulingBounds(new BoundingSphere(new Point3d(), 10000d));
+        MouseZoom mouseZoom = new MouseZoom(view_TG);
+        mouseZoom.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
         return mouseZoom;
     }
 
@@ -89,17 +90,6 @@ public class MONKEECHESS extends JPanel {
         viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
     }
 
-    public static void viewerZoom(SimpleUniverse su, Point3d eye){
-        TransformGroup viewTransform = su.getViewingPlatform().getViewPlatformTransform();
-        Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
-        Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
-        Transform3D view_TM = new Transform3D();
-        view_TM.lookAt(eye, center, up);
-        view_TM.invert();
-        viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
-    }
-
-
     public static RotationInterpolator rotateBehavior(TransformGroup rotTG, Alpha rotAlpha) {
         Transform3D yAxis = new Transform3D();                        // y-axis is the default
         RotationInterpolator rot_beh = new RotationInterpolator(
@@ -110,19 +100,21 @@ public class MONKEECHESS extends JPanel {
     }
 
     /* a function to create and return the scene BranchGroup */
-    public static void createScene(BranchGroup sceneBG, SimpleUniverse su) {
+    public static void createScene(BranchGroup sceneBG) {
         // create 'objsBG' for content
-        TransformGroup sceneTG = su.getViewingPlatform().getViewPlatformTransform();
+        TransformGroup sceneTG = new TransformGroup();
+        sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        sceneBG.addChild(sceneTG);
+//        sceneBG.addChild(rotateBehavior(sceneTG, new Alpha(-1, 10000)));
         addLights(sceneBG, White);
         sceneBG.addChild(generateBackground());
-        sceneBG.addChild(generateAxis(Yellow, 1f));
-
+        sceneTG.addChild(generateAxis(Yellow, 1f));
         chessBoard = new ChessBoard("chess");
-        chessBoard.createScene(sceneBG);
+        chessBoard.createScene(sceneTG);
     }
 
     public static void addLights(BranchGroup sceneBG, Color3f clr) {
-        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
+        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 1000.0);
         AmbientLight amLgt = new AmbientLight(new Color3f(0.2f, 0.2f, 0.2f));
         amLgt.setInfluencingBounds(bounds);
         sceneBG.addChild(amLgt);
@@ -138,7 +130,7 @@ public class MONKEECHESS extends JPanel {
         SimpleUniverse su = new SimpleUniverse(canvas_3D);   //define simpile universe and put canvas in it
         defineViewer(su, new Point3d(0, 20, 20.0));    // set the viewer's location
         BranchGroup scene = new BranchGroup();
-        createScene(scene, su);                           // add contents to the scene branch
+        createScene(scene);                           // add contents to the scene branch
         scene.addChild(keyNavigation(su));                   // allow key navigation
         scene.addChild(mouseZoom(su));
         scene.compile();                                     // compile the BranchGroup

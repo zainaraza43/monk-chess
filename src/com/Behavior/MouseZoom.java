@@ -16,14 +16,12 @@ public class MouseZoom extends Behavior {
     private double speed;
     private WakeupCriterion[] wakeupCriteria;
     private WakeupCondition wakeupCondition;
-    private SimpleUniverse simpleUniverse;
 
-    public MouseZoom(TransformGroup tg, SimpleUniverse su) {
+    public MouseZoom(TransformGroup tg) {
         this.direction = 0;
         this.currX = new Transform3D();
         this.transformX = new Transform3D();
         this.speed = 0.2;
-        this.simpleUniverse = su;
         this.targetTG = tg;
     }
 
@@ -63,11 +61,17 @@ public class MouseZoom extends Behavior {
     }
     public void moveViewer(double speed){
         this.targetTG.getTransform(currX);
+        Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
+        Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
         Vector3d v = new Vector3d();
         this.currX.get(v);
-        Point3d translation = new Point3d(v);
-        translation.z += speed;
-        MONKEECHESS.viewerZoom(simpleUniverse, translation);
+        Point3d eye = new Point3d(v);
+        eye.z += speed;
+        eye.y += speed;
+        Transform3D look = new Transform3D();
+        look.lookAt(eye, center, up);
+        look.invert();
+        this.targetTG.setTransform(look);
     }
 
 }
