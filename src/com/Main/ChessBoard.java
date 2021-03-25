@@ -1,10 +1,18 @@
-package com.Main;
+/*
+ * Class that will load in the game chess board provided a string which is the texture name
+ */
 
+package com.Main;
+import com.Behavior.MouseRotation;
+import com.Behavior.MouseZoom;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.loaders.Scene;
 import org.jogamp.java3d.loaders.objectfile.ObjectFile;
+import org.jogamp.java3d.utils.behaviors.mouse.MouseTranslate;
 import org.jogamp.java3d.utils.image.TextureLoader;
+import org.jogamp.vecmath.Point3d;
 
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
@@ -12,13 +20,20 @@ import java.net.MalformedURLException;
 public class ChessBoard {
     private String name;
     private TransformGroup sceneTG;
+    private MouseRotation mouseRotation;
     public ChessBoard(String name){
         this.name = name;
         this.sceneTG = new TransformGroup();
+        this.sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
     }
 
     public void createScene(BranchGroup sceneBG){
         createChessBoard(this.sceneTG);
+        BoundingSphere mouseBounds = new BoundingSphere(new Point3d(), 1000d);
+        mouseRotation = new MouseRotation(this.sceneTG);
+        mouseRotation.setSchedulingBounds(mouseBounds);
+        sceneBG.addChild(mouseRotation);
+
         sceneBG.addChild(this.sceneTG);
     }
 

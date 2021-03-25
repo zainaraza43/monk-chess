@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
+
+import com.Behavior.MouseZoom;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.loaders.Scene;
 import org.jogamp.java3d.loaders.objectfile.ObjectFile;
@@ -63,14 +65,32 @@ public class MONKEECHESS extends JPanel {
         ViewingPlatform view_platfm = simple_U.getViewingPlatform();
         TransformGroup view_TG = view_platfm.getViewPlatformTransform();
         KeyNavigatorBehavior keyNavBeh = new KeyNavigatorBehavior(view_TG);
-        BoundingSphere view_bounds = new BoundingSphere(new Point3d(), 1000.0);
+        BoundingSphere view_bounds = new BoundingSphere(new Point3d(), 10000.0);
         keyNavBeh.setSchedulingBounds(view_bounds);
         return keyNavBeh;
+    }
+
+    private MouseZoom mouseZoom(SimpleUniverse simpleUniverse) {
+        ViewingPlatform view_platfm = simpleUniverse.getViewingPlatform();
+        TransformGroup view_TG = view_platfm.getViewPlatformTransform();
+        MouseZoom mouseZoom = new MouseZoom(view_TG, simpleUniverse);
+        mouseZoom.setSchedulingBounds(new BoundingSphere(new Point3d(), 10000d));
+        return mouseZoom;
     }
 
 
     private static void defineViewer(SimpleUniverse simple_U, Point3d eye) {
         TransformGroup viewTransform = simple_U.getViewingPlatform().getViewPlatformTransform();
+        Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
+        Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
+        Transform3D view_TM = new Transform3D();
+        view_TM.lookAt(eye, center, up);
+        view_TM.invert();
+        viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
+    }
+
+    public static void viewerZoom(SimpleUniverse su, Point3d eye){
+        TransformGroup viewTransform = su.getViewingPlatform().getViewPlatformTransform();
         Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
         Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
         Transform3D view_TM = new Transform3D();
@@ -96,6 +116,7 @@ public class MONKEECHESS extends JPanel {
         addLights(sceneBG, White);
         sceneBG.addChild(generateBackground());
         sceneBG.addChild(generateAxis(Yellow, 1f));
+
         chessBoard = new ChessBoard("chess");
         chessBoard.createScene(sceneBG);
     }
@@ -119,6 +140,7 @@ public class MONKEECHESS extends JPanel {
         BranchGroup scene = new BranchGroup();
         createScene(scene, su);                           // add contents to the scene branch
         scene.addChild(keyNavigation(su));                   // allow key navigation
+        scene.addChild(mouseZoom(su));
         scene.compile();                                     // compile the BranchGroup
         su.addBranchGraph(scene);                            // attach the scene to SimpleUniverse
         setLayout(new BorderLayout());
