@@ -109,7 +109,7 @@ public class MONKEECHESS extends JPanel {
         addLights(sceneBG, White);
         sceneBG.addChild(generateBackground());
         sceneTG.addChild(generateAxis(Yellow, 1f));
-        chessBoard = new ChessBoard("chess");
+        chessBoard = new ChessBoard("chessboard1");
         chessBoard.createScene(sceneTG);
     }
 

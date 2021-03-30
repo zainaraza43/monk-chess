@@ -105,7 +105,7 @@ public class ChessBoard {
     }
 
     public static Texture setTexture(String name){
-        TextureLoader loader = new TextureLoader("Assets/Textures/" + name + ".jpg", null); // load in the image
+        TextureLoader loader = new TextureLoader("Assets/Textures/boards/" + name + ".jpg", null); // load in the image
         ImageComponent2D imageComponent2D = loader.getImage(); //get image
         if(imageComponent2D == null){ // if image is not found
             System.out.println("Error opening image");
