@@ -1,10 +1,11 @@
 package com.Main;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.ColorModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 import com.Behavior.MouseZoom;
 import org.jogamp.java3d.*;
@@ -33,7 +34,7 @@ public class MONKEECHESS extends JPanel {
     public final static int clr_num = 8;
 
     private static final long serialVersionUID = 1L;
-    private static JFrame frame;
+    private JFrame frame;
     private static ChessBoard chessBoard;
 
 
@@ -135,8 +136,9 @@ public class MONKEECHESS extends JPanel {
         scene.addChild(mouseZoom(su));
         scene.compile();                                     // compile the BranchGroup
         su.addBranchGraph(scene);                            // attach the scene to SimpleUniverse
-        setLayout(new BorderLayout());
+        canvas_3D.setBounds(10, 0, 850, 700);
         add("Center", canvas_3D);
+
         setVisible(true);
     }
 
@@ -144,10 +146,21 @@ public class MONKEECHESS extends JPanel {
         private static final long serialVersionUID = 1L;
         public MyGUI(String title) {
             JFrame frame = new JFrame(title);
-            frame.getContentPane().add(new MONKEECHESS());
-            frame.setSize(850, 700);    // set the size of the JFrame
+            frame.setSize(1010, 850);    // set the size of the JFrame
             frame.setResizable(false);
             frame.setLocationRelativeTo(null);
+            JPanel panel = new JPanel();
+            panel.setBounds(70, 2, 865,718);
+            panel.setBackground(Color.black);
+            panel.setVisible(true);
+            panel.add(new MONKEECHESS());
+            frame.add(panel);
+
+            Overlay overlay = new Overlay(frame);
+            overlay.createPanels();
+
+
+            frame.setLayout(null);
             frame.setVisible(true);
             pack();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // will exit the program on close

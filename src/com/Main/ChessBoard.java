@@ -4,18 +4,9 @@
 
 package com.Main;
 import com.Behavior.MouseRotation;
-import com.Behavior.MouseZoom;
 import org.jogamp.java3d.*;
-import org.jogamp.java3d.loaders.Scene;
-import org.jogamp.java3d.loaders.objectfile.ObjectFile;
-import org.jogamp.java3d.utils.behaviors.mouse.MouseTranslate;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
-
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
 
 public class ChessBoard {
     private String name;
@@ -28,35 +19,82 @@ public class ChessBoard {
     }
 
     public void createScene(TransformGroup sceneTG){
-        createChessBoard(this.sceneTG);
+        generateBase(this.sceneTG, 8, name);
         this.sceneTG.addChild(addSides());
         BoundingSphere mouseBounds = new BoundingSphere(new Point3d(), 1000d);
         mouseRotation = new MouseRotation(this.sceneTG);
         mouseRotation.setSchedulingBounds(mouseBounds);
         sceneTG.addChild(mouseRotation);
-
         ChessPieces chessPieces = new ChessPieces(this.sceneTG);
         chessPieces.CreatePieces();
         sceneTG.addChild(this.sceneTG);
     }
 
-    public void createChessBoard(TransformGroup objectTG){
-        Transform3D rotation3D = new Transform3D(); // rotationTransform3D
-        rotation3D.setScale(8);
-        TransformGroup rotationGroup = new TransformGroup(rotation3D);
-        ObjectFile objectFile = new ObjectFile(ObjectFile.STRIPIFY | ObjectFile.TRIANGULATE | ObjectFile.RESIZE);
-        Scene scene = null;
-        try{
-            scene = objectFile.load(new File("Assets/Objects/ChessBoard/back.obj").toURI().toURL());
-        }catch (FileNotFoundException | MalformedURLException e) {
-            System.err.println(e);
-            System.exit(1);
+
+
+    private static Shape3D generateRectangle(Color3f color, Point3f size, Vector2f scale){ // function to generate rectangle QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
+        QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
+        Point3f [] point3fs = new Point3f[4];
+        point3fs[0] = new Point3f(-size.x * scale.x, -size.y * scale.y, size.z); // first point -x and -y
+        point3fs[1] = new Point3f(size.x * scale.x, -size.y * scale.y, size.z); // second point +x and -y
+        point3fs[2] = new Point3f(size.x * scale.x,  size.y * scale.y, size.z); // third point +x and +y
+        point3fs[3] = new Point3f(-size.x * scale.x, size.y * scale.y, size.z); // last point in -x and +y
+        for (int i = 0; i < 4; i ++) {
+            quadArray.setCoordinate(i, point3fs[i]); // loop through and set the coordinates
+            quadArray.setColor(i, color); //set the color
         }
-        BranchGroup branchGroup = scene.getSceneGroup();
-        Shape3D chessBoard = (Shape3D) branchGroup.getChild(0);
-        setAppearance(chessBoard);
-        rotationGroup.addChild(branchGroup);
-        objectTG.addChild(rotationGroup);
+        return new Shape3D(quadArray);
+    }
+
+    private static Shape3D generateRectangle(String texture, Point3f size, Vector2f scale){ // function to generate rectangle QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
+        QuadArray quadArray = new QuadArray(4, QuadArray.TEXTURE_COORDINATE_2 | QuadArray.COORDINATES);
+        Point3f [] point3fs = new Point3f[4];
+        point3fs[0] = new Point3f(-size.x * scale.x, -size.y * scale.y, size.z); // first point -x and -y
+        point3fs[1] = new Point3f(size.x * scale.x, -size.y * scale.y, size.z); // second point +x and -y
+        point3fs[2] = new Point3f(size.x * scale.x,  size.y * scale.y, size.z); // third point +x and +y
+        point3fs[3] = new Point3f(-size.x * scale.x, size.y * scale.y, size.z); // last point in -x and +y
+        for (int i = 0; i < 4; i ++) {
+            quadArray.setCoordinate(i, point3fs[i]); // loop through and set the coordinates
+        }
+        setAppearance(quadArray);
+        return new Shape3D(quadArray, texturedApp(texture));
+    }
+
+    private static void generateBase(TransformGroup base, float scale, String texture){ // to scale down the base by factor of 0.06
+
+        float x, z;
+        Vector3f[] sides = new Vector3f[6];
+        sides[4] = new Vector3f(0, 0, 0); // location of top of base
+        sides[5] = new Vector3f(0, -(0.04f * scale), 0); // location of bottom of base
+        for(int i = 0; i < 6; i ++){
+            if(i < 4){ // calculate location of sides
+                double a  = (Math.PI/2) * i;
+                x = (float) Math.cos(a) * scale; // multiply by scale factor
+                z = (float) Math.sin(a) * scale; // multiply by scale factor
+                sides[i] = new Vector3f(x, -(0.04f * scale/2), z); // center the sides at -0.524f since they range from 0.024f to -0.24f (0.048 height diff) but 0.08 without scaling factor
+            }
+            Transform3D transform3D = new Transform3D(); // make a transform3d to move quad array
+            if(i < 4){ // rotating the sides accordingly
+                double angle = (i % 2 == 0) ? Math.cos(Math.PI/2 * i) * Math.PI/2 : ((i == 3) ? -Math.PI : 0);
+                transform3D.rotY(angle); // rotate the quadArray by angle if necessary red and cyan rotated to show properly (front, back) and yellow rotated by -180 to show on left
+            }
+            else { // rotating the top and bottom of base
+                transform3D.rotX(-Math.cos(Math.PI * (i % 4)) * Math.PI / 2); //rotate 90 degrees in positive for bottom and negative for top
+            }
+            transform3D.setTranslation(sides[i]); // apply the transition move it to the correct spot
+            TransformGroup tg = new TransformGroup(); // make a transform group
+            tg.setTransform(transform3D); // add the transformation to the group
+            if(i < 4){ // sides
+                tg.addChild(generateRectangle(MONKEECHESS.Grey, new Point3f(1, 0.04f, 0), new Vector2f(scale, scale/2)));
+            }
+            if(i == 4){ // textured top
+               tg.addChild(generateRectangle(texture, new Point3f(1, 1, 0), new Vector2f(scale, scale)));
+            }
+            if(i == 5){ // bottom
+                tg.addChild(generateRectangle(MONKEECHESS.Grey, new Point3f(1, 1, 0), new Vector2f(scale, scale)));
+            }
+            base.addChild(tg); // add the transform group to the baseTransformGroup
+        }
     }
 
     private static Shape3D generateRectangle(Color3f color, Point3f size){ // function to generate rectangle
@@ -97,11 +135,11 @@ public class ChessBoard {
         return base;
     }
 
-    public void setAppearance(Shape3D board){
-        Appearance app = texturedApp(this.name);
-        app.setTransparencyAttributes(setTransparency(TransparencyAttributes.FASTEST, 0.2f));
-        board.setAppearance(app);
-        board.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
+    public static void setAppearance(QuadArray quadArray){
+        float [][] coords = {{0f, 0f}, {1f, 0f}, {1f, 1f}, {0f, 1f}};
+        for(int i = 0; i < 4; i ++){
+            quadArray.setTextureCoordinate(0, i, coords[i]);
+        }
     }
 
     public static Texture setTexture(String name){
@@ -128,19 +166,9 @@ public class ChessBoard {
         TextureAttributes ta = new TextureAttributes();
         ta.setTextureMode(TextureAttributes.REPLACE);
 
-
-        float scale = 4f;
-        Transform3D t = new Transform3D();
-        t.setScale(scale);
-        ta.setTextureTransform(t);
-
         appearance.setPolygonAttributes(polygonAttributes);
         appearance.setTextureAttributes(ta);
         return appearance;
-    }
-
-    public static TransparencyAttributes setTransparency(int mode, float value){
-        return new TransparencyAttributes(mode, value);
     }
 
     public static Material setMaterial(Color3f clr) {
