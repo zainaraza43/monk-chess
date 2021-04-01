@@ -10,11 +10,10 @@ public class MouseRotation extends Behavior {
     private WakeupCriterion[] wakeupCriteria;
     private WakeupCondition wakeupCondition;
     private TransformGroup targetTG;
-    private boolean mouseClicked;
+    private boolean mouseClicked, rotation;
     private double xFactor;
     private int xPrev;
     private Transform3D currTrans, transformX, transformY;
-
 
     public MouseRotation(TransformGroup tg) { //will take in a transformGroup to apply rotation on
         this.targetTG = tg;
@@ -23,6 +22,7 @@ public class MouseRotation extends Behavior {
         this.transformY = new Transform3D(); // transformGrpup for rotating in the y
         this.xPrev = 0;
         this.mouseClicked = true;
+        this.rotation = true;
         this.xFactor = 0.002;
     }
 
@@ -56,13 +56,13 @@ public class MouseRotation extends Behavior {
         for (AWTEvent e : events) {
             MouseEvent mouseEvent = (MouseEvent) e;
             mouseX = mouseEvent.getX();
-            if (mouseEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
+            if (rotation && mouseEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
                 processDrag(mouseX);
             }
-            else if(mouseEvent.getID() == MouseEvent.MOUSE_PRESSED){
+            else if(rotation && mouseEvent.getID() == MouseEvent.MOUSE_PRESSED){
                 this.xPrev = mouseX;
             }
-            else if (mouseEvent.getID() == MouseEvent.MOUSE_RELEASED) {
+            else if (rotation && mouseEvent.getID() == MouseEvent.MOUSE_RELEASED) {
                 mouseClicked = false;
             }
         }
@@ -88,6 +88,25 @@ public class MouseRotation extends Behavior {
 
     public void setxFactor(double xFactor) {
         this.xFactor = xFactor;
+    }
+
+    public void resetRotation(){
+        Transform3D rotation3D = new Transform3D();
+        this.targetTG.getTransform(rotation3D);
+        rotation3D.rotY(0);
+        this.targetTG.setTransform(rotation3D);
+    }
+
+    public void pauseRotation(){
+        if(rotation){
+            rotation = false;
+        }
+    }
+
+    public void resumeRotation(){
+        if(!rotation){
+            rotation = true;
+        }
     }
 
 }

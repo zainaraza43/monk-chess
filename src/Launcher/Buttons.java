@@ -21,14 +21,20 @@ public class Buttons{
         image = new ImageIcon("Assets/Launcher/button.jpg");
 
     }
-
-    public Buttons(int x, int y, int width, int height, String label, Font font){
+    public Buttons(String label){
         this();
+        this.label = label;
+    }
+
+    public Buttons(int x, int y, int width, int height, String label){
+        this(label);
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.label = label;
+    }
+    public Buttons(int x, int y, int width, int height, String label, Font font){
+        this(x, y, width, height, label);
         this.font = font;
     }
 
@@ -49,6 +55,13 @@ public class Buttons{
         button.setkHoverEndColor(new Color(75,75,75));
         button.setkHoverColor(new Color(75,75,75));
         button.setkHoverStartColor(new Color(75,75,75));
+    }
+
+    public void setBounds(int x, int y, int width, int height){
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
     public int getHeight() {

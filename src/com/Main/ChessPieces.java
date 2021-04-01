@@ -26,7 +26,7 @@ public class ChessPieces {
 
     }
 
-    public void CreatePieces(){
+    public void createPieces(){
         String [] black = {"Rook", "Knight", "Bishop", "King"};
         String [] black2 = {"Queen", "Bishop", "Knight", "Rook"};
 
@@ -58,6 +58,7 @@ public class ChessPieces {
         ObjectFile objectFile = new ObjectFile(ObjectFile.STRIPIFY | ObjectFile.TRIANGULATE | ObjectFile.RESIZE);
         Scene scene = null;
         try{
+            System.out.println("attempting to load in object");
             scene = objectFile.load(new File("Assets/Objects/obj_sht/" + fileName + ".obj").toURI().toURL());
         }catch (FileNotFoundException | MalformedURLException e) {
             System.err.println(e);

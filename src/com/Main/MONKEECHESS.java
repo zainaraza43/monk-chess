@@ -1,16 +1,9 @@
 package com.Main;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.ColorModel;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
 import javax.swing.*;
 
 import com.Behavior.MouseZoom;
 import org.jogamp.java3d.*;
-import org.jogamp.java3d.loaders.Scene;
-import org.jogamp.java3d.loaders.objectfile.ObjectFile;
 import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
@@ -36,6 +29,8 @@ public class MONKEECHESS extends JPanel {
     private static final long serialVersionUID = 1L;
     private JFrame frame;
     private static ChessBoard chessBoard;
+    public static SimpleUniverse su;
+    public static RotationInterpolator rotationInterpolator;
 
 
 
@@ -80,7 +75,25 @@ public class MONKEECHESS extends JPanel {
         return mouseZoom;
     }
 
+    public static void changeViewer(SimpleUniverse su, Point3d eye){
+        TransformGroup viewTransform = su.getViewingPlatform().getViewPlatformTransform();
+        Point3d center = new Point3d(1, 0, 0);               // define the point where the eye looks at
+        Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
+        Transform3D view_TM = new Transform3D();
+        view_TM.lookAt(eye, center, up);
+        view_TM.invert();
+        viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
+    }
 
+    public static void resetViewer(SimpleUniverse su, Point3d eye){
+        TransformGroup viewTransform = su.getViewingPlatform().getViewPlatformTransform();
+        Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
+        Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
+        Transform3D view_TM = new Transform3D();
+        view_TM.lookAt(eye, center, up);
+        view_TM.invert();
+        viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
+    }
     private static void defineViewer(SimpleUniverse simple_U, Point3d eye) {
         TransformGroup viewTransform = simple_U.getViewingPlatform().getViewPlatformTransform();
         Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
@@ -104,6 +117,9 @@ public class MONKEECHESS extends JPanel {
     public static void createScene(BranchGroup sceneBG) {
         // create 'objsBG' for content
         TransformGroup sceneTG = new TransformGroup();
+//        rotationInterpolator = rotateBehavior(sceneTG, new Alpha(-1, 10000));
+//        rotationInterpolator.getAlpha().pause();
+//        sceneBG.addChild(rotationInterpolator);
         sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         sceneBG.addChild(sceneTG);
 //        sceneBG.addChild(rotateBehavior(sceneTG, new Alpha(-1, 10000)));
@@ -128,8 +144,8 @@ public class MONKEECHESS extends JPanel {
     public MONKEECHESS(){
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         Canvas3D canvas_3D = new Canvas3D(config);//define a canvas
-        SimpleUniverse su = new SimpleUniverse(canvas_3D);   //define simpile universe and put canvas in it
-        defineViewer(su, new Point3d(0, 20, 20.0));    // set the viewer's location
+        su = new SimpleUniverse(canvas_3D);   //define simpile universe and put canvas in it
+        defineViewer(su, new Point3d(0, 20, 20));    // set the viewer's location
         BranchGroup scene = new BranchGroup();
         createScene(scene);                           // add contents to the scene branch
         scene.addChild(keyNavigation(su));                   // allow key navigation

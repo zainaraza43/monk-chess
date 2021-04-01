@@ -11,7 +11,8 @@ import org.jogamp.vecmath.*;
 public class ChessBoard {
     private String name;
     private TransformGroup sceneTG;
-    private MouseRotation mouseRotation;
+    public static MouseRotation mouseRotation;
+    public static ChessPieces chessPieces;
     public ChessBoard(String name){
         this.name = name;
         this.sceneTG = new TransformGroup();
@@ -25,8 +26,8 @@ public class ChessBoard {
         mouseRotation = new MouseRotation(this.sceneTG);
         mouseRotation.setSchedulingBounds(mouseBounds);
         sceneTG.addChild(mouseRotation);
-        ChessPieces chessPieces = new ChessPieces(this.sceneTG);
-        chessPieces.CreatePieces();
+        chessPieces = new ChessPieces(this.sceneTG);
+        chessPieces.createPieces();
         sceneTG.addChild(this.sceneTG);
     }
 

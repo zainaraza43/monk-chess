@@ -1,6 +1,7 @@
 package Launcher;
 
 
+import com.Main.ChessBoard;
 import com.Main.MONKEECHESS;
 
 import javax.swing.*;
