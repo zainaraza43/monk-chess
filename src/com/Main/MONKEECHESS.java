@@ -131,11 +131,11 @@ public class MONKEECHESS extends JPanel {
 
     public static void addLights(BranchGroup sceneBG, Color3f clr) {
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 1000.0);
-        AmbientLight amLgt = new AmbientLight(new Color3f(0.2f, 0.2f, 0.2f));
+        AmbientLight amLgt = new AmbientLight(new Color3f(0.7f, 0.7f, 0.7f));
         amLgt.setInfluencingBounds(bounds);
         sceneBG.addChild(amLgt);
-        Point3f pt  = new Point3f(0f, 6f, 0f);
-        Point3f atn = new Point3f(0.1f, 0, 0);
+        Point3f pt  = new Point3f(0f, 2f, 0f);
+        Point3f atn = new Point3f(1, 0, 0);
         PointLight ptLight = new PointLight(clr, pt, atn);
         ptLight.setInfluencingBounds(bounds);
         sceneBG.addChild(ptLight);

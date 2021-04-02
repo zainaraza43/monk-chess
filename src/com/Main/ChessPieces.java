@@ -4,6 +4,7 @@ import com.Util.Pair;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.loaders.Scene;
 import org.jogamp.java3d.loaders.objectfile.ObjectFile;
+import org.jogamp.java3d.utils.geometry.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Vector3d;
@@ -36,7 +37,7 @@ public class ChessPieces {
         String [] whiteSide = {"Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Rook", "Knight", "Bishop", "King", "Queen", "Bishop",
                 "Knight", "Rook"};
         createPieces(blackSide, blackPieces, "mahogany", false);
-        createPieces(whiteSide, whitePieces, "gold2", true);
+        createPieces(whiteSide, whitePieces, "gold", true);
     }
 
     public void loadPieces() {
@@ -82,6 +83,7 @@ public class ChessPieces {
         Shape3D piece = (Shape3D) bg.getChild(0);
         piece.setName(fileName); // piece name
         piece.setUserData(0); // piece is on the board
+
         bg.removeAllChildren();
 
         return piece;
@@ -97,12 +99,13 @@ public class ChessPieces {
     public void setApp(Shape3D piece, String texture) {
         Appearance appearance = new Appearance();
         appearance.setMaterial(setMaterial(MONKEECHESS.White));
-        PolygonAttributes polygonAttributes = new PolygonAttributes();
-        polygonAttributes.setCapability(PolygonAttributes.CULL_NONE);
-        appearance.setPolygonAttributes(polygonAttributes);
+
+        ColoringAttributes ca = new ColoringAttributes(MONKEECHESS.Black, ColoringAttributes.SHADE_GOURAUD);
+        ca.setColor(0, 0, 0);
+        appearance.setColoringAttributes(ca);
 
         TextureAttributes ta = new TextureAttributes();
-        ta.setTextureMode(TextureAttributes.REPLACE);
+        ta.setTextureMode(TextureAttributes.MODULATE);
         appearance.setTexture(setTexture(texture));
         appearance.setTextureAttributes(ta);
         piece.setAppearance(appearance);
