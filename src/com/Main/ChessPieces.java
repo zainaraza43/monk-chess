@@ -4,12 +4,10 @@ import com.Util.Pair;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.loaders.Scene;
 import org.jogamp.java3d.loaders.objectfile.ObjectFile;
-import org.jogamp.java3d.utils.geometry.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.Color3f;
+import org.jogamp.vecmath.Vector2f;
 import org.jogamp.vecmath.Vector3d;
-
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
@@ -20,30 +18,29 @@ public class ChessPieces {
     private String textureNameBlack, textureNameWhite;
     private ArrayList<TransformGroup> blackPieces;
     private ArrayList<TransformGroup> whitePieces;
-    public HashMap<String, Pair<Shape3D, Float>> pieces;
+    public HashMap<String, Pair<Shape3D, Vector2f>> pieces;
     private String [] objNames;
     public ChessPieces() {
         blackPieces = new ArrayList<>();
         whitePieces = new ArrayList<>();
-        objNames = new String[]{"Pawn", "Rook", "Knight", "Bishop", "King", "Queen"};
+        objNames = new String[]{"Pawn", "Rook", "Knight", "Bishop", "Queen", "King"};
         pieces = new HashMap<>();
 
     }
 
     public void makePieces(){
-       String [] blackSide = {"Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Rook", "Knight", "Bishop", "Queen", "King", "Bishop",
+       String [] pieceNames = {"Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Rook", "Knight", "Bishop", "Queen", "King", "Bishop",
        "Knight", "Rook"};
 
-        String [] whiteSide = {"Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Rook", "Knight", "Bishop", "King", "Queen", "Bishop",
-                "Knight", "Rook"};
-        createPieces(blackSide, blackPieces, "mahogany", false);
-        createPieces(whiteSide, whitePieces, "gold", true);
+        createPieces(pieceNames, blackPieces, "mahogany", false);
+        createPieces(pieceNames, whitePieces, "gold", true);
     }
 
     public void loadPieces() {
-        float [] sizes = {0.8f, 0.9f, 1.025f, 1.15f, 1.275f, 1.4f};
+        float [] sizes = {0.8f, 0.9f, 1.025f, 1.15f, 1.275f, 1.35f};
+        float [] yValues = {0.65f, 0.78f, 0.8f, 1.03f, 1.17f, 1.25f};
         for (int i = 0; i < objNames.length; i ++) {
-            pieces.put(objNames[i], new Pair<Shape3D, Float>(loadPiece(objNames[i]),sizes[i]));
+            pieces.put(objNames[i], new Pair<>(loadPiece(objNames[i]), new Vector2f(sizes[i], yValues[i])));
         }
     }
 
@@ -64,8 +61,8 @@ public class ChessPieces {
             float z = isWhite ? 1 : -1;
             Shape3D tmp = new Shape3D();
             tmp.duplicateNode(pieces.get(pieceList[i]).getFirst(), true);
-            Vector3d vector3d = new Vector3d(-7 + (2f * (i % 8)), pieces.get(pieceList[i]).getSecond(), z * (i / 8 * 2 + 5));
-            list.add(designPieces(tmp, vector3d, pieces.get(pieceList[i]).getSecond(), isWhite ? Math.PI : 0, texture));
+            Vector3d vector3d = new Vector3d(-7 + (2f * (i % 8)), pieces.get(pieceList[i]).getSecond().y + 1/8f, z * (i / 8 * 2 + 5));
+            list.add(designPieces(tmp, vector3d, pieces.get(pieceList[i]).getSecond().x, isWhite ? Math.PI : 0, texture));
         }
     }
 
@@ -136,12 +133,4 @@ public class ChessPieces {
         ma.setLightingEnable(true);
         return ma;
     }
-
-//    public static ArrayList<TransformGroup> getBlackPieces() {
-//        return blackPieces;
-//    }
-//
-//    public static ArrayList<TransformGroup> getWhitePieces() {
-//        return whitePieces;
-//    }
 }

@@ -1,5 +1,6 @@
 package com.Main;
 import java.awt.*;
+import java.util.Random;
 import javax.swing.*;
 
 import com.Behavior.MouseZoom;
@@ -24,13 +25,10 @@ public class MONKEECHESS extends JPanel {
     public static final Color3f Black = new Color3f(0, 0, 0);
     public static final Color3f[] Clrs = {Blue, Green, Red, Yellow,
             Cyan, Orange, Magenta, Grey};
-    public final static int clr_num = 8;
-
     private static final long serialVersionUID = 1L;
-    private JFrame frame;
     private static ChessBoard chessBoard;
     public static SimpleUniverse su;
-    public static RotationInterpolator rotationInterpolator;
+    public static Point3d position;
 
 
 
@@ -57,8 +55,6 @@ public class MONKEECHESS extends JPanel {
     }
 
     private KeyNavigatorBehavior keyNavigation(SimpleUniverse simple_U) {
-        //function for moving around using keys , can be used to move any direction
-        //this allows us to move with the viewing platform
         ViewingPlatform view_platfm = simple_U.getViewingPlatform();
         TransformGroup view_TG = view_platfm.getViewPlatformTransform();
         KeyNavigatorBehavior keyNavBeh = new KeyNavigatorBehavior(view_TG);
@@ -117,9 +113,6 @@ public class MONKEECHESS extends JPanel {
     public static void createScene(BranchGroup sceneBG) {
         // create 'objsBG' for content
         TransformGroup sceneTG = new TransformGroup();
-//        rotationInterpolator = rotateBehavior(sceneTG, new Alpha(-1, 10000));
-//        rotationInterpolator.getAlpha().pause();
-//        sceneBG.addChild(rotationInterpolator);
         sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         sceneBG.addChild(sceneTG);
         addLights(sceneBG, White);
@@ -145,7 +138,9 @@ public class MONKEECHESS extends JPanel {
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         Canvas3D canvas_3D = new Canvas3D(config);//define a canvas
         su = new SimpleUniverse(canvas_3D);   //define simpile universe and put canvas in it
-        defineViewer(su, new Point3d(0, 20, 20));    // set the viewer's location
+        Random n = new Random();
+        position = new Point3d(0, 20, n.nextInt(2) == 1 ? 20 : -20);
+        defineViewer(su, position);    // set the viewer's location random for black piece or white piece
         BranchGroup scene = new BranchGroup();
         createScene(scene);                           // add contents to the scene branch
         scene.addChild(keyNavigation(su));                   // allow key navigation
@@ -171,10 +166,8 @@ public class MONKEECHESS extends JPanel {
             panel.setVisible(true);
             panel.add(new MONKEECHESS());
             frame.add(panel);
-
             Overlay overlay = new Overlay(frame);
             overlay.createPanels();
-
 
             frame.setLayout(null);
             frame.setVisible(true);

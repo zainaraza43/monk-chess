@@ -99,7 +99,7 @@ public class Overlay extends JPanel implements ActionListener {
                         System.out.println("Top view now");
                         break;
                     case "Normal":
-                        MONKEECHESS.resetViewer(MONKEECHESS.su, new Point3d(0, 20, 20));
+                        MONKEECHESS.resetViewer(MONKEECHESS.su, MONKEECHESS.position);
                         System.out.println("Normal view now");
                         break;
                     case "Lock":
@@ -110,14 +110,6 @@ public class Overlay extends JPanel implements ActionListener {
                         ChessBoard.mouseRotation.resumeRotation();
                         System.out.println("Rotation resumed");
                         break;
-                    case "Spin":
-                        spin = !spin;
-                        if(spin){
-                            MONKEECHESS.rotationInterpolator.getAlpha().pause();
-                        }else {
-                            MONKEECHESS.rotationInterpolator.getAlpha().resume();
-                        }
-                        System.out.println("Spinning");
                 }
             }
         }
