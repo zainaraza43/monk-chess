@@ -122,11 +122,10 @@ public class MONKEECHESS extends JPanel {
 //        sceneBG.addChild(rotationInterpolator);
         sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         sceneBG.addChild(sceneTG);
-//        sceneBG.addChild(rotateBehavior(sceneTG, new Alpha(-1, 10000)));
         addLights(sceneBG, White);
         sceneBG.addChild(generateBackground());
         sceneTG.addChild(generateAxis(Yellow, 1f));
-        chessBoard = new ChessBoard("chessboard1");
+        chessBoard = new ChessBoard("chess");
         chessBoard.createScene(sceneTG);
     }
 

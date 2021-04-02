@@ -3,6 +3,7 @@
  */
 
 package com.Main;
+import Launcher.Launcher;
 import com.Behavior.MouseRotation;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
@@ -12,7 +13,8 @@ public class ChessBoard {
     private String name;
     private TransformGroup sceneTG;
     public static MouseRotation mouseRotation;
-    public static ChessPieces chessPieces;
+    private ChessPieces chessPieces;
+
     public ChessBoard(String name){
         this.name = name;
         this.sceneTG = new TransformGroup();
@@ -26,9 +28,17 @@ public class ChessBoard {
         mouseRotation = new MouseRotation(this.sceneTG);
         mouseRotation.setSchedulingBounds(mouseBounds);
         sceneTG.addChild(mouseRotation);
-        chessPieces = new ChessPieces(this.sceneTG);
-        chessPieces.createPieces();
+        addChessPieces(this.sceneTG);
         sceneTG.addChild(this.sceneTG);
+    }
+
+    public void addChessPieces(TransformGroup sceneTG){
+        chessPieces = Launcher.chessPieces;
+        chessPieces.makePieces();
+        for(int i = 0; i < 16; i ++){
+           sceneTG.addChild(chessPieces.getBlackPieces().get(i));
+           sceneTG.addChild(chessPieces.getWhitePieces().get(i));
+        }
     }
 
 
@@ -144,7 +154,7 @@ public class ChessBoard {
     }
 
     public static Texture setTexture(String name){
-        TextureLoader loader = new TextureLoader("Assets/Textures/boards/" + name + ".jpg", null); // load in the image
+        TextureLoader loader = new TextureLoader("Assets/Textures/boardpics/" + name + ".jpg", null); // load in the image
         ImageComponent2D imageComponent2D = loader.getImage(); //get image
         if(imageComponent2D == null){ // if image is not found
             System.out.println("Error opening image");

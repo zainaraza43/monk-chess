@@ -8,8 +8,6 @@ import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class Overlay extends JPanel implements ActionListener {
@@ -36,7 +34,6 @@ public class Overlay extends JPanel implements ActionListener {
             panel.setVisible(true);
             panel.setLayout(null);
             if(i == 0){
-//                createButtons(panel);
                 makeBottomLabels(panel);
             }
             else{
@@ -60,7 +57,7 @@ public class Overlay extends JPanel implements ActionListener {
     public void makeBottomLabels(JPanel panel){
         String [] labels = {"View", "Sound", "Rotation"};
 
-        String [][] buttonLabels = {{"Top", "Normal", "Spin"}, {"Stop", "Play", "Change"}, {"Pause", "Resume", "Reset"}};
+        String [][] buttonLabels = {{"Top", "Normal", "Spin"}, {"Stop", "Play", "Change"}, {"Lock", "Unlock", "Reset"}};
 
         for(int i = 0; i < 3; i ++){
             JLabel label = new JLabel(labels[i]);
@@ -105,11 +102,11 @@ public class Overlay extends JPanel implements ActionListener {
                         MONKEECHESS.resetViewer(MONKEECHESS.su, new Point3d(0, 20, 20));
                         System.out.println("Normal view now");
                         break;
-                    case "Pause":
+                    case "Lock":
                         ChessBoard.mouseRotation.pauseRotation();
                         System.out.println("Rotation paused");
                         break;
-                    case "Resume":
+                    case "Unlock":
                         ChessBoard.mouseRotation.resumeRotation();
                         System.out.println("Rotation resumed");
                         break;

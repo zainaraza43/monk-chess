@@ -2,6 +2,7 @@ package Launcher;
 
 
 import com.Main.ChessBoard;
+import com.Main.ChessPieces;
 import com.Main.MONKEECHESS;
 
 import javax.swing.*;
@@ -20,7 +21,7 @@ public class Launcher extends JPanel implements ActionListener {
     private Buttons jbuttons;
     private ArrayList<Buttons> buttons = new ArrayList<>();
     private JFrame jFrame;
-
+    public static ChessPieces chessPieces;
 
     public Launcher(){
         jFrame = new JFrame("MONKEECHESS");
@@ -28,6 +29,9 @@ public class Launcher extends JPanel implements ActionListener {
         ImageIcon imageIcon = new ImageIcon("Assets/Launcher/icon.png"); // setting the image icon
         jFrame.setIconImage(imageIcon.getImage());
         Frame(jFrame);
+        chessPieces = new ChessPieces();
+        chessPieces.loadPieces();
+
     }
     public void Frame(JFrame frame){
 
