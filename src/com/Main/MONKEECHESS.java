@@ -134,12 +134,13 @@ public class MONKEECHESS extends JPanel {
         AmbientLight amLgt = new AmbientLight(new Color3f(0.2f, 0.2f, 0.2f));
         amLgt.setInfluencingBounds(bounds);
         sceneBG.addChild(amLgt);
-        Point3f pt  = new Point3f(2.0f, 2.0f, 2.0f);
-        Point3f atn = new Point3f(1.0f, 0.0f, 0.0f);
+        Point3f pt  = new Point3f(0f, 6f, 0f);
+        Point3f atn = new Point3f(0.1f, 0, 0);
         PointLight ptLight = new PointLight(clr, pt, atn);
         ptLight.setInfluencingBounds(bounds);
         sceneBG.addChild(ptLight);
     }
+
     public MONKEECHESS(){
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         Canvas3D canvas_3D = new Canvas3D(config);//define a canvas

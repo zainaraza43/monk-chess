@@ -36,7 +36,7 @@ public class ChessPieces {
         String [] whiteSide = {"Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Rook", "Knight", "Bishop", "King", "Queen", "Bishop",
                 "Knight", "Rook"};
         createPieces(blackSide, blackPieces, "mahogany", false);
-        createPieces(whiteSide, whitePieces, "gold", true);
+        createPieces(whiteSide, whitePieces, "gold2", true);
     }
 
     public void loadPieces() {
