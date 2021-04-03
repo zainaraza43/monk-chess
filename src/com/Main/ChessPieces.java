@@ -1,5 +1,13 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * ChessPieces.java
+ */
 package com.Main;
-
 import com.Util.Pair;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.loaders.Scene;
@@ -15,7 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ChessPieces {
-    private String textureNameBlack, textureNameWhite;
+    private String textureNameBlack, textureNameWhite; // will be used later for texture picking
     private ArrayList<TransformGroup> blackPieces;
     private ArrayList<TransformGroup> whitePieces;
     public HashMap<String, Pair<Shape3D, Vector2f>> pieces;
@@ -23,7 +31,7 @@ public class ChessPieces {
     public ChessPieces() {
         blackPieces = new ArrayList<>();
         whitePieces = new ArrayList<>();
-        objNames = new String[]{"Pawn", "Rook", "Knight", "Bishop", "Queen", "King"};
+        objNames = new String[]{"Pawn", "Rook", "Knight", "Bishop", "Queen", "King"}; // string array to hold names
         pieces = new HashMap<>();
 
     }
@@ -31,12 +39,11 @@ public class ChessPieces {
     public void makePieces(){
        String [] pieceNames = {"Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Rook", "Knight", "Bishop", "Queen", "King", "Bishop",
        "Knight", "Rook"};
-
         createPieces(pieceNames, blackPieces, "mahogany", false);
         createPieces(pieceNames, whitePieces, "gold", true);
     }
 
-    public void loadPieces() {
+    public void loadPieces() { // will load all the objects in called at the start of game
         float [] sizes = {0.8f, 0.9f, 1.025f, 1.15f, 1.275f, 1.35f};
         float [] yValues = {0.65f, 0.78f, 0.8f, 1.03f, 1.17f, 1.25f};
         for (int i = 0; i < objNames.length; i ++) {
@@ -44,7 +51,7 @@ public class ChessPieces {
         }
     }
 
-    public TransformGroup designPieces(Shape3D piece, Vector3d position, float scale, double rotation, String texture) {
+    public TransformGroup designPieces(Shape3D piece, String name, Vector3d position, float scale, double rotation, String texture) {
         Transform3D scalar = new Transform3D();
         scalar.rotY(rotation);
         scalar.setScale(scale);
@@ -52,6 +59,8 @@ public class ChessPieces {
         TransformGroup tg = new TransformGroup();
         tg.setTransform(scalar);
         setApp(piece, texture);
+        piece.setName(name);
+        piece.setUserData(0);
         tg.addChild(piece);
         return tg;
     }
@@ -62,11 +71,11 @@ public class ChessPieces {
             Shape3D tmp = new Shape3D();
             tmp.duplicateNode(pieces.get(pieceList[i]).getFirst(), true);
             Vector3d vector3d = new Vector3d(-7 + (2f * (i % 8)), pieces.get(pieceList[i]).getSecond().y + 1/8f, z * (i / 8 * 2 + 5));
-            list.add(designPieces(tmp, vector3d, pieces.get(pieceList[i]).getSecond().x, isWhite ? Math.PI : 0, texture));
+            list.add(designPieces(tmp, pieceList[i] + i, vector3d, pieces.get(pieceList[i]).getSecond().x, isWhite ? Math.PI : 0, texture));
         }
     }
 
-    public Shape3D loadPiece(String fileName) {
+    public Shape3D loadPiece(String fileName) { // function that loads a piece in
         ObjectFile objectFile = new ObjectFile(ObjectFile.STRIPIFY | ObjectFile.TRIANGULATE | ObjectFile.RESIZE);
         Scene scene = null;
         try {
@@ -78,8 +87,6 @@ public class ChessPieces {
         }
         BranchGroup bg = scene.getSceneGroup();
         Shape3D piece = (Shape3D) bg.getChild(0);
-        piece.setName(fileName); // piece name
-        piece.setUserData(0); // piece is on the board
 
         bg.removeAllChildren();
 
@@ -93,6 +100,7 @@ public class ChessPieces {
     public ArrayList<TransformGroup> getBlackPieces() {
         return blackPieces;
     }
+
     public void setApp(Shape3D piece, String texture) {
         Appearance appearance = new Appearance();
         appearance.setMaterial(setMaterial(MONKEECHESS.White));
@@ -103,8 +111,9 @@ public class ChessPieces {
 
         TextureAttributes ta = new TextureAttributes();
         ta.setTextureMode(TextureAttributes.MODULATE);
-        appearance.setTexture(setTexture(texture));
         appearance.setTextureAttributes(ta);
+
+        appearance.setTexture(setTexture(texture));
         piece.setAppearance(appearance);
     }
 

@@ -1,7 +1,14 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * Launcher.java
+ */
+
 package Launcher;
-
-
-import com.Main.ChessBoard;
 import com.Main.ChessPieces;
 import com.Main.MONKEECHESS;
 

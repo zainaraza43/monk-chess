@@ -1,10 +1,17 @@
 /*
- * Class that will load in the game chess board provided a string which is the texture name
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * ChessBoard.java
  */
 
 package com.Main;
 import Launcher.Launcher;
 import com.Behavior.MouseRotation;
+import com.Behavior.PickBehavior;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
@@ -14,25 +21,36 @@ public class ChessBoard {
     private TransformGroup sceneTG;
     public static MouseRotation mouseRotation;
     private ChessPieces chessPieces;
+    public Canvas3D canvas3D;
+    public BranchGroup sceneBG;
 
-    public ChessBoard(String name){
+    public ChessBoard(String name, Canvas3D canvas3D, BranchGroup sceneBG){
         this.name = name;
         this.sceneTG = new TransformGroup();
         this.sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        this.canvas3D = canvas3D;
+        this.sceneBG = sceneBG;
     }
 
     public void createScene(TransformGroup sceneTG){
         generateBase(this.sceneTG, 8, name);
         this.sceneTG.addChild(addSides());
         BoundingSphere mouseBounds = new BoundingSphere(new Point3d(), 1000d);
-        mouseRotation = new MouseRotation(this.sceneTG);
+
+        mouseRotation = new MouseRotation(this.sceneTG); // mouseRotation used for rotating the board
         mouseRotation.setSchedulingBounds(mouseBounds);
+
+        PickBehavior pickBehavior = new PickBehavior(this.sceneBG, this.sceneTG, canvas3D); // pickBehaviour class
+        pickBehavior.setSchedulingBounds(mouseBounds);
+        this.sceneTG.addChild(pickBehavior);
+
+
         sceneTG.addChild(mouseRotation);
         addChessPieces(this.sceneTG);
         sceneTG.addChild(this.sceneTG);
     }
 
-    public void addChessPieces(TransformGroup sceneTG){
+    public void addChessPieces(TransformGroup sceneTG){ // will add the pieces to the chess board
         chessPieces = Launcher.chessPieces;
         chessPieces.makePieces();
         for(int i = 0; i < 16; i ++){
@@ -42,7 +60,7 @@ public class ChessBoard {
     }
 
 
-
+    // function used to make bottom and sides of chess board
     private static Shape3D generateRectangle(Color3f color, Point3f size, Vector2f scale){ // function to generate rectangle QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
         QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
         Point3f [] point3fs = new Point3f[4];
@@ -54,9 +72,17 @@ public class ChessBoard {
             quadArray.setCoordinate(i, point3fs[i]); // loop through and set the coordinates
             quadArray.setColor(i, color); //set the color
         }
-        return new Shape3D(quadArray);
+        Appearance appearance = new Appearance();
+        appearance.setMaterial(setMaterial(MONKEECHESS.White));
+        TransparencyAttributes transparencyAttributes = new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.2f);
+        appearance.setTransparencyAttributes(transparencyAttributes);
+
+        Shape3D shape3D = new Shape3D(quadArray, appearance);
+        shape3D.setUserData(0);
+        return shape3D;
     }
 
+    //function used to make textured top of board
     private static Shape3D generateRectangle(String texture, Point3f size, Vector2f scale){ // function to generate rectangle QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
         QuadArray quadArray = new QuadArray(4, QuadArray.TEXTURE_COORDINATE_2 | QuadArray.COORDINATES);
         Point3f [] point3fs = new Point3f[4];
@@ -68,9 +94,12 @@ public class ChessBoard {
             quadArray.setCoordinate(i, point3fs[i]); // loop through and set the coordinates
         }
         setAppearance(quadArray);
-        return new Shape3D(quadArray, texturedApp(texture));
+        Shape3D shape3D = new Shape3D(quadArray, texturedApp(texture));
+        shape3D.setUserData(0);
+        return shape3D;
     }
 
+    //function used to make the entire board
     private static void generateBase(TransformGroup base, float scale, String texture){ // to scale down the base by factor of 0.06
 
         float x, z;
@@ -108,6 +137,7 @@ public class ChessBoard {
         }
     }
 
+    //function used to make the side border
     private static Shape3D generateRectangle(Color3f color, Point3f size){ // function to generate rectangle
         QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
         Point3f [] point3fs = new Point3f[4];
@@ -119,10 +149,18 @@ public class ChessBoard {
             quadArray.setCoordinate(i, point3fs[i]); // loop through and set the coordinates
             quadArray.setColor(i, color); //set the color
         }
-        return new Shape3D(quadArray);
+        Appearance appearance = new Appearance();
+        appearance.setMaterial(setMaterial(MONKEECHESS.White));
+        TransparencyAttributes transparencyAttributes = new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.2f);
+        appearance.setTransparencyAttributes(transparencyAttributes);
+
+        Shape3D shape3D = new Shape3D(quadArray, appearance);
+        shape3D.setUserData(0);
+        return shape3D;
     }
 
-    public TransformGroup addSides(){
+    // function used to make the entire border
+    public TransformGroup addSides(){ // will add sides that will hold a-h and 1 - 8 for coordinate system
         TransformGroup base = new TransformGroup();
         float x, z;
         Point3f [] point3fs = new Point3f[4];
@@ -146,7 +184,7 @@ public class ChessBoard {
         return base;
     }
 
-    public static void setAppearance(QuadArray quadArray){
+    public static void setAppearance(QuadArray quadArray){ // will set the appearance of the chessBoard
         float [][] coords = {{0f, 0f}, {1f, 0f}, {1f, 1f}, {0f, 1f}};
         for(int i = 0; i < 4; i ++){
             quadArray.setTextureCoordinate(0, i, coords[i]);
@@ -169,16 +207,14 @@ public class ChessBoard {
     public static Appearance texturedApp(String name){
         Appearance appearance = new Appearance();
         appearance.setMaterial(setMaterial(MONKEECHESS.White));
-        appearance.setTexture(setTexture(name));
-
-        PolygonAttributes polygonAttributes = new PolygonAttributes();
-        polygonAttributes.setCullFace(PolygonAttributes.CULL_NONE);
 
         TextureAttributes ta = new TextureAttributes();
-        ta.setTextureMode(TextureAttributes.REPLACE);
-
-        appearance.setPolygonAttributes(polygonAttributes);
+        ta.setTextureMode(TextureAttributes.MODULATE);
         appearance.setTextureAttributes(ta);
+
+        TransparencyAttributes transparencyAttributes = new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.2f);
+        appearance.setTransparencyAttributes(transparencyAttributes);
+        appearance.setTexture(setTexture(name));
         return appearance;
     }
 

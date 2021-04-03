@@ -1,3 +1,12 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * Overlay.java
+ */
 package com.Main;
 
 import Launcher.Buttons;
@@ -20,7 +29,7 @@ public class Overlay extends JPanel implements ActionListener {
        buttons = new ArrayList<>();
     }
 
-    public void createPanels(){
+    public void createPanels(){ // function that will make the panels
         Rectangle[] bounds = new Rectangle[3];
         bounds[0] = new Rectangle(70, 730, 860, 90);
         bounds[1] = new Rectangle(10, 10, 50, 800);

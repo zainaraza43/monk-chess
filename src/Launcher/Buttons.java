@@ -1,7 +1,14 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * Buttons.java
+ */
 package Launcher;
-
 import keeptoo.KButton;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;

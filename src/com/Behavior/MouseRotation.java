@@ -1,3 +1,13 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * Overlay.java
+ */
+
 package com.Behavior;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Matrix4d;
@@ -59,7 +69,7 @@ public class MouseRotation extends Behavior {
             if (rotation && mouseEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
                 processDrag(mouseX);
             }
-            else if(rotation && mouseEvent.getID() == MouseEvent.MOUSE_PRESSED){
+            else if(rotation && mouseEvent.getID() == MouseEvent.MOUSE_PRESSED && mouseEvent.getButton() == MouseEvent.BUTTON1){
                 this.xPrev = mouseX;
             }
             else if (rotation && mouseEvent.getID() == MouseEvent.MOUSE_RELEASED) {

@@ -1,8 +1,14 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * PickBehavior.java
+ */
 package com.Behavior;
-
-import com.Main.MONKEECHESS;
 import org.jogamp.java3d.*;
-import org.jogamp.java3d.utils.universe.SimpleUniverse;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 import java.awt.*;

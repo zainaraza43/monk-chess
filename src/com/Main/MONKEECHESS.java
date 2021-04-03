@@ -1,3 +1,13 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * MONKEECHESS.java
+ */
+
 package com.Main;
 import java.awt.*;
 import java.util.Random;
@@ -12,7 +22,7 @@ import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.jogamp.vecmath.*;
 
 public class MONKEECHESS extends JPanel {
-
+    // defining colors
     public static final Color3f Red = new Color3f(1.0f, 0.0f, 0.0f);
     public static final Color3f Green = new Color3f(0.0f, 1.0f, 0.0f);
     public static final Color3f Blue = new Color3f(0.0f, 0.0f, 1.0f);
@@ -27,15 +37,17 @@ public class MONKEECHESS extends JPanel {
             Cyan, Orange, Magenta, Grey};
     private static final long serialVersionUID = 1L;
     private static ChessBoard chessBoard;
+    public static Canvas3D canvas3D;
     public static SimpleUniverse su;
     public static Point3d position;
+    public static int PLAYER1 = 1, PLAYER2 = 2;
 
 
 
     private static Background generateBackground(){ // will return a background
         Background background = new Background(); // make a background
         background.setImageScaleMode(Background.SCALE_FIT_MAX); // scale it to max
-        TextureLoader loader = new TextureLoader("Assets/Background/background.jpg", null); // load the image
+        TextureLoader loader = new TextureLoader("Assets/Background/background2.jpg", null); // load the image
         background.setApplicationBounds(new BoundingSphere(new Point3d(), 1000d)); // set the bounds
         background.setImage(loader.getImage()); // set the image
         return background;
@@ -63,7 +75,7 @@ public class MONKEECHESS extends JPanel {
         return keyNavBeh;
     }
 
-    private MouseZoom mouseZoom(SimpleUniverse simpleUniverse) {
+    private MouseZoom mouseZoom(SimpleUniverse simpleUniverse) { // used for zooming the viewer in and out of the board
         ViewingPlatform view_platfm = simpleUniverse.getViewingPlatform();
         TransformGroup view_TG = view_platfm.getViewPlatformTransform();
         MouseZoom mouseZoom = new MouseZoom(view_TG);
@@ -71,7 +83,7 @@ public class MONKEECHESS extends JPanel {
         return mouseZoom;
     }
 
-    public static void changeViewer(SimpleUniverse su, Point3d eye){
+    public static void changeViewer(SimpleUniverse su, Point3d eye){ // used to move the viewer to a top down view
         TransformGroup viewTransform = su.getViewingPlatform().getViewPlatformTransform();
         Point3d center = new Point3d(1, 0, 0);               // define the point where the eye looks at
         Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
@@ -81,7 +93,7 @@ public class MONKEECHESS extends JPanel {
         viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
     }
 
-    public static void resetViewer(SimpleUniverse su, Point3d eye){
+    public static void resetViewer(SimpleUniverse su, Point3d eye){ // function used to reset the viewer
         TransformGroup viewTransform = su.getViewingPlatform().getViewPlatformTransform();
         Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
         Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
@@ -90,7 +102,7 @@ public class MONKEECHESS extends JPanel {
         view_TM.invert();
         viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
     }
-    private static void defineViewer(SimpleUniverse simple_U, Point3d eye) {
+    private static void defineViewer(SimpleUniverse simple_U, Point3d eye) { // function used to define viewer original position
         TransformGroup viewTransform = simple_U.getViewingPlatform().getViewPlatformTransform();
         Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
         Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
@@ -118,8 +130,8 @@ public class MONKEECHESS extends JPanel {
         addLights(sceneBG, White);
         sceneBG.addChild(generateBackground());
         sceneTG.addChild(generateAxis(Yellow, 1f));
-        chessBoard = new ChessBoard("chess");
-        chessBoard.createScene(sceneTG);
+        chessBoard = new ChessBoard("chess", canvas3D, sceneBG); // pass in texture name, canvas and sceneBG
+        chessBoard.createScene(sceneTG); // sceneTG is what all pieces and board will be on
     }
 
     public static void addLights(BranchGroup sceneBG, Color3f clr) {
@@ -136,8 +148,8 @@ public class MONKEECHESS extends JPanel {
 
     public MONKEECHESS(){
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
-        Canvas3D canvas_3D = new Canvas3D(config);//define a canvas
-        su = new SimpleUniverse(canvas_3D);   //define simpile universe and put canvas in it
+        canvas3D = new Canvas3D(config);//define a canvas
+        su = new SimpleUniverse(canvas3D);   //define simpile universe and put canvas in it
         Random n = new Random();
         position = new Point3d(0, 20, n.nextInt(2) == 1 ? 20 : -20);
         defineViewer(su, position);    // set the viewer's location random for black piece or white piece
@@ -147,8 +159,8 @@ public class MONKEECHESS extends JPanel {
         scene.addChild(mouseZoom(su));
         scene.compile();                                     // compile the BranchGroup
         su.addBranchGraph(scene);                            // attach the scene to SimpleUniverse
-        canvas_3D.setBounds(10, 0, 850, 700);
-        add("Center", canvas_3D);
+        canvas3D.setBounds(10, 0, 850, 700);
+        add("Center", canvas3D);
 
         setVisible(true);
     }
