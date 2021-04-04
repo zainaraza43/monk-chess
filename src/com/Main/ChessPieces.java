@@ -57,6 +57,9 @@ public class ChessPieces {
         scalar.setScale(scale);
         scalar.setTranslation(position);
         TransformGroup tg = new TransformGroup();
+        tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        tg.setCapability(TransformGroup.ALLOW_CHILDREN_WRITE);
+        tg.setCapability(TransformGroup.ALLOW_CHILDREN_EXTEND);
         tg.setTransform(scalar);
         setApp(piece, texture);
         piece.setName(name);
@@ -71,7 +74,7 @@ public class ChessPieces {
             Shape3D tmp = new Shape3D();
             tmp.duplicateNode(pieces.get(pieceList[i]).getFirst(), true);
             Vector3d vector3d = new Vector3d(-7 + (2f * (i % 8)), pieces.get(pieceList[i]).getSecond().y + 1/8f, z * (i / 8 * 2 + 5));
-            list.add(designPieces(tmp, pieceList[i] + i, vector3d, pieces.get(pieceList[i]).getSecond().x, isWhite ? Math.PI : 0, texture));
+            list.add(designPieces(tmp, isWhite ? "White" : "Black", vector3d, pieces.get(pieceList[i]).getSecond().x, isWhite ? Math.PI : 0, texture));
         }
     }
 

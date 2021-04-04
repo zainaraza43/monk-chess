@@ -20,12 +20,9 @@ import java.util.Iterator;
 public class PickBehavior extends Behavior {
     private WakeupCriterion[] wakeupCriteria;
     private WakeupCondition wakeupCondition;
-    private TransformGroup targetTG, sceneTG;
-    private static Vector3d inVector = new Vector3d(0f, 0f, -1f);
+    private TransformGroup sceneTG;
     private Point3d mousePos, center;
-    private double xFactor, zFactor;
-    private int xPrev, zPrev;
-    private boolean isDrag;
+    private boolean isMoving, isWhite;
     private Transform3D currX, transformX, transformZ, imWorld3D;
     private Canvas3D canvas3D;
     private PickTool pickTool;
@@ -34,18 +31,17 @@ public class PickBehavior extends Behavior {
 
     public PickBehavior(BranchGroup sceneBG, TransformGroup sceneTG, Canvas3D canvas){
        this.sceneTG = sceneTG;
+       this.sceneTG.setCapability(TransformGroup.ALLOW_CHILDREN_EXTEND);
+       this.sceneTG.setCapability(TransformGroup.ALLOW_CHILDREN_WRITE);
+       this.sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
        this.canvas3D = canvas;
        this.sceneBG = sceneBG;
-       isDrag = true;
+       isMoving = false;
        currX = new Transform3D();
        transformX = new Transform3D();
        transformZ = new Transform3D();
        imWorld3D = new Transform3D();
        mousePos = new Point3d();
-       xFactor = 0.002;
-       zFactor = 0.002;
-       xPrev = 0;
-       zPrev = 0;
        pickTool = new PickTool(this.sceneBG);
        pickTool.setMode(PickTool.GEOMETRY);
 
@@ -80,9 +76,7 @@ public class PickBehavior extends Behavior {
             MouseEvent mouseEvent = (MouseEvent) e;
             int mouseX = mouseEvent.getX();
             int mouseY = mouseEvent.getY();
-            if(mouseEvent.getID() == MouseEvent.MOUSE_PRESSED && mouseEvent.getButton() == MouseEvent.BUTTON1){ // if left click
-                this.xPrev = mouseX; // record mouse x and y
-                this.zPrev = mouseY;
+            if(!isMoving && mouseEvent.getID() == MouseEvent.MOUSE_PRESSED && mouseEvent.getButton() == MouseEvent.BUTTON1){ // if left click
                 pickBeh(mouseX, mouseY);
             }
         }
@@ -106,11 +100,39 @@ public class PickBehavior extends Behavior {
             if(pickResult.getNode(PickResult.SHAPE3D) instanceof Shape3D){ // if node is Shape3D
                 Shape3D piece = (Shape3D) pickResult.getNode(PickResult.SHAPE3D); // grab the Shape3D
                 if(piece != null){ // if it's not null
-                    if((int) piece.getUserData() == 0){ // if userData is 0
+                    if((int) piece.getUserData() == 0 && piece.getName() != null){ // if userData is 0
+                        isMoving = true;
                         System.out.println("Piece name: " + piece.getName());
+                        isWhite = piece.getName().equals("White");
+                        TransformGroup parentTransform = (TransformGroup) piece.getParent();
+                        setYValue(parentTransform, 2);
+                        KeyBoardInput keyBoardInput = new  KeyBoardInput(this, parentTransform, isWhite);
+                        keyBoardInput.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
+                        BranchGroup tmpBG = new BranchGroup();
+                        tmpBG.setCapability(BranchGroup.ALLOW_DETACH);
+                        tmpBG.addChild(keyBoardInput);
+                        sceneTG.addChild(tmpBG);
                     }
                 }
             }
         }
     }
+
+    public void removeKeyNav(){
+        sceneTG.removeChild(40);
+        isMoving = false;
+    }
+
+    public void setYValue(TransformGroup targetTG, float amount){
+        Transform3D tmp = new Transform3D();
+        double rotation = isWhite ? -Math.PI : 0;
+        tmp.rotY(rotation);
+        targetTG.getTransform(tmp);
+        Vector3d vector3d = new Vector3d();
+        tmp.get(vector3d);
+        vector3d.y += amount;
+        tmp.set(vector3d);
+        targetTG.setTransform(tmp);
+    }
+
 }

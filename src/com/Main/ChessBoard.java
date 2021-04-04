@@ -10,6 +10,7 @@
 
 package com.Main;
 import Launcher.Launcher;
+import com.Behavior.KeyBoardInput;
 import com.Behavior.MouseRotation;
 import com.Behavior.PickBehavior;
 import org.jogamp.java3d.*;
@@ -58,7 +59,6 @@ public class ChessBoard {
            sceneTG.addChild(chessPieces.getWhitePieces().get(i));
         }
     }
-
 
     // function used to make bottom and sides of chess board
     private static Shape3D generateRectangle(Color3f color, Point3f size, Vector2f scale){ // function to generate rectangle QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
