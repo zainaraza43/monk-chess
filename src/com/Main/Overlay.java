@@ -11,6 +11,7 @@ package com.Main;
 
 import Launcher.Buttons;
 import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Vector3d;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -66,7 +67,7 @@ public class Overlay extends JPanel implements ActionListener {
     public void makeBottomLabels(JPanel panel){
         String [] labels = {"View", "Sound", "Rotation"};
 
-        String [][] buttonLabels = {{"Top", "Normal", "Spin"}, {"Stop", "Play", "Change"}, {"Lock", "Unlock", "Reset"}};
+        String [][] buttonLabels = {{"Top", "Normal", "Opposite"}, {"Stop", "Play", "Change"}, {"Lock", "Unlock", "Reset"}};
 
         for(int i = 0; i < 3; i ++){
             JLabel label = new JLabel(labels[i]);
@@ -96,29 +97,27 @@ public class Overlay extends JPanel implements ActionListener {
         for(Buttons button : buttons){
             JButton jButton = button.getButton();
             if (e.getSource() == jButton){
-                System.out.println(button.getLabel());
                 switch (jButton.getText()){
                     case "Reset":
-                        System.out.println("Reset rotation");
                         ChessBoard.mouseRotation.resetRotation();
                         break;
                     case "Top":
 
                         MONKEECHESS.changeViewer(MONKEECHESS.su, new Point3d(0, 35, 0));
-                        System.out.println("Top view now");
                         break;
                     case "Normal":
                         MONKEECHESS.resetViewer(MONKEECHESS.su, MONKEECHESS.position);
-                        System.out.println("Normal view now");
                         break;
                     case "Lock":
                         ChessBoard.mouseRotation.pauseRotation();
-                        System.out.println("Rotation paused");
                         break;
                     case "Unlock":
                         ChessBoard.mouseRotation.resumeRotation();
-                        System.out.println("Rotation resumed");
                         break;
+                    case "Opposite":
+                        Point3d position = MONKEECHESS.position;
+                        position.z = -position.z;
+                        MONKEECHESS.resetViewer(MONKEECHESS.su, position);
                 }
             }
         }

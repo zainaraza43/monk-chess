@@ -68,7 +68,7 @@ public class KeyBoardInput extends Behavior {
             if(keyEvent.getID() == KeyEvent.KEY_PRESSED){
                 for(int i = 0; i < keyCodes.length; i ++){
                     if(keyEvent.getKeyCode() == keyCodes[i]){
-                        movePiece(moves[i][0], moves[i][1]);
+                        movePiece(moves[i][0], isWhite ? moves[i][1] : -moves[i][1]);
 
                     }
                 }
