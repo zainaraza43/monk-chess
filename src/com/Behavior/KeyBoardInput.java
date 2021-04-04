@@ -1,6 +1,13 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * KeyBoardInput.java
+ */
 package com.Behavior;
-
-import com.Main.ChessBoard;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Vector3d;
 
@@ -11,23 +18,22 @@ import java.util.Iterator;
 public class KeyBoardInput extends Behavior {
     private WakeupCriterion[] wakeupCriteria;
     private WakeupCondition wakeupCondition;
-    private TransformGroup targetTG, hg;
+    private TransformGroup targetTG, highlightTransform;
     private boolean isMoving;
-    private Transform3D currTransform, transformX, transformZ;
+    private Transform3D pieceTransform3D, highlightTransform3D;
     private int[] keyCodes;
     private float[][] moves;
     private PickBehavior pickBehavior;
     private boolean isWhite;
 
-    public KeyBoardInput(PickBehavior p, TransformGroup tg,TransformGroup hg, boolean isWhite){
+    public KeyBoardInput(PickBehavior p, TransformGroup tg,TransformGroup highlightTransform, boolean isWhite){
         this.targetTG = tg;
         this.pickBehavior = p;
         this.isWhite = isWhite;
-        this.hg = hg;
+        this.highlightTransform = highlightTransform;
         isMoving = true;
-        currTransform = new Transform3D();
-        transformX = new Transform3D();
-        transformZ = new Transform3D();
+        pieceTransform3D = new Transform3D();
+        highlightTransform3D = new Transform3D();
         keyCodes = new int[]{KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D};
         moves = new float[][]{{2f, 1}, {-2f, -2}, {2f, -1}, {-2f, 2}};
     }
@@ -62,13 +68,11 @@ public class KeyBoardInput extends Behavior {
             if(keyEvent.getID() == KeyEvent.KEY_PRESSED){
                 for(int i = 0; i < keyCodes.length; i ++){
                     if(keyEvent.getKeyCode() == keyCodes[i]){
-                        System.out.println("key Pressed: " + keyCodes[i]);
                         movePiece(moves[i][0], moves[i][1]);
 
                     }
                 }
                 if(keyEvent.getKeyCode() == KeyEvent.VK_SPACE){
-                    System.out.println("piece was moved");
                     pickBehavior.setYValue(targetTG, -2);
                     pickBehavior.removeKeyNav();
                 }
@@ -77,13 +81,13 @@ public class KeyBoardInput extends Behavior {
     }
 
     public void movePiece(float amount, float direction){
-        hg.getTransform(transformX);
+        highlightTransform.getTransform(highlightTransform3D);
         Vector3d highlightVector = new Vector3d();
-        transformX.get(highlightVector);
+        highlightTransform3D.get(highlightVector);
 
-        targetTG.getTransform(currTransform);
+        targetTG.getTransform(pieceTransform3D);
         Vector3d vector3d = new Vector3d();
-        currTransform.get(vector3d);
+        pieceTransform3D.get(vector3d);
 
         switch ((int) direction){
             case 1:
@@ -103,10 +107,10 @@ public class KeyBoardInput extends Behavior {
                 highlightVector.z += amount;
                 break;
         }
-        transformX.setTranslation(highlightVector);
-        hg.setTransform(transformX);
-        currTransform.setTranslation(vector3d);
-        targetTG.setTransform(currTransform);
+        highlightTransform3D.setTranslation(highlightVector);
+        highlightTransform.setTransform(highlightTransform3D);
+        pieceTransform3D.setTranslation(vector3d);
+        targetTG.setTransform(pieceTransform3D);
 
     }
 }

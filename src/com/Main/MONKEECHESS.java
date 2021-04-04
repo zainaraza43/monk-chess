@@ -92,7 +92,6 @@ public class MONKEECHESS extends JPanel {
         view_TM.invert();
         viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
     }
-
     public static void resetViewer(SimpleUniverse su, Point3d eye){ // function used to reset the viewer
         TransformGroup viewTransform = su.getViewingPlatform().getViewPlatformTransform();
         Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
@@ -102,6 +101,7 @@ public class MONKEECHESS extends JPanel {
         view_TM.invert();
         viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
     }
+
     private static void defineViewer(SimpleUniverse simple_U, Point3d eye) { // function used to define viewer original position
         TransformGroup viewTransform = simple_U.getViewingPlatform().getViewPlatformTransform();
         Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
