@@ -52,20 +52,27 @@ public class ChessPieces {
     }
 
     public TransformGroup designPieces(Shape3D piece, String name, Vector3d position, float scale, double rotation, String texture) {
+        TransformGroup positionTG = new TransformGroup();
+        positionTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        positionTG.setCapability(TransformGroup.ALLOW_CHILDREN_WRITE);
+        positionTG.setCapability(TransformGroup.ALLOW_CHILDREN_EXTEND);
+
+        TransformGroup scaledTG = new TransformGroup();
+
         Transform3D scalar = new Transform3D();
+        Transform3D pos = new Transform3D();
+        pos.setTranslation(position);
         scalar.rotY(rotation);
         scalar.setScale(scale);
-        scalar.setTranslation(position);
-        TransformGroup tg = new TransformGroup();
-        tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-        tg.setCapability(TransformGroup.ALLOW_CHILDREN_WRITE);
-        tg.setCapability(TransformGroup.ALLOW_CHILDREN_EXTEND);
-        tg.setTransform(scalar);
+        scaledTG.setTransform(scalar);
+
+        positionTG.setTransform(pos);
+        positionTG.addChild(scaledTG);
         setApp(piece, texture);
         piece.setName(name);
         piece.setUserData(0);
-        tg.addChild(piece);
-        return tg;
+        scaledTG.addChild(piece);
+        return positionTG;
     }
 
     public void createPieces(String [] pieceList, ArrayList<TransformGroup> list, String texture, boolean isWhite) {

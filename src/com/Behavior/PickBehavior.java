@@ -8,10 +8,13 @@
  * PickBehavior.java
  */
 package com.Behavior;
+import com.Main.MONKEECHESS;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.picking.PickResult;
 import org.jogamp.java3d.utils.picking.PickTool;
+import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Point3f;
 import org.jogamp.vecmath.Vector3d;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -102,13 +105,14 @@ public class PickBehavior extends Behavior {
                 if(piece != null){ // if it's not null
                     if((int) piece.getUserData() == 0 && piece.getName() != null){ // if userData is 0
                         isMoving = true;
-                        System.out.println("Piece name: " + piece.getName());
                         isWhite = piece.getName().equals("White");
-                        TransformGroup parentTransform = (TransformGroup) piece.getParent();
+                        TransformGroup parentTransform = (TransformGroup) piece.getParent().getParent();
+                        TransformGroup highlightTransform = makeHighlight(parentTransform);
                         setYValue(parentTransform, 2);
-                        KeyBoardInput keyBoardInput = new  KeyBoardInput(this, parentTransform, isWhite);
+                        KeyBoardInput keyBoardInput = new  KeyBoardInput(this, parentTransform, highlightTransform, isWhite);
                         keyBoardInput.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
                         BranchGroup tmpBG = new BranchGroup();
+                        tmpBG.addChild(highlightTransform);
                         tmpBG.setCapability(BranchGroup.ALLOW_DETACH);
                         tmpBG.addChild(keyBoardInput);
                         sceneTG.addChild(tmpBG);
@@ -125,14 +129,50 @@ public class PickBehavior extends Behavior {
 
     public void setYValue(TransformGroup targetTG, float amount){
         Transform3D tmp = new Transform3D();
-        double rotation = isWhite ? -Math.PI : 0;
-        tmp.rotY(rotation);
         targetTG.getTransform(tmp);
         Vector3d vector3d = new Vector3d();
         tmp.get(vector3d);
         vector3d.y += amount;
-        tmp.set(vector3d);
+        tmp.setTranslation(vector3d);
         targetTG.setTransform(tmp);
     }
 
+    public TransformGroup makeHighlight(TransformGroup positionTG){
+
+        QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.NORMALS | QuadArray.COORDINATES);
+        float [][] coords = {{-1, 0, -1}, {-1 , 0, 1}, {1, 0, 1}, {1, 0, -1}};
+        float [] normal = {0, 1, 0};
+        for(int i = 0; i < 4; i ++){
+            quadArray.setCoordinate(i, coords[i]);
+            quadArray.setNormal(i, normal);
+            quadArray.setColor(i, MONKEECHESS.Green);
+        }
+        TransformGroup tg = new TransformGroup();
+        tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        Transform3D t3d = new Transform3D();
+        positionTG.getTransform(t3d);
+        Vector3d tmp = new Vector3d();
+        t3d.get(tmp);
+        tmp.y = 0.01;
+        t3d.setTranslation(tmp);
+        tg.setTransform(t3d);
+
+        Appearance appearance = new Appearance();
+        appearance.setMaterial(setMaterial(MONKEECHESS.Green));
+        tg.addChild(new Shape3D(quadArray, appearance));
+        return tg;
+    }
+
+    public static Material setMaterial(Color3f clr) {
+        int SH = 100;               // 10
+        Material ma = new Material();
+        Color3f c = new Color3f(0.6f * clr.x, 0.6f * clr.y, 0.6f * clr.z);
+        ma.setAmbientColor(c);
+        ma.setEmissiveColor(new Color3f(0, 0, 0));
+        ma.setDiffuseColor(c);
+        ma.setSpecularColor(clr);
+        ma.setShininess(SH);
+        ma.setLightingEnable(true);
+        return ma;
+    }
 }

@@ -11,7 +11,7 @@ import java.util.Iterator;
 public class KeyBoardInput extends Behavior {
     private WakeupCriterion[] wakeupCriteria;
     private WakeupCondition wakeupCondition;
-    private TransformGroup targetTG;
+    private TransformGroup targetTG, hg;
     private boolean isMoving;
     private Transform3D currTransform, transformX, transformZ;
     private int[] keyCodes;
@@ -19,10 +19,11 @@ public class KeyBoardInput extends Behavior {
     private PickBehavior pickBehavior;
     private boolean isWhite;
 
-    public KeyBoardInput(PickBehavior p, TransformGroup tg, boolean isWhite){
+    public KeyBoardInput(PickBehavior p, TransformGroup tg,TransformGroup hg, boolean isWhite){
         this.targetTG = tg;
         this.pickBehavior = p;
         this.isWhite = isWhite;
+        this.hg = hg;
         isMoving = true;
         currTransform = new Transform3D();
         transformX = new Transform3D();
@@ -76,24 +77,36 @@ public class KeyBoardInput extends Behavior {
     }
 
     public void movePiece(float amount, float direction){
+        hg.getTransform(transformX);
+        Vector3d highlightVector = new Vector3d();
+        transformX.get(highlightVector);
+
         targetTG.getTransform(currTransform);
         Vector3d vector3d = new Vector3d();
+        currTransform.get(vector3d);
+
         switch ((int) direction){
             case 1:
-                vector3d.z = isWhite ? vector3d.z - amount : vector3d.z + amount;
+                vector3d.z -= amount;
+                highlightVector.z -= amount;
                 break;
             case 2:
-                vector3d.x = isWhite ? vector3d.x - amount : vector3d.x + amount;
+                vector3d.x -= amount;
+                highlightVector.x -= amount;
                 break;
             case -2:
-                vector3d.x = isWhite ? vector3d.x + amount : vector3d.x - amount;
+                vector3d.x += amount;
+                highlightVector.x += amount;
                 break;
             case -1:
-                vector3d.z = isWhite ? vector3d.z + amount : vector3d.z - amount;
+                vector3d.z += amount;
+                highlightVector.z += amount;
                 break;
         }
-        transformZ.set(vector3d);
-        currTransform.mul(currTransform, transformZ);
+        transformX.setTranslation(highlightVector);
+        hg.setTransform(transformX);
+        currTransform.setTranslation(vector3d);
         targetTG.setTransform(currTransform);
+
     }
 }
