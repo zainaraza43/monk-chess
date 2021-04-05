@@ -1,14 +1,9 @@
 package com.Behavior;
-import Launcher.Launcher;
 import com.Main.ChessBoard;
-import com.Main.ChessPieces;
 import org.jogamp.java3d.*;
-import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
-
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 
@@ -18,11 +13,13 @@ public class Collision extends Behavior {
     private WakeupOnCollisionExit wExit;
     private TransformGroup sceneTG, positionTransform;
     private boolean isColliding, isWhite;
-    private ArrayList<TransformGroup> currentPieces, oppositePieces;
+    private ArrayList<BranchGroup> currentPieces, oppositePieces;
     private BranchGroup removeBG;
     private PickBehavior pickBehavior;
+    private ChessBoard chessBoard;
 
-    public Collision(PickBehavior p, BranchGroup removeBG, TransformGroup sceneTG, ArrayList<TransformGroup> currentPieces, ArrayList<TransformGroup> oppositePieces, Shape3D piece, TransformGroup positionTransform, boolean isWhite){
+    public Collision(ChessBoard chessBoard, PickBehavior p, BranchGroup removeBG, TransformGroup sceneTG, ArrayList<BranchGroup> currentPieces, ArrayList<BranchGroup> oppositePieces, Shape3D piece, TransformGroup positionTransform, boolean isWhite){
+        this.chessBoard = chessBoard;
         this.isWhite = isWhite;
         this.pickBehavior = p;
         this.removeBG = removeBG;
@@ -44,27 +41,20 @@ public class Collision extends Behavior {
     @Override
     public void processStimulus(Iterator<WakeupCriterion> criteria) {
         isColliding = !isColliding;
-        if(isColliding){
-            for(TransformGroup positionTG : oppositePieces){
+        if(isColliding) {
+            for (BranchGroup pieceBG : oppositePieces) {
+                TransformGroup positionTG = (TransformGroup) pieceBG.getChild(0);
                 Rectangle rect1 = createRect(positionTG);
-                int index = currentPieces.indexOf(positionTransform);
-                Rectangle rect2 = createRect(currentPieces.get(index));
-                if(rect1.intersects(rect2)){
+                int index = currentPieces.indexOf((BranchGroup) positionTransform.getParent());
+                Rectangle rect2 = createRect((TransformGroup) currentPieces.get(index).getChild(0));
+                if (rect1.intersects(rect2)) {
                     TransformGroup scaledTG = (TransformGroup) positionTG.getChild(0);
                     piece2 = (Shape3D) scaledTG.getChild(0);
-                    if(!piece1.getName().equals(piece2.getName())){
-                        if(isWhite){
-                            processCollision(positionTG, -1);
-                        }else{
-                            processCollision(positionTG, 1);
-                        }
-                    }
-                    break;
+                    processCollision(pieceBG, piece2.getName());
+                    return;
                 }
             }
-            wakeupOn(wExit);
-        }else {
-            wakeupOn(wEnter);
+            processOwnPiece();
         }
     }
 
@@ -76,12 +66,15 @@ public class Collision extends Behavior {
         return new Rectangle((int)vector3d.x, (int)vector3d.z, 2, 2);
     }
 
-    public void processCollision(TransformGroup positionTG, float x){
-        oppositePieces.remove(positionTG);
-        Transform3D transform3D = new Transform3D();
-        transform3D.setTranslation(new Vector3d(x * 9.5f, 1, PickBehavior.zValue));
-        positionTG.setTransform(transform3D);
-        PickBehavior.zValue += 1.5;
+    public void processCollision(BranchGroup positionBG, String pieceRemoved){
+        System.out.println("piece removed was " + pieceRemoved);
+        oppositePieces.remove(positionBG);
+        chessBoard.removeChessPiece(positionBG);
+        pickBehavior.removeCollisionBehavior(removeBG);
+    }
+
+    public void processOwnPiece(){
+        System.out.println("own piece");
         pickBehavior.removeCollisionBehavior(removeBG);
     }
 }

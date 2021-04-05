@@ -28,13 +28,13 @@ import java.util.HashMap;
 public class ChessPieces {
     public static  String textureNameBlack="mahogany";
     public static String textureNameWhite="gold"; // will be used later for texture picking
-    private ArrayList<TransformGroup> blackPieces;
-    private ArrayList<TransformGroup> whitePieces;
+    private ArrayList<BranchGroup> blackPieces;
+    private ArrayList<BranchGroup> whitePieces;
     public HashMap<String, Pair<Shape3D, Vector2f>> pieces;
     private String [] objNames;
     public ChessPieces(String black,String white ){
-        blackPieces = new ArrayList<>();
-        whitePieces = new ArrayList<>();
+        blackPieces = new ArrayList<BranchGroup>();
+        whitePieces = new ArrayList<BranchGroup>();
         objNames = new String[]{"Pawn", "Rook", "Knight", "Bishop", "Queen", "King"}; // string array to hold names
         pieces = new HashMap<>();
         this.textureNameBlack = black;
@@ -56,7 +56,9 @@ public class ChessPieces {
         }
     }
 
-    public TransformGroup designPieces(Shape3D piece, String name, Vector3d position, float scale, double rotation, String texture) {
+    public BranchGroup designPieces(Shape3D piece, String name, Vector3d position, float scale, double rotation, String texture) {
+        BranchGroup pieceBG = new BranchGroup();
+        pieceBG.setCapability(BranchGroup.ALLOW_DETACH);
         TransformGroup positionTG = new TransformGroup();
         positionTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         positionTG.setCapability(TransformGroup.ALLOW_CHILDREN_WRITE);
@@ -79,10 +81,12 @@ public class ChessPieces {
         piece.setName(name);
         piece.setUserData(0);
         scaledTG.addChild(piece);
-        return positionTG;
+
+        pieceBG.addChild(positionTG);
+        return pieceBG;
     }
 
-    public void createPieces(String [] pieceList, ArrayList<TransformGroup> list, String texture, boolean isWhite) {
+    public void createPieces(String [] pieceList, ArrayList<BranchGroup> list, String texture, boolean isWhite) {
         for (int i = 0; i < 16; i++) {
             float z = isWhite ? 1 : -1;
             Shape3D tmp = new Shape3D();
@@ -110,11 +114,11 @@ public class ChessPieces {
         return piece;
     }
 
-    public ArrayList<TransformGroup> getWhitePieces() {
+    public ArrayList<BranchGroup> getWhitePieces() {
         return whitePieces;
     }
 
-    public ArrayList<TransformGroup> getBlackPieces() {
+    public ArrayList<BranchGroup> getBlackPieces() {
         return blackPieces;
     }
 

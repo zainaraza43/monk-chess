@@ -10,10 +10,8 @@
 
 package com.Main;
 import Launcher.Launcher;
-import com.Behavior.KeyBoardInput;
 import com.Behavior.MouseRotation;
 import com.Behavior.PickBehavior;
-import org.jdesktop.j3d.examples.collision.CollisionDetector;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
@@ -25,6 +23,7 @@ public class ChessBoard {
     private ChessPieces chessPieces;
     public Canvas3D canvas3D;
     public BranchGroup sceneBG;
+    public static boolean isWhite;
 
     public ChessBoard(String name, Canvas3D canvas3D, BranchGroup sceneBG){
         this.name = name;
@@ -42,7 +41,7 @@ public class ChessBoard {
         mouseRotation = new MouseRotation(this.sceneTG); // mouseRotation used for rotating the board
         mouseRotation.setSchedulingBounds(mouseBounds);
 
-        PickBehavior pickBehavior = new PickBehavior(this.sceneBG, this.sceneTG, canvas3D); // pickBehaviour class
+        PickBehavior pickBehavior = new PickBehavior(this, this.sceneBG, this.sceneTG, canvas3D); // pickBehaviour class
         pickBehavior.setSchedulingBounds(mouseBounds);
         this.sceneTG.addChild(pickBehavior);
 
@@ -58,6 +57,10 @@ public class ChessBoard {
             sceneTG.addChild(chessPieces.getBlackPieces().get(i));
             sceneTG.addChild(chessPieces.getWhitePieces().get(i));
         }
+    }
+
+    public void removeChessPiece(BranchGroup piece){
+        sceneTG.removeChild(piece);
     }
 
     // function used to make bottom and sides of chess board

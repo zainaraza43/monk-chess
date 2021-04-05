@@ -117,6 +117,7 @@ public class Overlay extends JPanel implements ActionListener {
                     case "Opposite":
                         Point3d position = MONKEECHESS.position;
                         position.z = -position.z;
+                        ChessBoard.isWhite = !ChessBoard.isWhite;
                         MONKEECHESS.resetViewer(MONKEECHESS.su, position);
                 }
             }

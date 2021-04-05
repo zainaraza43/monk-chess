@@ -17,7 +17,9 @@ import com.Behavior.MouseZoom;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
 import org.jogamp.java3d.utils.image.TextureLoader;
+import org.jogamp.java3d.utils.universe.PlatformGeometry;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
+import org.jogamp.java3d.utils.universe.Viewer;
 import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.jogamp.vecmath.*;
 
@@ -150,9 +152,22 @@ public class MONKEECHESS extends JPanel {
     public MONKEECHESS(){
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         canvas3D = new Canvas3D(config);//define a canvas
-        su = new SimpleUniverse(canvas3D);   //define simpile universe and put canvas in it
+        Viewer viewer = new Viewer(canvas3D);
+        viewer.getView().setFrontClipDistance(0.05);
+        viewer.getView().setBackClipDistance(100);
+
+        ViewingPlatform viewingPlatform = new ViewingPlatform();
+        viewingPlatform.setCapability(ViewingPlatform.ALLOW_BOUNDS_WRITE);
+
+        su = new SimpleUniverse(viewingPlatform, viewer);   //define simpile universe and put canvas in it
         Random n = new Random();
-        position = new Point3d(0, 20, n.nextInt(2) == 1 ? 20 : -20);
+        if(n.nextInt(2) == 1){
+            position = new Point3d(0, 25, 25);
+            ChessBoard.isWhite = true;
+        }else{
+            position = new Point3d(0, 25, -25);
+            ChessBoard.isWhite = false;
+        }
         defineViewer(su, position);    // set the viewer's location random for black piece or white piece
         BranchGroup scene = new BranchGroup();
         createScene(scene);                           // add contents to the scene branch

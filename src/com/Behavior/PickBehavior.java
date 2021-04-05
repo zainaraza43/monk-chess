@@ -10,9 +10,9 @@
 package com.Behavior;
 
 import Launcher.Launcher;
+import com.Main.ChessBoard;
 import com.Main.ChessPieces;
 import com.Main.MONKEECHESS;
-import org.jdesktop.j3d.examples.collision.CollisionDetector;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.picking.PickResult;
 import org.jogamp.java3d.utils.picking.PickTool;
@@ -36,9 +36,10 @@ public class PickBehavior extends Behavior {
     private BranchGroup sceneBG;
     private ChessPieces chessPieces;
     static float zValue = -9f;
+    private ChessBoard chessBoard;
 
-
-    public PickBehavior(BranchGroup sceneBG, TransformGroup sceneTG, Canvas3D canvas) {
+    public PickBehavior(ChessBoard chessBoard, BranchGroup sceneBG, TransformGroup sceneTG, Canvas3D canvas) {
+        this.chessBoard = chessBoard;
         this.sceneTG = sceneTG;
         this.sceneTG.setCapability(TransformGroup.ALLOW_CHILDREN_EXTEND);
         this.sceneTG.setCapability(TransformGroup.ALLOW_CHILDREN_WRITE);
@@ -153,11 +154,11 @@ public class PickBehavior extends Behavior {
     public void addCollisionBehavior(BranchGroup tmpBG, TransformGroup positionTransform, Shape3D piece, boolean isWhite) {
 
         if (isWhite) {
-            Collision collision = new Collision(this, tmpBG, sceneTG, chessPieces.getWhitePieces(), chessPieces.getBlackPieces(), piece, positionTransform, isWhite);
+            Collision collision = new Collision(chessBoard, this, tmpBG, sceneTG, chessPieces.getWhitePieces(), chessPieces.getBlackPieces(), piece, positionTransform, isWhite);
             collision.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
             tmpBG.addChild(collision);
         }else{
-            Collision collision = new Collision(this, tmpBG, sceneTG, chessPieces.getBlackPieces(), chessPieces.getWhitePieces(), piece, positionTransform, isWhite);
+            Collision collision = new Collision(chessBoard, this, tmpBG, sceneTG, chessPieces.getBlackPieces(), chessPieces.getWhitePieces(), piece, positionTransform, isWhite);
             collision.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
             tmpBG.addChild(collision);
         }
