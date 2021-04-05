@@ -79,11 +79,11 @@ public class Launcher extends JPanel implements ActionListener {
         fontBack = ttfFontloader(75f);
         fontsmall = ttfFontloader(25f);
 
-        smalllabel = new JLabel("FUCK JAVA3D EDITION", JLabel.CENTER); // make a label and center it also the top font
-        smalllabel.setFont(fontsmall);
-        smalllabel.setAlignmentX(0.09f); // align
-        smalllabel.setAlignmentY(0.2f);
-        smalllabel.setForeground(new Color(255, 255, 255)); // set the color
+//        smalllabel = new JLabel("FUCK JAVA3D EDITION", JLabel.CENTER); // make a label and center it also the top font
+//        smalllabel.setFont(fontsmall);
+//        smalllabel.setAlignmentX(0.09f); // align
+//        smalllabel.setAlignmentY(0.2f);
+//        smalllabel.setForeground(new Color(255, 255, 255)); // set the color
 
         textlabel = new JLabel("MONKEECHESS", JLabel.CENTER); // make a label and center it also the top font
         textlabel.setFont(fontOver);
@@ -91,13 +91,13 @@ public class Launcher extends JPanel implements ActionListener {
         textlabel.setAlignmentY(1.0f);
         textlabel.setForeground(new Color(236, 202, 21)); // set the color
 
-        jPanel.add(smalllabel);
+//        jPanel.add(smalllabel);
         jPanel.add(textlabel);
 
     }
 
     public JLabel loadImage(){ // will load in the background image
-        background = new ImageIcon("Assets/Launcher/Background.jpg");// load background
+        background = new ImageIcon("Assets/Launcher/Background1.jpg");// load background
         mylabel  = new JLabel(background, JLabel.CENTER); // new label
         mylabel.setAlignmentX(0.55f);
         mylabel.setAlignmentY(0.25f);
