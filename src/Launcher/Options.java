@@ -28,6 +28,8 @@ public class Options extends JPanel implements ActionListener {
         panel.add(exit.getButton());
         panel.setLayout(null);
         frame.add(panel);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
         frame.setSize(1000, 600);
         frame.setVisible(true);
 

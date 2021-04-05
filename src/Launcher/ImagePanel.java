@@ -33,8 +33,8 @@ public class ImagePanel extends JPanel implements MouseListener {
         Toolkit t = Toolkit.getDefaultToolkit();
 
         for (int i = 0; i <= 3; i++) {
-            pieces.add(new ImageIcon("Assets/images/"+ "piece"+i+".jpg"));
-            images.add(new ImageIcon("Assets/images/" + "chess" + i + ".jpg"));
+            pieces.add(new ImageIcon("Assets/Images/"+ "piece"+i+".jpg"));
+            images.add(new ImageIcon("Assets/Images/" + "chess" + i + ".jpg"));
             g.drawImage(images.get(i).getImage(), 120, 80 + (130 * i), 80, 80, this);
             images.get(i).getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT);
 
