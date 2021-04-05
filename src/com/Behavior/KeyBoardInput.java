@@ -8,6 +8,7 @@
  * KeyBoardInput.java
  */
 package com.Behavior;
+import com.Main.Piece;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Vector3d;
 
@@ -18,22 +19,20 @@ import java.util.Iterator;
 public class KeyBoardInput extends Behavior {
     private WakeupCriterion[] wakeupCriteria;
     private WakeupCondition wakeupCondition;
-    private TransformGroup targetTG, highlightTransform;
+    private TransformGroup positionTG, highlightTransform;
     private boolean isMoving;
     private Transform3D pieceTransform3D, highlightTransform3D;
     private int[] keyCodes;
     private float[][] moves;
     private PickBehavior pickBehavior;
-    private boolean isWhite;
     private BranchGroup removingBG;
-    private Shape3D piece;
+    private Piece piece;
 
-    public KeyBoardInput(Shape3D piece, BranchGroup removingBG, PickBehavior p, TransformGroup tg,TransformGroup highlightTransform, boolean isWhite){
+    public KeyBoardInput(Piece piece, BranchGroup removingBG, PickBehavior p,TransformGroup highlightTransform){
         this.piece = piece;
         this.removingBG = removingBG;
-        this.targetTG = tg;
+        this.positionTG = piece.getPositionTransform();
         this.pickBehavior = p;
-        this.isWhite = isWhite;
         this.highlightTransform = highlightTransform;
         isMoving = true;
         pieceTransform3D = new Transform3D();
@@ -72,13 +71,13 @@ public class KeyBoardInput extends Behavior {
             if(keyEvent.getID() == KeyEvent.KEY_PRESSED){
                 for(int i = 0; i < keyCodes.length; i ++){
                     if(keyEvent.getKeyCode() == keyCodes[i]){
-                        movePiece(moves[i][0], isWhite ? moves[i][1] : -moves[i][1]);
+                        movePiece(moves[i][0], piece.isWhite() ? moves[i][1] : -moves[i][1]);
 
                     }
                 }
                 if(keyEvent.getKeyCode() == KeyEvent.VK_SPACE){
-                    pickBehavior.setYValue(targetTG, -3);
-                    pickBehavior.removeKeyNav(removingBG, targetTG, piece, isWhite);
+                    pickBehavior.setYValue(piece, -3);
+                    pickBehavior.removeKeyNav(removingBG);
                 }
             }
         }
@@ -89,7 +88,7 @@ public class KeyBoardInput extends Behavior {
         Vector3d highlightVector = new Vector3d();
         highlightTransform3D.get(highlightVector);
 
-        targetTG.getTransform(pieceTransform3D);
+        positionTG.getTransform(pieceTransform3D);
         Vector3d vector3d = new Vector3d();
         pieceTransform3D.get(vector3d);
 
@@ -114,7 +113,7 @@ public class KeyBoardInput extends Behavior {
         highlightTransform3D.setTranslation(highlightVector);
         highlightTransform.setTransform(highlightTransform3D);
         pieceTransform3D.setTranslation(vector3d);
-        targetTG.setTransform(pieceTransform3D);
+        positionTG.setTransform(pieceTransform3D);
 
     }
 }

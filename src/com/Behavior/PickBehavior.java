@@ -10,9 +10,7 @@
 package com.Behavior;
 
 import Launcher.Launcher;
-import com.Main.ChessBoard;
-import com.Main.ChessPieces;
-import com.Main.MONKEECHESS;
+import com.Main.*;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.picking.PickResult;
 import org.jogamp.java3d.utils.picking.PickTool;
@@ -109,20 +107,21 @@ public class PickBehavior extends Behavior {
         if (pickTool.pickClosest() != null) { // if pickRay is not null
             PickResult pickResult = pickTool.pickClosest(); // get closest node
             if (pickResult.getNode(PickResult.SHAPE3D) instanceof Shape3D) { // if node is Shape3D
-                Shape3D piece = (Shape3D) pickResult.getNode(PickResult.SHAPE3D); // grab the Shape3D
-                if (piece != null) { // if it's not null
-                    if ((int) piece.getUserData() == 0 && piece.getName() != null) { // if userData is 0
+                Shape3D pickPiece = (Shape3D) pickResult.getNode(PickResult.SHAPE3D); // grab the Shape3D
+                if (pickPiece != null) { // if it's not null
+                    Piece piece = (Piece) pickPiece.getParent().getParent().getParent();
+                    if ((int) pickPiece.getUserData() == 0 && pickPiece.getName() != null) { // if userData is 0
                         isMoving = true;
-                        isWhite = piece.getName().equals("White"); // check if piece selected is white
+                        isWhite = piece.getColor().equals("White"); // check if pickPiece selected is white
 
-                        TransformGroup positionTransform = (TransformGroup) piece.getParent().getParent(); // get positionTransformGroup
+                        TransformGroup positionTransform = piece.getPositionTransform(); // get positionTransformGroup
                         TransformGroup highlightTransform = makeHighlight(positionTransform);
 
                         BranchGroup movementBG = new BranchGroup();
                         movementBG.setCapability(BranchGroup.ALLOW_DETACH);
 
-                        setYValue(positionTransform, 3);
-                        addKeyNav(piece, movementBG, positionTransform, highlightTransform, this.isWhite);
+                        setYValue(piece, 3);
+                        addKeyNav(piece, movementBG, highlightTransform);
                         sceneTG.addChild(movementBG);
                     }
                 }
@@ -130,49 +129,39 @@ public class PickBehavior extends Behavior {
         }
     }
 
-    public void removeKeyNav(BranchGroup bg, TransformGroup poisitionTransform, Shape3D piece, boolean isWhite) {
+    public void removeKeyNav(BranchGroup bg) {
         sceneTG.removeChild(bg);
         isMoving = false;
-
-        BranchGroup collisionBG = new BranchGroup();
-        collisionBG.setCapability(BranchGroup.ALLOW_DETACH);
-        addCollisionBehavior(collisionBG, poisitionTransform, piece, isWhite);
-        sceneTG.addChild(collisionBG);
     }
 
     public void removeCollisionBehavior(BranchGroup bg){
         sceneTG.removeChild(bg);
     }
 
-    public void addKeyNav(Shape3D piece, BranchGroup tmpBG, TransformGroup positionTransform, TransformGroup highlightTransform, boolean isWhite) {
-        KeyBoardInput keyBoardInput = new KeyBoardInput(piece, tmpBG,this, positionTransform, highlightTransform, isWhite);
+    public void addKeyNav(Piece piece, BranchGroup tmpBG, TransformGroup highlightTransform) {
+        KeyBoardInput keyBoardInput = new KeyBoardInput(piece, tmpBG,this, highlightTransform);
         keyBoardInput.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
         tmpBG.addChild(highlightTransform);
         tmpBG.addChild(keyBoardInput);
+
+        BranchGroup collisionBG = new BranchGroup();
+        collisionBG.setCapability(BranchGroup.ALLOW_DETACH);
+        addCollisionBehavior(collisionBG, piece);
+        sceneTG.addChild(collisionBG);
     }
 
-    public void addCollisionBehavior(BranchGroup tmpBG, TransformGroup positionTransform, Shape3D piece, boolean isWhite) {
-
-        if (isWhite) {
-            Collision collision = new Collision(chessBoard, this, tmpBG, sceneTG, chessPieces.getWhitePieces(), chessPieces.getBlackPieces(), piece, positionTransform, isWhite);
-            collision.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
-            tmpBG.addChild(collision);
-        }else{
-            Collision collision = new Collision(chessBoard, this, tmpBG, sceneTG, chessPieces.getBlackPieces(), chessPieces.getWhitePieces(), piece, positionTransform, isWhite);
-            collision.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
-            tmpBG.addChild(collision);
-        }
+    public void addCollisionBehavior(BranchGroup tmpBG, Piece piece) {
+        Collision collision = new Collision(chessBoard, this, tmpBG, sceneTG, chessPieces.getWhitePieces(), chessPieces.getBlackPieces(), piece);
+        collision.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
+        tmpBG.addChild(collision);
 
     }
 
-    public void setYValue(TransformGroup targetTG, float amount) {
-        Transform3D tmp = new Transform3D();
-        targetTG.getTransform(tmp);
-        Vector3d vector3d = new Vector3d();
-        tmp.get(vector3d);
-        vector3d.y += amount;
-        tmp.setTranslation(vector3d);
-        targetTG.setTransform(tmp);
+    public void setYValue(Piece piece, float amount) {
+        Vector3d vector3d = new Vector3d(); // make vector
+        piece.getPosition(vector3d); // get the current position
+        vector3d.y += amount; // update
+        piece.setPosition(vector3d); // set
     }
 
     public TransformGroup makeHighlight(TransformGroup positionTG) {
