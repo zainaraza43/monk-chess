@@ -8,12 +8,15 @@
  * ChessPieces.java
  */
 package com.Main;
+import com.Behavior.Collision;
 import com.Util.Pair;
+import org.jdesktop.j3d.examples.collision.CollisionDetector;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.loaders.Scene;
 import org.jogamp.java3d.loaders.objectfile.ObjectFile;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.Color3f;
+import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector2f;
 import org.jogamp.vecmath.Vector3d;
 import java.io.File;
@@ -28,11 +31,15 @@ public class ChessPieces {
     private ArrayList<TransformGroup> whitePieces;
     public HashMap<String, Pair<Shape3D, Vector2f>> pieces;
     private String [] objNames;
+    private Bounds[] boundBlack;
+    private Bounds[] boundingWhite;
     public ChessPieces() {
         blackPieces = new ArrayList<>();
         whitePieces = new ArrayList<>();
         objNames = new String[]{"Pawn", "Rook", "Knight", "Bishop", "Queen", "King"}; // string array to hold names
         pieces = new HashMap<>();
+        boundBlack = new Bounds[16];
+        boundingWhite = new Bounds[16];
 
     }
 
@@ -58,6 +65,8 @@ public class ChessPieces {
         positionTG.setCapability(TransformGroup.ALLOW_CHILDREN_EXTEND);
 
         TransformGroup scaledTG = new TransformGroup();
+        scaledTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        scaledTG.setCapability(TransformGroup.ALLOW_CHILDREN_WRITE);
 
         Transform3D scalar = new Transform3D();
         Transform3D pos = new Transform3D();
@@ -109,6 +118,24 @@ public class ChessPieces {
 
     public ArrayList<TransformGroup> getBlackPieces() {
         return blackPieces;
+    }
+
+    public Bounds[] getBoundBlack() {
+        for(int i = 0; i < blackPieces.size(); i ++){
+            TransformGroup scaled = (TransformGroup) blackPieces.get(i).getChild(0);
+            Shape3D piece = (Shape3D) scaled.getChild(0);
+            boundBlack[i] = piece.getBounds();
+        }
+        return boundBlack;
+    }
+
+    public Bounds[] getBoundingWhite() {
+        for(int i = 0; i < whitePieces.size(); i ++){
+            TransformGroup scaled = (TransformGroup) whitePieces.get(i).getChild(0);
+            Shape3D piece = (Shape3D) scaled.getChild(0);
+            boundingWhite[i] = piece.getBounds();
+        }
+        return boundingWhite;
     }
 
     public void setApp(Shape3D piece, String texture) {

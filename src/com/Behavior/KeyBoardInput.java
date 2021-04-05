@@ -25,8 +25,12 @@ public class KeyBoardInput extends Behavior {
     private float[][] moves;
     private PickBehavior pickBehavior;
     private boolean isWhite;
+    private BranchGroup removingBG;
+    private Shape3D piece;
 
-    public KeyBoardInput(PickBehavior p, TransformGroup tg,TransformGroup highlightTransform, boolean isWhite){
+    public KeyBoardInput(Shape3D piece, BranchGroup removingBG, PickBehavior p, TransformGroup tg,TransformGroup highlightTransform, boolean isWhite){
+        this.piece = piece;
+        this.removingBG = removingBG;
         this.targetTG = tg;
         this.pickBehavior = p;
         this.isWhite = isWhite;
@@ -73,8 +77,8 @@ public class KeyBoardInput extends Behavior {
                     }
                 }
                 if(keyEvent.getKeyCode() == KeyEvent.VK_SPACE){
-                    pickBehavior.setYValue(targetTG, -2);
-                    pickBehavior.removeKeyNav();
+                    pickBehavior.setYValue(targetTG, -3);
+                    pickBehavior.removeKeyNav(removingBG, targetTG, piece, isWhite);
                 }
             }
         }
