@@ -41,18 +41,6 @@ public class Collision extends Behavior {
     public void processStimulus(Iterator<WakeupCriterion> criteria) {
         isColliding = !isColliding;
         if(isColliding) {
-//            for (BranchGroup pieceBG : oppositePieces) {
-//                TransformGroup positionTG = (TransformGroup) pieceBG.getChild(0);
-//                Rectangle rect1 = createRect(positionTG);
-//                int index = currentPieces.indexOf((BranchGroup) positionTransform.getParent());
-//                Rectangle rect2 = createRect((TransformGroup) currentPieces.get(index).getChild(0));
-//                if (rect1.intersects(rect2)) {
-//                    TransformGroup scaledTG = (TransformGroup) positionTG.getChild(0);
-//                    piece2 = (Shape3D) scaledTG.getChild(0);
-//                    processCollision(pieceBG, piece2.getName());
-//                    return;
-//                }
-//            }
             for(Piece pieceBG : oppositePieces){
                 Rectangle rect1 = createRect(pieceBG.getPositionTransform());
                 Rectangle rect2 = createRect(piece.getPositionTransform());
@@ -61,7 +49,17 @@ public class Collision extends Behavior {
                     return;
                 }
             }
-            processOwnPiece();
+            for(Piece pieceBG : currentPieces){
+                if(piece == pieceBG){
+                    continue;
+                }
+                Rectangle rect1 = createRect(pieceBG.getPositionTransform());
+                Rectangle rect2 = createRect(piece.getPositionTransform());
+                if(rect1.intersects(rect2)){
+                    processOwnPiece(piece);
+                    return;
+                }
+            }
         }
     }
 
@@ -74,14 +72,13 @@ public class Collision extends Behavior {
     }
 
     public void processCollision(Piece pieceObj){
-        System.out.println("piece removed was " + pieceObj.getName());
         oppositePieces.remove(pieceObj);
         chessBoard.removeChessPiece(pieceObj);
         pickBehavior.removeCollisionBehavior(removeBG);
     }
 
-    public void processOwnPiece(){
-        System.out.println("own piece");
+    public void processOwnPiece(Piece pieceObj){
+        pieceObj.resetPos();
         pickBehavior.removeCollisionBehavior(removeBG);
     }
 }

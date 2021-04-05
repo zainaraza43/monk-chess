@@ -109,8 +109,8 @@ public class PickBehavior extends Behavior {
             if (pickResult.getNode(PickResult.SHAPE3D) instanceof Shape3D) { // if node is Shape3D
                 Shape3D pickPiece = (Shape3D) pickResult.getNode(PickResult.SHAPE3D); // grab the Shape3D
                 if (pickPiece != null) { // if it's not null
-                    Piece piece = (Piece) pickPiece.getParent().getParent().getParent();
                     if ((int) pickPiece.getUserData() == 0 && pickPiece.getName() != null) { // if userData is 0
+                        Piece piece = (Piece) pickPiece.getParent().getParent().getParent();
                         isMoving = true;
                         isWhite = piece.getColor().equals("White"); // check if pickPiece selected is white
 
@@ -120,6 +120,7 @@ public class PickBehavior extends Behavior {
                         BranchGroup movementBG = new BranchGroup();
                         movementBG.setCapability(BranchGroup.ALLOW_DETACH);
 
+                        piece.oldPos(); // store old position before movement
                         setYValue(piece, 3);
                         addKeyNav(piece, movementBG, highlightTransform);
                         sceneTG.addChild(movementBG);
@@ -158,8 +159,7 @@ public class PickBehavior extends Behavior {
     }
 
     public void setYValue(Piece piece, float amount) {
-        Vector3d vector3d = new Vector3d(); // make vector
-        piece.getPosition(vector3d); // get the current position
+        Vector3d vector3d = piece.getPosition();
         vector3d.y += amount; // update
         piece.setPosition(vector3d); // set
     }

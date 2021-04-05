@@ -7,6 +7,7 @@ import org.jogamp.vecmath.Vector3d;
 
 public class Piece extends BranchGroup {
     private String name, color;
+    private Vector3d oldPosition;
 
     public Piece(Obj3D piece, String name, String color, Vector3d position, float scale, double rotation, String texture) {
         piece.setPiece(this);
@@ -36,6 +37,7 @@ public class Piece extends BranchGroup {
         piece.setUserData(0);
         scaledTG.addChild(piece);
         addChild(positionTG);
+        this.oldPosition = getPosition();
     }
 
     public String getColor() {
@@ -55,7 +57,8 @@ public class Piece extends BranchGroup {
         return (TransformGroup) this.getChild(0);
     }
 
-    public Vector3d getPosition(Vector3d vector3d) {
+    public Vector3d getPosition() {
+        Vector3d vector3d = new Vector3d();
         Transform3D tmp = new Transform3D();
         getPositionTransform().getTransform(tmp);
         tmp.get(vector3d);
@@ -72,6 +75,18 @@ public class Piece extends BranchGroup {
 
     public Shape3D getPiece() {
         return (Shape3D) ((TransformGroup) getPositionTransform().getChild(0)).getChild(0);
+    }
+
+    public void oldPos(){
+        oldPosition = getPosition();
+    }
+
+    public Vector3d getOldPosition() {
+        return oldPosition;
+    }
+
+    public void resetPos(){
+        setPosition(oldPosition);
     }
 
     public static void setApp(Shape3D piece, String texture) {
