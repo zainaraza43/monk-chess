@@ -35,7 +35,7 @@ public class PickBehavior extends Behavior {
     private PickTool pickTool;
     private BranchGroup sceneBG;
     private ChessPieces chessPieces;
-    static float zValue = -7f;
+    static float zValue = -9f;
 
 
     public PickBehavior(BranchGroup sceneBG, TransformGroup sceneTG, Canvas3D canvas) {

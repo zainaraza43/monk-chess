@@ -26,28 +26,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ChessPieces {
-    private String textureNameBlack, textureNameWhite; // will be used later for texture picking
+    public static  String textureNameBlack="mahogany";
+    public static String textureNameWhite="gold"; // will be used later for texture picking
     private ArrayList<TransformGroup> blackPieces;
     private ArrayList<TransformGroup> whitePieces;
     public HashMap<String, Pair<Shape3D, Vector2f>> pieces;
     private String [] objNames;
-    private Bounds[] boundBlack;
-    private Bounds[] boundingWhite;
-    public ChessPieces() {
+    public ChessPieces(String black,String white ){
         blackPieces = new ArrayList<>();
         whitePieces = new ArrayList<>();
         objNames = new String[]{"Pawn", "Rook", "Knight", "Bishop", "Queen", "King"}; // string array to hold names
         pieces = new HashMap<>();
-        boundBlack = new Bounds[16];
-        boundingWhite = new Bounds[16];
-
+        this.textureNameBlack = black;
+        this.textureNameWhite = white;
     }
 
     public void makePieces(){
        String [] pieceNames = {"Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Rook", "Knight", "Bishop", "Queen", "King", "Bishop",
        "Knight", "Rook"};
-        createPieces(pieceNames, blackPieces, "mahogany", false);
-        createPieces(pieceNames, whitePieces, "gold", true);
+        createPieces(pieceNames, blackPieces, textureNameBlack, false);
+        createPieces(pieceNames, whitePieces, textureNameWhite, true);
     }
 
     public void loadPieces() { // will load all the objects in called at the start of game
@@ -118,24 +116,6 @@ public class ChessPieces {
 
     public ArrayList<TransformGroup> getBlackPieces() {
         return blackPieces;
-    }
-
-    public Bounds[] getBoundBlack() {
-        for(int i = 0; i < blackPieces.size(); i ++){
-            TransformGroup scaled = (TransformGroup) blackPieces.get(i).getChild(0);
-            Shape3D piece = (Shape3D) scaled.getChild(0);
-            boundBlack[i] = piece.getBounds();
-        }
-        return boundBlack;
-    }
-
-    public Bounds[] getBoundingWhite() {
-        for(int i = 0; i < whitePieces.size(); i ++){
-            TransformGroup scaled = (TransformGroup) whitePieces.get(i).getChild(0);
-            Shape3D piece = (Shape3D) scaled.getChild(0);
-            boundingWhite[i] = piece.getBounds();
-        }
-        return boundingWhite;
     }
 
     public void setApp(Shape3D piece, String texture) {
