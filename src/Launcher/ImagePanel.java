@@ -96,8 +96,6 @@ public class ImagePanel extends JPanel implements MouseListener {
 
             }
         });
-
-
     }
 
 
