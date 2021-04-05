@@ -29,6 +29,8 @@ public class Launcher extends JPanel implements ActionListener {
     private ArrayList<Buttons> buttons = new ArrayList<>();
     private JFrame jFrame;
     public static ChessPieces chessPieces;
+    public static String black="mahogany";
+    public static String white = "gold";
 
     public Launcher(){
         jFrame = new JFrame("MONKEECHESS");
@@ -36,7 +38,7 @@ public class Launcher extends JPanel implements ActionListener {
         ImageIcon imageIcon = new ImageIcon("Assets/Launcher/icon.png"); // setting the image icon
         jFrame.setIconImage(imageIcon.getImage());
         Frame(jFrame);
-        chessPieces = new ChessPieces();
+        chessPieces = new ChessPieces(black,white);
         chessPieces.loadPieces();
 
     }
@@ -142,9 +144,8 @@ public class Launcher extends JPanel implements ActionListener {
                 if(buttons.getButton().getText().equals("MULTIPLAYER")){ // if multiplayer is pressed
                     System.out.println("hello");
                 }
-
                 if(buttons.getButton().getText().equals("OPTIONS")){ // if multiplayer is pressed
-                    System.out.println("options");
+                    Options op = new Options(button_font);
                 }
                 if(buttons.getButton().getText().equals("EXIT")){ // if exit is pressed
                     System.exit(0); // exit

@@ -13,6 +13,7 @@ import Launcher.Launcher;
 import com.Behavior.KeyBoardInput;
 import com.Behavior.MouseRotation;
 import com.Behavior.PickBehavior;
+import org.jdesktop.j3d.examples.collision.CollisionDetector;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
@@ -28,7 +29,7 @@ public class ChessBoard {
     public ChessBoard(String name, Canvas3D canvas3D, BranchGroup sceneBG){
         this.name = name;
         this.sceneTG = new TransformGroup();
-        this.sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        this.sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE | TransformGroup.ALLOW_CHILDREN_WRITE | TransformGroup.ALLOW_CHILDREN_EXTEND | TransformGroup.ALLOW_CHILDREN_READ);
         this.canvas3D = canvas3D;
         this.sceneBG = sceneBG;
     }
@@ -45,7 +46,6 @@ public class ChessBoard {
         pickBehavior.setSchedulingBounds(mouseBounds);
         this.sceneTG.addChild(pickBehavior);
 
-
         sceneTG.addChild(mouseRotation);
         addChessPieces(this.sceneTG);
         sceneTG.addChild(this.sceneTG);
@@ -55,8 +55,8 @@ public class ChessBoard {
         chessPieces = Launcher.chessPieces;
         chessPieces.makePieces();
         for(int i = 0; i < 16; i ++){
-           sceneTG.addChild(chessPieces.getBlackPieces().get(i));
-           sceneTG.addChild(chessPieces.getWhitePieces().get(i));
+            sceneTG.addChild(chessPieces.getBlackPieces().get(i));
+            sceneTG.addChild(chessPieces.getWhitePieces().get(i));
         }
     }
 
@@ -128,7 +128,7 @@ public class ChessBoard {
                 tg.addChild(generateRectangle(MONKEECHESS.Grey, new Point3f(1, 0.04f, 0), new Vector2f(scale, scale/2)));
             }
             if(i == 4){ // textured top
-               tg.addChild(generateRectangle(texture, new Point3f(1, 1, 0), new Vector2f(scale, scale)));
+                tg.addChild(generateRectangle(texture, new Point3f(1, 1, 0), new Vector2f(scale, scale)));
             }
             if(i == 5){ // bottom
                 tg.addChild(generateRectangle(MONKEECHESS.Grey, new Point3f(1, 1, 0), new Vector2f(scale, scale)));

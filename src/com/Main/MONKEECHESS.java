@@ -23,6 +23,7 @@ import org.jogamp.vecmath.*;
 
 public class MONKEECHESS extends JPanel {
     // defining colors
+    public static String board ="chess";
     public static final Color3f Red = new Color3f(1.0f, 0.0f, 0.0f);
     public static final Color3f Green = new Color3f(0.0f, 1.0f, 0.0f);
     public static final Color3f Blue = new Color3f(0.0f, 0.0f, 1.0f);
@@ -130,7 +131,7 @@ public class MONKEECHESS extends JPanel {
         addLights(sceneBG, White);
         sceneBG.addChild(generateBackground());
         sceneTG.addChild(generateAxis(Yellow, 1f));
-        chessBoard = new ChessBoard("chess", canvas3D, sceneBG); // pass in texture name, canvas and sceneBG
+        chessBoard = new ChessBoard(board, canvas3D, sceneBG); // pass in texture name, canvas and sceneBG
         chessBoard.createScene(sceneTG); // sceneTG is what all pieces and board will be on
     }
 
