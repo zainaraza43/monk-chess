@@ -23,24 +23,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ChessPieces {
-    private String textureNameBlack, textureNameWhite; // will be used later for texture picking
+    public static  String textureNameBlack="mahogany";
+    public static String textureNameWhite="gold"; // will be used later for texture picking
     private ArrayList<TransformGroup> blackPieces;
     private ArrayList<TransformGroup> whitePieces;
     public HashMap<String, Pair<Shape3D, Vector2f>> pieces;
     private String [] objNames;
-    public ChessPieces() {
+    public ChessPieces(String black,String white ){
         blackPieces = new ArrayList<>();
         whitePieces = new ArrayList<>();
         objNames = new String[]{"Pawn", "Rook", "Knight", "Bishop", "Queen", "King"}; // string array to hold names
         pieces = new HashMap<>();
+        this.textureNameBlack = black;
+        this.textureNameWhite = white;
 
     }
 
     public void makePieces(){
        String [] pieceNames = {"Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Rook", "Knight", "Bishop", "Queen", "King", "Bishop",
        "Knight", "Rook"};
-        createPieces(pieceNames, blackPieces, "mahogany", false);
-        createPieces(pieceNames, whitePieces, "gold", true);
+        createPieces(pieceNames, blackPieces, textureNameBlack, false);
+        createPieces(pieceNames, whitePieces, textureNameWhite, true);
     }
 
     public void loadPieces() { // will load all the objects in called at the start of game
