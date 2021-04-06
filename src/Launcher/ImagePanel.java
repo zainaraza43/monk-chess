@@ -10,7 +10,8 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.awt.Graphics;
 import java.net.URL;
-
+import java.applet.Applet;
+import java.applet.AudioClip;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -18,13 +19,15 @@ import java.awt.event.*;
 import java.awt.Component.*;
 
 
-public class ImagePanel extends JPanel implements MouseListener {
+public class ImagePanel extends JPanel{
     private ArrayList<ImageIcon> images = new ArrayList<>();
     private ArrayList<ImageIcon> pieces = new ArrayList<>();
     private ArrayList<ImageIcon> background = new ArrayList<>();
     private ArrayList<JLabel> label = new ArrayList<>();
     private ArrayList<JLabel> label1 = new ArrayList<>();
     private ArrayList<JLabel> label2 = new ArrayList<>();
+    AudioClip click;
+
 
     public ImagePanel() {
         // images.add(new ImageIcon("Assets/images/"+"chess" + 0+ ".jpg"));
@@ -74,15 +77,15 @@ public class ImagePanel extends JPanel implements MouseListener {
             add(label2.get(i));
 
         }
-
-
         mouse();
-
     }
 
     public void mouse(){
+        URL urlClick = ImagePanel.class.getResource("click.wav");
+        click = Applet.newAudioClip(urlClick);
         label.get(0).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                click.play();
                 MONKEECHESS.board = "chess0";
                 System.out.println("black");
             }
@@ -90,9 +93,9 @@ public class ImagePanel extends JPanel implements MouseListener {
 
             }
         });
-
         label.get(1).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                click.play();
                 MONKEECHESS.board = "chess1";
                 System.out.println("gold");
             }
@@ -102,6 +105,7 @@ public class ImagePanel extends JPanel implements MouseListener {
 
         label.get(2).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                click.play();
                 MONKEECHESS.board = "chess3";
                 System.out.println("gray");
             }
@@ -111,6 +115,7 @@ public class ImagePanel extends JPanel implements MouseListener {
         });
         label.get(3).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                click.play();
                 MONKEECHESS.board="chess2";
                 System.out.println("red");
             }
@@ -121,6 +126,7 @@ public class ImagePanel extends JPanel implements MouseListener {
 
         label1.get(0).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                click.play();
                 Launcher.black="mahogany";
                 Launcher.white="gold";
                 System.out.println("black");
@@ -131,6 +137,7 @@ public class ImagePanel extends JPanel implements MouseListener {
         });
         label1.get(1).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                click.play();
                 ChessPieces.textureNameWhite = "piece0";
                 ChessPieces.textureNameBlack = "piece";
                 System.out.println("SHUT RAT");
@@ -141,6 +148,7 @@ public class ImagePanel extends JPanel implements MouseListener {
 
         label1.get(2).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                click.play();
                 ChessPieces.textureNameWhite = "piece1";
                 ChessPieces.textureNameBlack = "piece2";
                 System.out.println("black");
@@ -152,6 +160,7 @@ public class ImagePanel extends JPanel implements MouseListener {
 
         label1.get(3).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                click.play();
                 MONKEECHESS.board="chess";
                 System.out.println("black");
             }
@@ -163,6 +172,7 @@ public class ImagePanel extends JPanel implements MouseListener {
 
         label2.get(0).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                click.play();
                 MONKEECHESS.ground="background0";
                 System.out.println("space");
             }
@@ -173,6 +183,7 @@ public class ImagePanel extends JPanel implements MouseListener {
 
         label2.get(1).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                click.play();
                 MONKEECHESS.ground="background1";
                 System.out.println("jungle");
             }
@@ -182,6 +193,7 @@ public class ImagePanel extends JPanel implements MouseListener {
 
         label2.get(2).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                click.play();
                 MONKEECHESS.ground="background2";
                 System.out.println("rainbow");
             }
@@ -191,45 +203,13 @@ public class ImagePanel extends JPanel implements MouseListener {
 
         label2.get(3).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                click.play();
                 MONKEECHESS.ground="background3";
                 System.out.println("rainbow");
             }
             public void mouseReleased(MouseEvent e) {
             }
         });
-
-
     }
-
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-        int ClickedCount = e.getClickCount();
-        if (ClickedCount > 0) {
-            System.out.println("THE RAT");
-        }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
 
 }
