@@ -28,7 +28,6 @@ public class ImagePanel extends JPanel{
     }
     @Override
     protected void paintComponent(Graphics g) {
-
         Toolkit t = Toolkit.getDefaultToolkit();
 
         for (int i = 0; i <= 3; i++) {
@@ -49,9 +48,7 @@ public class ImagePanel extends JPanel{
     }
 
     public void check() {
-
         for(int i=0;i<=3;i++) {
-
             JLabel c1 = new JLabel("     ");
             JLabel c2 = new JLabel("     ");
             JLabel c3 = new JLabel("     ");
@@ -69,9 +66,9 @@ public class ImagePanel extends JPanel{
         }
         mouse();
     }
-
     public void mouse(){
-
+        URL urlClick = ImagePanel.class.getResource("click.wav");
+        click = Applet.newAudioClip(urlClick);
         label.get(0).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 click.play();
