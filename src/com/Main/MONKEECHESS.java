@@ -26,6 +26,7 @@ import org.jogamp.vecmath.*;
 public class MONKEECHESS extends JPanel {
     // defining colors
     public static Overlay overlay;
+    //public static String status;
     public static String board ="chess0";
     public static final Color3f Red = new Color3f(1.0f, 0.0f, 0.0f);
     public static final Color3f Green = new Color3f(0.0f, 1.0f, 0.0f);
@@ -46,8 +47,6 @@ public class MONKEECHESS extends JPanel {
     public static Point3d position;
     public static int PLAYER1 = 1, PLAYER2 = 2;
     public static String ground = "background0";
-
-
 
     private static Background generateBackground(){ // will return a background
         Background background = new Background(); // make a background

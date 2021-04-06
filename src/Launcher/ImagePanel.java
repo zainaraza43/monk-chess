@@ -6,17 +6,13 @@ import com.Main.MONKEECHESS;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.awt.Graphics;
 import java.net.URL;
 import java.applet.Applet;
 import java.applet.AudioClip;
-
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import java.awt.event.*;
-import java.awt.Component.*;
 
 
 public class ImagePanel extends JPanel{
@@ -27,13 +23,9 @@ public class ImagePanel extends JPanel{
     private ArrayList<JLabel> label1 = new ArrayList<>();
     private ArrayList<JLabel> label2 = new ArrayList<>();
     AudioClip click;
-
-
     public ImagePanel() {
-        // images.add(new ImageIcon("Assets/images/"+"chess" + 0+ ".jpg"));
         check();
     }
-
     @Override
     protected void paintComponent(Graphics g) {
 
@@ -70,8 +62,6 @@ public class ImagePanel extends JPanel{
             label.get(i).setBounds(120,80+(130*i),80,80);
             label2.get(i).setBounds(600,80+(130*i),100,60);
 
-
-            //cl.setLocation(120,80 + (130 * i));
             add(label1.get(i));
             add(label.get(i));
             add(label2.get(i));
@@ -81,8 +71,7 @@ public class ImagePanel extends JPanel{
     }
 
     public void mouse(){
-        URL urlClick = ImagePanel.class.getResource("click.wav");
-        click = Applet.newAudioClip(urlClick);
+
         label.get(0).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 click.play();
@@ -154,21 +143,20 @@ public class ImagePanel extends JPanel{
                 System.out.println("black");
             }
             public void mouseReleased(MouseEvent e) {
-
             }
         });
 
         label1.get(3).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 click.play();
-                MONKEECHESS.board="chess";
+                ChessPieces.textureNameWhite = "piece1";
+                ChessPieces.textureNameBlack = "piece2";
                 System.out.println("black");
             }
             public void mouseReleased(MouseEvent e) {
 
             }
         });
-
 
         label2.get(0).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -177,7 +165,6 @@ public class ImagePanel extends JPanel{
                 System.out.println("space");
             }
             public void mouseReleased(MouseEvent e) {
-
             }
         });
 
