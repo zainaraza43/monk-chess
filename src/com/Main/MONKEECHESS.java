@@ -17,7 +17,6 @@ import com.Behavior.MouseZoom;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
 import org.jogamp.java3d.utils.image.TextureLoader;
-import org.jogamp.java3d.utils.universe.PlatformGeometry;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
 import org.jogamp.java3d.utils.universe.Viewer;
 import org.jogamp.java3d.utils.universe.ViewingPlatform;
@@ -44,6 +43,7 @@ public class MONKEECHESS extends JPanel {
     public static SimpleUniverse su;
     public static Point3d position;
     public static int PLAYER1 = 1, PLAYER2 = 2;
+    public static Overlay overlay;
 
 
 
@@ -194,7 +194,7 @@ public class MONKEECHESS extends JPanel {
             panel.setVisible(true);
             panel.add(new MONKEECHESS());
             frame.add(panel);
-            Overlay overlay = new Overlay(frame);
+            overlay = new Overlay(frame);
             overlay.createPanels();
 
             frame.setLayout(null);

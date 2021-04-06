@@ -114,6 +114,5 @@ public class KeyBoardInput extends Behavior {
         highlightTransform.setTransform(highlightTransform3D);
         pieceTransform3D.setTranslation(vector3d);
         positionTG.setTransform(pieceTransform3D);
-
     }
 }

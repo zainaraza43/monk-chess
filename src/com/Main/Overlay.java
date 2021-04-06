@@ -24,10 +24,12 @@ public class Overlay extends JPanel implements ActionListener {
     private JFrame frame;
     private ArrayList<Buttons> buttons;
     private boolean spin = false;
+    private OverlayPanels[] panels;
 
     public Overlay(JFrame frame){
        this.frame = frame;
        buttons = new ArrayList<>();
+       panels = new OverlayPanels[]{new OverlayPanels(), new OverlayPanels(), new OverlayPanels()};
     }
 
     public void createPanels(){ // function that will make the panels
@@ -36,7 +38,7 @@ public class Overlay extends JPanel implements ActionListener {
         bounds[1] = new Rectangle(10, 10, 50, 800);
         bounds[2] = new Rectangle(945, 10, 50, 800);
         for(int i = 0; i < 3; i ++) {
-            JPanel panel = new JPanel();
+            OverlayPanels panel = panels[i];
             panel.setBounds(bounds[i]);
             BevelBorder border = new BevelBorder(BevelBorder.RAISED, Color.black, Color.black, Color.black, Color.black);
             panel.setBorder(border);
@@ -53,13 +55,22 @@ public class Overlay extends JPanel implements ActionListener {
         }
     }
 
+    public OverlayPanels getLeftPanel(){
+        return this.panels[1];
+    }
+
+    public OverlayPanels getRightPanel(){
+        return this.panels[2];
+    }
+
+
     public void createLabel(JPanel panel, int k){
         JLabel label = new JLabel();
         label.setBounds(0,0, 50, 30);
         BevelBorder border = new BevelBorder(BevelBorder.RAISED, Color.black, Color.black, Color.black, Color.black);
         label.setBorder(border);
         label.setBackground(Color.black);
-        label.setText("P" + k);
+        label.setText(k == 1 ? "Black" : "White");
         label.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(label);
     }

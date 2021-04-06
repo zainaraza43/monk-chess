@@ -14,6 +14,9 @@ import org.jogamp.java3d.loaders.Scene;
 import org.jogamp.java3d.loaders.objectfile.ObjectFile;
 import org.jogamp.vecmath.Vector2f;
 import org.jogamp.vecmath.Vector3d;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
@@ -26,14 +29,17 @@ public class ChessPieces {
     private ArrayList<Piece> blackPieces;
     private ArrayList<Piece> whitePieces;
     public HashMap<String, Pair<Shape3D, Vector2f>> pieces;
-    private String [] objNames;
+    public static String [] objNames;
+    public static HashMap<String, ImageIcon> icons;
+
     public ChessPieces(String black,String white ){
         blackPieces = new ArrayList<Piece>();
         whitePieces = new ArrayList<Piece>();
         objNames = new String[]{"Pawn", "Rook", "Knight", "Bishop", "Queen", "King"}; // string array to hold names
         pieces = new HashMap<>();
-        this.textureNameBlack = black;
-        this.textureNameWhite = white;
+        icons = new HashMap<>();
+        textureNameBlack = black;
+        textureNameWhite = white;
     }
 
     public void makePieces(){
@@ -48,6 +54,8 @@ public class ChessPieces {
         float [] yValues = {0.65f, 0.78f, 0.8f, 1.03f, 1.17f, 1.25f};
         for (int i = 0; i < objNames.length; i ++) {
             pieces.put(objNames[i], new Pair<>(loadPiece(objNames[i]), new Vector2f(sizes[i], yValues[i])));
+            icons.put("Black_" + objNames[i], new ImageIcon("Assets/Icons/Black_" + objNames[i] + ".png"));
+            icons.put("White_" + objNames[i], new ImageIcon("Assets/Icons/White_" + objNames[i] + ".png"));
         }
     }
     public void createPieces(String [] pieceList, ArrayList<Piece> list, String texture, boolean isWhite) {

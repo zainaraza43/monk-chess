@@ -1,6 +1,5 @@
 package com.Behavior;
-import com.Main.ChessBoard;
-import com.Main.Piece;
+import com.Main.*;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Vector3d;
 import java.awt.*;
@@ -18,6 +17,7 @@ public class Collision extends Behavior {
     private BranchGroup removeBG;
     private PickBehavior pickBehavior;
     private ChessBoard chessBoard;
+    private Overlay overlay;
 
     public Collision(ChessBoard chessBoard, PickBehavior p, BranchGroup removeBG, TransformGroup sceneTG, ArrayList<Piece> whitePiece, ArrayList<Piece> blackPieces, Piece piece){
         this.chessBoard = chessBoard;
@@ -28,6 +28,7 @@ public class Collision extends Behavior {
         this.oppositePieces = piece.isWhite() ? blackPieces : whitePiece;
         this.positionTransform = piece.getPositionTransform();
         this.piece = piece;
+        overlay = MONKEECHESS.overlay;
         isColliding = false;
     }
 
@@ -75,6 +76,9 @@ public class Collision extends Behavior {
         oppositePieces.remove(pieceObj);
         chessBoard.removeChessPiece(pieceObj);
         pickBehavior.removeCollisionBehavior(removeBG);
+        OverlayPanels panels = pieceObj.isWhite() ? overlay.getRightPanel() : overlay.getLeftPanel();
+        panels.addIcon(pieceObj.getColor() + "_" + pieceObj.getName());
+        panels.repaint();
     }
 
     public void processOwnPiece(Piece pieceObj){
