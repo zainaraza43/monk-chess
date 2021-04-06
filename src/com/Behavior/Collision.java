@@ -1,8 +1,13 @@
 package com.Behavior;
+import Launcher.ImagePanel;
 import com.Main.*;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Vector3d;
+
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -79,6 +84,17 @@ public class Collision extends Behavior {
         OverlayPanels panels = pieceObj.isWhite() ? overlay.getRightPanel() : overlay.getLeftPanel();
         panels.addIcon(pieceObj.getColor() + "_" + pieceObj.getName());
         panels.repaint();
+
+        if(pieceObj.getName().equals("King")){
+            win(pieceObj);
+        }
+    }
+
+    public void win(Piece pieceObj){
+        if(pieceObj.isWhite())
+            System.out.println("GAME OVER, Black team wins");
+        else
+            System.out.println("GAME OVER, White team wins");
     }
 
     public void processOwnPiece(Piece pieceObj){

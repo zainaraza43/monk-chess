@@ -81,10 +81,6 @@ public class Piece extends BranchGroup {
         oldPosition = getPosition();
     }
 
-    public Vector3d getOldPosition() {
-        return oldPosition;
-    }
-
     public void resetPos(){
         setPosition(oldPosition);
     }
