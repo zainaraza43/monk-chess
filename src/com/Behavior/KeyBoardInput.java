@@ -110,9 +110,21 @@ public class KeyBoardInput extends Behavior {
                 highlightVector.z += amount;
                 break;
         }
+        // Make sure that piece can't go off the board
+        bindCoords(vector3d, -7, 7);
+        bindCoords(highlightVector, -7, 7);
+
         highlightTransform3D.setTranslation(highlightVector);
         highlightTransform.setTransform(highlightTransform3D);
         pieceTransform3D.setTranslation(vector3d);
         positionTG.setTransform(pieceTransform3D);
+    }
+
+    private static void bindCoords(Vector3d v, double min, double max) {
+        v.x = Math.max(min, v.x);
+        v.x = Math.min(max, v.x);
+
+        v.z = Math.max(min, v.z);
+        v.z = Math.min(max, v.z);
     }
 }
