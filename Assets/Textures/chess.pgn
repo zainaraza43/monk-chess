@@ -1,0 +1,12 @@
+[Event "Online Chess"]
+[Site "Betterthanchess.com"]
+[Date "2021.04.02"]
+[Round ""]
+[White "Me"]
+[Black "Computer (Normal) [1200]"]
+[Result "0-1"]
+[TimeControl "5|5"]
+[Termination "White ran out of time."]
+
+1. d4 d5 2. e3 Qd6 3. f3 Nc6 4. e4 dxe4 5. fxe4 Nxd4 6. c3 Nc6 7. Qxd6 exd6 8. Bb5 Kd8 9. Bg5+ f6 10. Bh4 Be6
+11. Nf3 Nge7 12. b3 g5 13. g3 gxh4 14. gxh4 Bh6 15. O-O a6 16. Bd3 Kd7 17. Nbd2 Be3+ 18. Kg2 Rhg8+ 19. Kh1 b5 20. Ng5 fxg5 0-1
