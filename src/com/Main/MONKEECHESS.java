@@ -17,6 +17,7 @@ import com.Behavior.MouseZoom;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
 import org.jogamp.java3d.utils.image.TextureLoader;
+import org.jogamp.java3d.utils.universe.PlatformGeometry;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
 import org.jogamp.java3d.utils.universe.Viewer;
 import org.jogamp.java3d.utils.universe.ViewingPlatform;
@@ -24,7 +25,8 @@ import org.jogamp.vecmath.*;
 
 public class MONKEECHESS extends JPanel {
     // defining colors
-    public static String board ="chess";
+    public static Overlay overlay;
+    public static String board ="chess0";
     public static final Color3f Red = new Color3f(1.0f, 0.0f, 0.0f);
     public static final Color3f Green = new Color3f(0.0f, 1.0f, 0.0f);
     public static final Color3f Blue = new Color3f(0.0f, 0.0f, 1.0f);
@@ -43,14 +45,14 @@ public class MONKEECHESS extends JPanel {
     public static SimpleUniverse su;
     public static Point3d position;
     public static int PLAYER1 = 1, PLAYER2 = 2;
-    public static Overlay overlay;
+    public static String ground = "background0";
 
 
 
     private static Background generateBackground(){ // will return a background
         Background background = new Background(); // make a background
         background.setImageScaleMode(Background.SCALE_FIT_MAX); // scale it to max
-        TextureLoader loader = new TextureLoader("Assets/Background/background2.jpg", null); // load the image
+        TextureLoader loader = new TextureLoader("Assets/Images/"+ground+".jpg", null); // load the image
         background.setApplicationBounds(new BoundingSphere(new Point3d(), 1000d)); // set the bounds
         background.setImage(loader.getImage()); // set the image
         return background;

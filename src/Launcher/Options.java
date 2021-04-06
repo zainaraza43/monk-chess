@@ -13,9 +13,8 @@ public class Options extends JPanel implements ActionListener {
     private JPanel option;
     private Buttons exit;
     private ArrayList<ImageIcon> images = new ArrayList<>();
-    JFrame frame;
     JLabel label;
-
+    JFrame frame;
     public Options(Font f) {
         frame = new JFrame("MONKEECHESS");
 
