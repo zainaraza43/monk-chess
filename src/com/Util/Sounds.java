@@ -76,15 +76,4 @@ public class Sounds {
         soundJOAL.stop(soundPath + sound);
     }
 
-    public void movePiece(){
-        String sound = "move";
-        soundJOAL.play(soundPath + sound);
-        try{
-            Thread.sleep(450);
-        }catch (InterruptedException e){
-            System.out.println(e);
-        }
-        soundJOAL.stop(soundPath + sound);
-    }
-
 }
