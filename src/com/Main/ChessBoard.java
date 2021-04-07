@@ -17,7 +17,6 @@ import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
 import java.awt.*;
-import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 
 public class ChessBoard {
@@ -27,7 +26,7 @@ public class ChessBoard {
     private ChessPieces chessPieces;
     public Canvas3D canvas3D;
     public BranchGroup sceneBG;
-    public static boolean isWhite;
+    public boolean rotate;
     public Sounds sounds;
 
     public ChessBoard(String name, Canvas3D canvas3D, BranchGroup sceneBG, TransformGroup sceneTG){
@@ -36,6 +35,7 @@ public class ChessBoard {
         this.canvas3D = canvas3D;
         this.sceneBG = sceneBG;
         sounds = new Sounds();
+        rotate = false;
     }
 
     public void createScene(){
@@ -147,6 +147,14 @@ public class ChessBoard {
         board.setCollidable(false);
         boardTG.addChild(board);
         return boardTG;
+    }
+
+    public void rotateBoard(){
+       Transform3D tmp = new Transform3D();
+       objTG.getTransform(tmp);
+       tmp.rotY(rotate ? 0: Math.PI);
+       objTG.setTransform(tmp);
+       rotate = !rotate;
     }
 
     //function used to make the side border

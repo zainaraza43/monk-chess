@@ -73,7 +73,7 @@ public class MouseZoom extends Behavior {
         Vector3d v = new Vector3d();
         this.currX.get(v);
         Point3d eye = new Point3d(v);
-        eye.z = ChessBoard.isWhite ? eye.z + speed : eye.z - speed;
+        eye.z += speed;
         eye.y += speed;
         Transform3D look = new Transform3D();
         look.lookAt(eye, center, up);

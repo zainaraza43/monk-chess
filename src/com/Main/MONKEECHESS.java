@@ -161,14 +161,7 @@ public class MONKEECHESS extends JPanel {
         viewingPlatform.setCapability(ViewingPlatform.ALLOW_BOUNDS_WRITE);
 
         su = new SimpleUniverse(viewingPlatform, viewer);   //define simpile universe and put canvas in it
-        Random n = new Random();
-        if(n.nextInt(2) == 1){
-            position = new Point3d(0, 25, 25);
-            ChessBoard.isWhite = true;
-        }else{
-            position = new Point3d(0, 25, -25);
-            ChessBoard.isWhite = false;
-        }
+        position = new Point3d(0, 25, 25);
         defineViewer(su, position);    // set the viewer's location random for black piece or white piece
         BranchGroup scene = new BranchGroup();
         createScene(scene);                           // add contents to the scene branch
