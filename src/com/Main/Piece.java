@@ -1,5 +1,7 @@
 package com.Main;
 
+import com.Util.SoundUtilityJOAL;
+import com.Util.Sounds;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.Color3f;
@@ -8,6 +10,8 @@ import org.jogamp.vecmath.Vector3d;
 public class Piece extends BranchGroup {
     private String name, color;
     private Vector3d oldPosition;
+    private String path = "Assets/Sounds/SoundEffects";
+    public Sounds sounds;
 
     public Piece(Obj3D piece, String name, String color, Vector3d position, float scale, double rotation, String texture) {
         piece.setPiece(this);
@@ -38,6 +42,7 @@ public class Piece extends BranchGroup {
         scaledTG.addChild(piece);
         addChild(positionTG);
         this.oldPosition = getPosition();
+        sounds = MONKEECHESS.chessBoard.sounds;
     }
 
     public String getColor() {

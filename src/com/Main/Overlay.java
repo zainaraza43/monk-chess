@@ -10,6 +10,8 @@
 package com.Main;
 
 import Launcher.Buttons;
+import com.Util.Sounds;
+import org.jogamp.java3d.MediaContainer;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -23,13 +25,20 @@ import java.util.ArrayList;
 public class Overlay extends JPanel implements ActionListener {
     private JFrame frame;
     private ArrayList<Buttons> buttons;
-    private boolean spin = false;
+    private boolean isPlaying;
     private OverlayPanels[] panels;
+    private Sounds sounds;
+    private String currentSound;
+    private int soundIndex;
 
     public Overlay(JFrame frame){
        this.frame = frame;
        buttons = new ArrayList<>();
        panels = new OverlayPanels[]{new OverlayPanels(), new OverlayPanels(), new OverlayPanels()};
+       sounds = MONKEECHESS.chessBoard.sounds;
+       currentSound = sounds.getSoundNames()[0];
+       isPlaying = true;
+       soundIndex = 0;
     }
 
     public void createPanels(){ // function that will make the panels
@@ -130,6 +139,31 @@ public class Overlay extends JPanel implements ActionListener {
                         position.z = -position.z;
                         ChessBoard.isWhite = !ChessBoard.isWhite;
                         MONKEECHESS.resetViewer(MONKEECHESS.su, position);
+                    case "Stop":
+                        if(isPlaying){
+                            sounds.stopSound(currentSound);
+                            isPlaying = false;
+                        }
+                        break;
+                    case "Play":
+                        if(!isPlaying){
+                           sounds.playSound(currentSound);
+                            isPlaying = true;
+                        }
+                        break;
+                    case "Change":
+                        if(soundIndex == 9){
+                            soundIndex = 0;
+                            sounds.soundJOAL.stop(currentSound);
+                            currentSound = sounds.getSoundNames()[soundIndex];
+                            sounds.playSound(currentSound);
+                        }else{
+                            soundIndex++;
+                            sounds.soundJOAL.stop(currentSound);
+                            currentSound = sounds.getSoundNames()[soundIndex];
+                            sounds.playSound(currentSound);
+                        }
+                        break;
                 }
             }
         }
