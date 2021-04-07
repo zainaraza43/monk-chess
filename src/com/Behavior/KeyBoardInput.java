@@ -8,12 +8,16 @@
  * KeyBoardInput.java
  */
 package com.Behavior;
+import Launcher.Launcher;
+import com.Main.ChessBoard;
+import com.Main.MONKEECHESS;
 import com.Main.Piece;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Vector3d;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class KeyBoardInput extends Behavior {
@@ -72,7 +76,23 @@ public class KeyBoardInput extends Behavior {
                 for(int i = 0; i < keyCodes.length; i ++){
                     if(keyEvent.getKeyCode() == keyCodes[i]){
                         movePiece(moves[i][0], piece.isWhite() ? moves[i][1] : -moves[i][1]);
-
+                        ArrayList<Piece> toCheck = piece.isWhite() ? Launcher.chessPieces.getWhitePieces() : Launcher.chessPieces.getBlackPieces();
+                        Appearance app = new Appearance();
+                        for (Piece p:toCheck) {
+                            if (piece.getPosition().x == p.getPosition().x && piece.getPosition().z == p.getPosition().z && piece.getPosition().y != p.getPosition().y) {
+                                piece.makePieceRed();
+                                Shape3D shape3D = (Shape3D)highlightTransform.getChild(0);
+//                                shape3D.getAppearance().setMaterial(PickBehavior.setMaterial(MONKEECHESS.Red));
+                                app.setMaterial(PickBehavior.setMaterial(MONKEECHESS.Red));
+                                shape3D.setAppearance(app);
+                                return;
+                            }
+                        }
+                        piece.makePieceGreen();
+                        Shape3D shape3D = (Shape3D)highlightTransform.getChild(0);
+//                        shape3D.getAppearance().setMaterial(PickBehavior.setMaterial(MONKEECHESS.Green));
+                        app.setMaterial(PickBehavior.setMaterial(MONKEECHESS.Green));
+                        shape3D.setAppearance(app);
                     }
                 }
                 if(keyEvent.getKeyCode() == KeyEvent.VK_SPACE){

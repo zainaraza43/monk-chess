@@ -113,7 +113,7 @@ public class PickBehavior extends Behavior {
                         Piece piece = (Piece) pickPiece.getParent().getParent().getParent();
                         isMoving = true;
                         isWhite = piece.getColor().equals("White"); // check if pickPiece selected is white
-                        piece.makePieceRed();
+                        piece.makePieceGreen();
 
                         TransformGroup positionTransform = piece.getPositionTransform(); // get positionTransformGroup
                         TransformGroup highlightTransform = makeHighlight(positionTransform);
@@ -186,18 +186,20 @@ public class PickBehavior extends Behavior {
         tg.setTransform(t3d);
 
         Appearance appearance = new Appearance();
-        appearance.setMaterial(setMaterial(MONKEECHESS.Green));
-        tg.addChild(new Shape3D(quadArray, appearance));
+//        appearance.setCapability(Appearance.ALLOW_COLORING_ATTRIBUTES_WRITE | Appearance.ALLOW_MATERIAL_READ | Appearance.ALLOW_MATERIAL_WRITE);
+//        appearance.setMaterial(setMaterial(MONKEECHESS.Green));
+        Shape3D shape3d = new Shape3D(quadArray, appearance);
+        shape3d.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE | Shape3D.ALLOW_APPEARANCE_READ);
+        tg.addChild(shape3d);
         return tg;
     }
 
     public static Material setMaterial(Color3f clr) {
         int SH = 100;               // 10
         Material ma = new Material();
-        Color3f c = new Color3f(0.6f * clr.x, 0.6f * clr.y, 0.6f * clr.z);
-        ma.setAmbientColor(c);
-        ma.setEmissiveColor(new Color3f(0, 0, 0));
-        ma.setDiffuseColor(c);
+        ma.setAmbientColor(clr);
+        ma.setEmissiveColor(clr);
+        ma.setDiffuseColor(clr);
         ma.setSpecularColor(clr);
         ma.setShininess(SH);
         ma.setLightingEnable(true);
