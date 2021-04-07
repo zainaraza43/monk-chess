@@ -115,15 +115,13 @@ public class PickBehavior extends Behavior {
                         isWhite = piece.getColor().equals("White"); // check if pickPiece selected is white
                         piece.makePieceGreen();
 
-                        TransformGroup positionTransform = piece.getPositionTransform(); // get positionTransformGroup
-                        TransformGroup highlightTransform = makeHighlight(positionTransform);
-
                         BranchGroup movementBG = new BranchGroup();
                         movementBG.setCapability(BranchGroup.ALLOW_DETACH);
 
                         piece.oldPos(); // store old position before movement
                         setYValue(piece, 3);
-                        addKeyNav(piece, movementBG, highlightTransform);
+                        piece.makeHighlight();
+                        addKeyNav(piece, movementBG);
                         sceneTG.addChild(movementBG);
                     }
                 }
@@ -140,10 +138,9 @@ public class PickBehavior extends Behavior {
         sceneTG.removeChild(bg);
     }
 
-    public void addKeyNav(Piece piece, BranchGroup tmpBG, TransformGroup highlightTransform) {
-        KeyBoardInput keyBoardInput = new KeyBoardInput(piece, tmpBG,this, highlightTransform);
+    public void addKeyNav(Piece piece, BranchGroup tmpBG) {
+        KeyBoardInput keyBoardInput = new KeyBoardInput(piece, tmpBG,this);
         keyBoardInput.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
-        tmpBG.addChild(highlightTransform);
         tmpBG.addChild(keyBoardInput);
 
         BranchGroup collisionBG = new BranchGroup();
@@ -163,35 +160,6 @@ public class PickBehavior extends Behavior {
         Vector3d vector3d = piece.getPosition();
         vector3d.y += amount; // update
         piece.setPosition(vector3d); // set
-    }
-
-    public TransformGroup makeHighlight(TransformGroup positionTG) {
-
-        QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.NORMALS | QuadArray.COORDINATES);
-        float[][] coords = {{-1, 0, -1}, {-1, 0, 1}, {1, 0, 1}, {1, 0, -1}};
-        float[] normal = {0, 1, 0};
-        for (int i = 0; i < 4; i++) {
-            quadArray.setCoordinate(i, coords[i]);
-            quadArray.setNormal(i, normal);
-            quadArray.setColor(i, MONKEECHESS.Green);
-        }
-        TransformGroup tg = new TransformGroup();
-        tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-        Transform3D t3d = new Transform3D();
-        positionTG.getTransform(t3d);
-        Vector3d tmp = new Vector3d();
-        t3d.get(tmp);
-        tmp.y = 0.01;
-        t3d.setTranslation(tmp);
-        tg.setTransform(t3d);
-
-        Appearance appearance = new Appearance();
-//        appearance.setCapability(Appearance.ALLOW_COLORING_ATTRIBUTES_WRITE | Appearance.ALLOW_MATERIAL_READ | Appearance.ALLOW_MATERIAL_WRITE);
-//        appearance.setMaterial(setMaterial(MONKEECHESS.Green));
-        Shape3D shape3d = new Shape3D(quadArray, appearance);
-        shape3d.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE | Shape3D.ALLOW_APPEARANCE_READ);
-        tg.addChild(shape3d);
-        return tg;
     }
 
     public static Material setMaterial(Color3f clr) {

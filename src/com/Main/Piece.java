@@ -10,12 +10,14 @@ import java.util.HashMap;
 public class Piece extends BranchGroup {
     private String name, color, texture;
     private Vector3d oldPosition;
+    private BranchGroup highlight;
 
     public Piece(Obj3D piece, String name, String color, Vector3d position, float scale, double rotation, String texture) {
         piece.setPiece(this);
         this.name = name;
         this.color = color;
         this.texture = texture;
+        this.highlight = null;
         this.setCapability(BranchGroup.ALLOW_DETACH);
         TransformGroup positionTG = new TransformGroup();
         positionTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -54,7 +56,7 @@ public class Piece extends BranchGroup {
         return name;
     }
 
-    public boolean isWhite(){
+    public boolean isWhite() {
         return color.equals("White");
     }
 
@@ -81,11 +83,11 @@ public class Piece extends BranchGroup {
         return (Shape3D) ((TransformGroup) getPositionTransform().getChild(0)).getChild(0);
     }
 
-    public void oldPos(){
+    public void oldPos() {
         oldPosition = getPosition();
     }
 
-    public void resetPos(){
+    public void resetPos() {
         setPosition(oldPosition);
     }
 
@@ -111,9 +113,65 @@ public class Piece extends BranchGroup {
         getPiece().getAppearance().setTexture(t);
     }
 
-    public void makePieceGreen() { setTexture(texture+"_green"); }
-    public void makePieceRed() { setTexture(texture+"_red"); }
-    public void makePieceNormal() { setTexture(texture); }
+    public void makePieceGreen() {
+        setTexture(texture + "_green");
+        changeHighlightColor(MONKEECHESS.Green);
+    }
+
+    public void makePieceRed() {
+        setTexture(texture + "_red");
+        changeHighlightColor(MONKEECHESS.Red);
+    }
+
+    public void makePieceNormal() {
+        setTexture(texture);
+        removeHighlight();
+    }
+
+    public void makeHighlight() {
+        QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.NORMALS | QuadArray.COORDINATES);
+        quadArray.setCapability(QuadArray.ALLOW_COLOR_WRITE);
+        float[][] coords = {{-1, 0, -1}, {-1, 0, 1}, {1, 0, 1}, {1, 0, -1}};
+        float[] normal = {0, 1, 0};
+        for (int i = 0; i < 4; i++) {
+            quadArray.setCoordinate(i, coords[i]);
+            quadArray.setNormal(i, normal);
+            quadArray.setColor(i, MONKEECHESS.Green);
+        }
+        BranchGroup bg = new BranchGroup();
+        bg.setCapability(BranchGroup.ALLOW_DETACH);
+        TransformGroup tg = new TransformGroup();
+        tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+
+        Transform3D highlightTransform = new Transform3D();
+        getPositionTransform().getTransform(highlightTransform);
+        Vector3d highlightPosition = new Vector3d();
+        highlightPosition.y = 0.01 - getPosition().y;
+        highlightTransform.setTranslation(highlightPosition);
+        tg.setTransform(highlightTransform);
+
+        Shape3D shape3d = new Shape3D(quadArray);
+        shape3d.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE | Shape3D.ALLOW_APPEARANCE_READ);
+        tg.addChild(shape3d);
+
+        bg.addChild(tg);
+        getPositionTransform().addChild(bg);
+        highlight = bg;
+    }
+
+    public void changeHighlightColor(Color3f color) {
+        if (highlight != null) {
+            QuadArray quadArray = (QuadArray) ((Shape3D)((TransformGroup) highlight.getChild(0)).getChild(0)).getGeometry();
+            for (int i = 0; i < quadArray.getVertexCount(); i++) {
+                quadArray.setColor(i, color);
+            }
+        }
+    }
+
+    public void removeHighlight() {
+        getPositionTransform().removeChild(1);
+        highlight = null;
+    }
 
     public static Material setMaterial(Color3f clr) {
         int SH = 100;               // 10

@@ -23,7 +23,7 @@ import java.util.Iterator;
 public class KeyBoardInput extends Behavior {
     private WakeupCriterion[] wakeupCriteria;
     private WakeupCondition wakeupCondition;
-    private TransformGroup positionTG, highlightTransform;
+    private TransformGroup positionTG;
     private boolean isMoving;
     private Transform3D pieceTransform3D, highlightTransform3D;
     private int[] keyCodes;
@@ -32,12 +32,11 @@ public class KeyBoardInput extends Behavior {
     private BranchGroup removingBG;
     private Piece piece;
 
-    public KeyBoardInput(Piece piece, BranchGroup removingBG, PickBehavior p,TransformGroup highlightTransform){
+    public KeyBoardInput(Piece piece, BranchGroup removingBG, PickBehavior p){
         this.piece = piece;
         this.removingBG = removingBG;
         this.positionTG = piece.getPositionTransform();
         this.pickBehavior = p;
-        this.highlightTransform = highlightTransform;
         isMoving = true;
         pieceTransform3D = new Transform3D();
         highlightTransform3D = new Transform3D();
@@ -77,22 +76,13 @@ public class KeyBoardInput extends Behavior {
                     if(keyEvent.getKeyCode() == keyCodes[i]){
                         movePiece(moves[i][0], piece.isWhite() ? moves[i][1] : -moves[i][1]);
                         ArrayList<Piece> toCheck = piece.isWhite() ? Launcher.chessPieces.getWhitePieces() : Launcher.chessPieces.getBlackPieces();
-                        Appearance app = new Appearance();
                         for (Piece p:toCheck) {
                             if (piece.getPosition().x == p.getPosition().x && piece.getPosition().z == p.getPosition().z && piece.getPosition().y != p.getPosition().y) {
                                 piece.makePieceRed();
-                                Shape3D shape3D = (Shape3D)highlightTransform.getChild(0);
-//                                shape3D.getAppearance().setMaterial(PickBehavior.setMaterial(MONKEECHESS.Red));
-                                app.setMaterial(PickBehavior.setMaterial(MONKEECHESS.Red));
-                                shape3D.setAppearance(app);
                                 return;
                             }
                         }
                         piece.makePieceGreen();
-                        Shape3D shape3D = (Shape3D)highlightTransform.getChild(0);
-//                        shape3D.getAppearance().setMaterial(PickBehavior.setMaterial(MONKEECHESS.Green));
-                        app.setMaterial(PickBehavior.setMaterial(MONKEECHESS.Green));
-                        shape3D.setAppearance(app);
                     }
                 }
                 if(keyEvent.getKeyCode() == KeyEvent.VK_SPACE){
@@ -105,10 +95,6 @@ public class KeyBoardInput extends Behavior {
     }
 
     public void movePiece(float amount, float direction){
-        highlightTransform.getTransform(highlightTransform3D);
-        Vector3d highlightVector = new Vector3d();
-        highlightTransform3D.get(highlightVector);
-
         positionTG.getTransform(pieceTransform3D);
         Vector3d vector3d = new Vector3d();
         pieceTransform3D.get(vector3d);
@@ -116,27 +102,20 @@ public class KeyBoardInput extends Behavior {
         switch ((int) direction){
             case 1:
                 vector3d.z -= amount;
-                highlightVector.z -= amount;
                 break;
             case 2:
                 vector3d.x -= amount;
-                highlightVector.x -= amount;
                 break;
             case -2:
                 vector3d.x += amount;
-                highlightVector.x += amount;
                 break;
             case -1:
                 vector3d.z += amount;
-                highlightVector.z += amount;
                 break;
         }
         // Make sure that piece can't go off the board
         bindCoords(vector3d, -7, 7);
-        bindCoords(highlightVector, -7, 7);
 
-        highlightTransform3D.setTranslation(highlightVector);
-        highlightTransform.setTransform(highlightTransform3D);
         pieceTransform3D.setTranslation(vector3d);
         positionTG.setTransform(pieceTransform3D);
     }
