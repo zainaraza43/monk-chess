@@ -78,6 +78,7 @@ public class KeyBoardInput extends Behavior {
                 if(keyEvent.getKeyCode() == KeyEvent.VK_SPACE){
                     pickBehavior.setYValue(piece, -3);
                     pickBehavior.removeKeyNav(removingBG);
+                    piece.makePieceNormal();
                 }
             }
         }

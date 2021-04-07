@@ -5,14 +5,17 @@ import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Vector3d;
 
+import java.util.HashMap;
+
 public class Piece extends BranchGroup {
-    private String name, color;
+    private String name, color, texture;
     private Vector3d oldPosition;
 
     public Piece(Obj3D piece, String name, String color, Vector3d position, float scale, double rotation, String texture) {
         piece.setPiece(this);
         this.name = name;
         this.color = color;
+        this.texture = texture;
         this.setCapability(BranchGroup.ALLOW_DETACH);
         TransformGroup positionTG = new TransformGroup();
         positionTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -32,11 +35,13 @@ public class Piece extends BranchGroup {
 
         positionTG.setTransform(pos);
         positionTG.addChild(scaledTG);
-        setApp(piece, texture);
         piece.setName(name);
         piece.setUserData(0);
         scaledTG.addChild(piece);
         addChild(positionTG);
+
+        System.out.println("Making piece with name " + name + " and texture " + texture);
+        setApp(texture);
         this.oldPosition = getPosition();
     }
 
@@ -70,7 +75,6 @@ public class Piece extends BranchGroup {
         getPositionTransform().getTransform(position3D);
         position3D.setTranslation(position);
         getPositionTransform().setTransform(position3D);
-
     }
 
     public Shape3D getPiece() {
@@ -85,34 +89,31 @@ public class Piece extends BranchGroup {
         setPosition(oldPosition);
     }
 
-    public static void setApp(Shape3D piece, String texture) {
-        Appearance appearance = new Appearance();
-        appearance.setMaterial(setMaterial(MONKEECHESS.White));
+    private void setApp(String texture) {
+        Appearance app = getPiece().getAppearance();
+        app.setCapability(Appearance.ALLOW_TEXTURE_WRITE);
+        app.setMaterial(setMaterial(MONKEECHESS.White));
 
         ColoringAttributes ca = new ColoringAttributes(MONKEECHESS.Black, ColoringAttributes.SHADE_GOURAUD);
         ca.setColor(0, 0, 0);
-        appearance.setColoringAttributes(ca);
+        app.setColoringAttributes(ca);
 
         TextureAttributes ta = new TextureAttributes();
         ta.setTextureMode(TextureAttributes.MODULATE);
-        appearance.setTextureAttributes(ta);
+        app.setTextureAttributes(ta);
 
-        appearance.setTexture(setTexture(texture));
-        piece.setAppearance(appearance);
+        setTexture(texture);
+        getPiece().setAppearance(app);
     }
 
-    public static Texture setTexture(String name) {
-        TextureLoader loader = new TextureLoader("Assets/Textures/" + name + ".jpg", null); // load in the image
-        ImageComponent2D imageComponent2D = loader.getImage(); //get image
-        if (imageComponent2D == null) { // if image is not found
-            System.out.println("Error opening image");
-        }
-
-        Texture2D texture2D = new Texture2D(Texture.BASE_LEVEL, Texture.RGBA, imageComponent2D.getWidth(), imageComponent2D.getHeight());
-        texture2D.setImage(0, imageComponent2D); //set the image on the texture
-        texture2D.setEnable(true);
-        return texture2D; // return the texture with the image
+    public void setTexture(String name) {
+        Texture t = ChessPieces.textures.get(name);
+        getPiece().getAppearance().setTexture(t);
     }
+
+    public void makePieceGreen() { setTexture(texture+"_green"); }
+    public void makePieceRed() { setTexture(texture+"_red"); }
+    public void makePieceNormal() { setTexture(texture); }
 
     public static Material setMaterial(Color3f clr) {
         int SH = 100;               // 10

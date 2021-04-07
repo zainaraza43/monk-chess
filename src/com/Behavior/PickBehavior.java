@@ -113,6 +113,7 @@ public class PickBehavior extends Behavior {
                         Piece piece = (Piece) pickPiece.getParent().getParent().getParent();
                         isMoving = true;
                         isWhite = piece.getColor().equals("White"); // check if pickPiece selected is white
+                        piece.makePieceRed();
 
                         TransformGroup positionTransform = piece.getPositionTransform(); // get positionTransformGroup
                         TransformGroup highlightTransform = makeHighlight(positionTransform);
