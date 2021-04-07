@@ -25,6 +25,7 @@ public class Collision extends Behavior {
     private ChessBoard chessBoard;
     private Overlay overlay;
     public static boolean isColliding;
+    public static int collidingIndex = -1;
 
     public Collision(ChessBoard chessBoard, PickBehavior p, BranchGroup removeBG, TransformGroup sceneTG, ArrayList<Piece> whitePiece, ArrayList<Piece> blackPieces, Piece piece){
         this.chessBoard = chessBoard;
@@ -66,6 +67,7 @@ public class Collision extends Behavior {
     }
 
     public void processCollision(Piece pieceObj){
+        collidingIndex = oppositePieces.indexOf(pieceObj);
         oppositePieces.remove(pieceObj);
         chessBoard.removeChessPiece(pieceObj);
         pickBehavior.removeCollisionBehavior(removeBG);

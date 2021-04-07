@@ -121,7 +121,8 @@ public class PickBehavior extends Behavior {
                         collisionBG.setCapability(BranchGroup.ALLOW_DETACH);
 
                         piece.oldPos(); // store old position before movement
-                        setYValue(piece, 4);
+//                        setYValue(piece, 4);
+                        piece.moveYPos(Piece.RAISE_AMOUNT);
                         piece.makeHighlight();
                         addKeyNav(piece);
                     }
@@ -157,7 +158,7 @@ public class PickBehavior extends Behavior {
     }
 
     public void addKeyNav(Piece piece) {
-        KeyBoardInput keyBoardInput = new KeyBoardInput(piece, movementBG,this);
+        KeyBoardInput keyBoardInput = new KeyBoardInput(piece, movementBG,this, chessBoard);
         keyBoardInput.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
         movementBG.addChild(keyBoardInput);
         sceneTG.addChild(movementBG);
@@ -171,12 +172,6 @@ public class PickBehavior extends Behavior {
         collisionBG.addChild(collision);
         sceneTG.addChild(collisionBG);
 
-    }
-
-    public void setYValue(Piece piece, float amount) {
-        Vector3d vector3d = piece.getPosition();
-        vector3d.y += amount; // update
-        piece.setPosition(vector3d); // set
     }
 
     public static Material setMaterial(Color3f clr) {

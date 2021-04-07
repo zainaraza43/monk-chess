@@ -137,7 +137,7 @@ public class Launcher extends JPanel implements ActionListener {
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            new MONKEECHESS.MyGUI("MONKEECHESS"); // call the game
+                            new MONKEECHESS.MyGUI("MONKEECHESS", false); // call the game
 
                         }
                     });

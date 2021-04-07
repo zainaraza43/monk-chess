@@ -14,6 +14,7 @@ import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Vector3d;
 
 public class Piece extends BranchGroup {
+    public static final int RAISE_AMOUNT = 3;
     private String name, color, texture;
     private Vector3d oldPosition;
     private BranchGroup highlight;
@@ -96,6 +97,12 @@ public class Piece extends BranchGroup {
 
     public void resetPos() {
         setPosition(oldPosition);
+    }
+
+    public void moveYPos(double amount) {
+        Vector3d v = getPosition();
+        v.y += amount;
+        setPosition(v);
     }
 
     public void setApp(String texture) {

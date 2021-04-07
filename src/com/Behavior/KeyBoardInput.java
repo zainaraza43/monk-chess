@@ -9,6 +9,7 @@
  */
 package com.Behavior;
 import Launcher.Launcher;
+import com.Main.ChessBoard;
 import com.Main.Piece;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Vector3d;
@@ -29,12 +30,14 @@ public class KeyBoardInput extends Behavior {
     private PickBehavior pickBehavior;
     private BranchGroup removingBG;
     private Piece piece;
+    private ChessBoard chessBoard;
 
-    public KeyBoardInput(Piece piece, BranchGroup removingBG, PickBehavior p){
+    public KeyBoardInput(Piece piece, BranchGroup removingBG, PickBehavior p, ChessBoard cb){
         this.piece = piece;
         this.removingBG = removingBG;
         this.positionTG = piece.getPositionTransform();
         this.pickBehavior = p;
+        this.chessBoard = cb;
         isMoving = true;
         pieceTransform3D = new Transform3D();
         highlightTransform3D = new Transform3D();
@@ -84,9 +87,14 @@ public class KeyBoardInput extends Behavior {
                     }
                 }
                 if(keyEvent.getKeyCode() == KeyEvent.VK_SPACE){
-                    pickBehavior.setYValue(piece, -4);
+                    piece.moveYPos(-Piece.RAISE_AMOUNT);
+                    chessBoard.sendData(piece);
                     pickBehavior.removeKeyNav(removingBG);
                     piece.makePieceNormal();
+                }
+                if(keyEvent.getKeyCode() == KeyEvent.VK_M){
+                    System.out.println("MOVING THE PIECE");
+                    chessBoard.updateBoard(true, 0, -0, 0, 1);
                 }
             }
         }

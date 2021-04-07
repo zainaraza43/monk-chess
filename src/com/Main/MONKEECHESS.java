@@ -40,13 +40,13 @@ public class MONKEECHESS extends JPanel {
     public static final Color3f Black = new Color3f(0, 0, 0);
     public static final Color3f[] Clrs = {Blue, Green, Red, Yellow,
             Cyan, Orange, Magenta, Grey};
-    private static final long serialVersionUID = 1L;
     public static ChessBoard chessBoard;
-    public static Canvas3D canvas3D;
+    public Canvas3D canvas3D;
     public static SimpleUniverse su;
     public static Point3d position;
     public static int PLAYER1 = 1, PLAYER2 = 2;
     public static String ground = "background0";
+    private static boolean isMultiplayer;
 
     private static Background generateBackground(){ // will return a background
         Background background = new Background(); // make a background
@@ -126,14 +126,13 @@ public class MONKEECHESS extends JPanel {
     }
 
     /* a function to create and return the scene BranchGroup */
-    public static void createScene(BranchGroup sceneBG) {
+    public void createScene(BranchGroup sceneBG) {
         // create 'objsBG' for content
         TransformGroup sceneTG = new TransformGroup();
         sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE | TransformGroup.ALLOW_CHILDREN_WRITE | TransformGroup.ALLOW_CHILDREN_EXTEND);
         sceneBG.addChild(sceneTG);
         addLights(sceneBG, White);
         sceneBG.addChild(generateBackground());
-        sceneTG.addChild(generateAxis(Yellow, 1f));
         chessBoard = new ChessBoard(board, canvas3D, sceneBG, sceneTG); // pass in texture name, canvas and sceneBG
         chessBoard.createScene(); // sceneTG is what all pieces and board will be on
     }
@@ -150,7 +149,8 @@ public class MONKEECHESS extends JPanel {
         sceneBG.addChild(ptLight);
     }
 
-    public MONKEECHESS(){
+    public MONKEECHESS(boolean isMultiplayer){
+        this.isMultiplayer = isMultiplayer;
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         canvas3D = new Canvas3D(config);//define a canvas
         Viewer viewer = new Viewer(canvas3D);
@@ -184,7 +184,7 @@ public class MONKEECHESS extends JPanel {
 
     public static class MyGUI extends JFrame {
         private static final long serialVersionUID = 1L;
-        public MyGUI(String title) {
+        public MyGUI(String title, boolean isMultiplayer) {
             JFrame frame = new JFrame(title);
             frame.setSize(1010, 850);    // set the size of the JFrame
             frame.setResizable(false);
@@ -193,7 +193,7 @@ public class MONKEECHESS extends JPanel {
             panel.setBounds(70, 2, 865,718);
             panel.setBackground(Color.black);
             panel.setVisible(true);
-            panel.add(new MONKEECHESS());
+            panel.add(new MONKEECHESS(isMultiplayer));
             frame.add(panel);
             overlay = new Overlay(frame);
             overlay.createPanels();

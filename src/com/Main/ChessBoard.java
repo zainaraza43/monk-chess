@@ -9,6 +9,7 @@
  */
 package com.Main;
 import Launcher.Launcher;
+import com.Behavior.Collision;
 import com.Behavior.MouseRotation;
 import com.Behavior.PickBehavior;
 import com.Util.Sounds;
@@ -16,6 +17,8 @@ import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
 import java.awt.*;
+import java.awt.geom.GeneralPath;
+import java.util.ArrayList;
 
 public class ChessBoard {
     private String name;
@@ -64,6 +67,52 @@ public class ChessBoard {
             sceneTG.addChild(chessPieces.getBlackPieces().get(i));
             sceneTG.addChild(chessPieces.getWhitePieces().get(i));
         }
+    }
+
+    //  [isWhite]   [index of piece to move]   [new x pos]    [new z pos]    [piece to remove]
+    public void updateBoard(boolean pieceIsWhite, int indexOfMovingPiece, double newX, double newZ, int collisionIndex) {
+        ArrayList<Piece> pieceList = pieceIsWhite ? chessPieces.getWhitePieces() : chessPieces.getBlackPieces();
+        ArrayList<Piece> oppList = pieceIsWhite ? chessPieces.getBlackPieces() : chessPieces.getWhitePieces();
+
+        Piece movingPiece = pieceList.get(indexOfMovingPiece);
+        Vector3d newPosition = movingPiece.getPosition();
+        newPosition.x = newX;
+        newPosition.z = newZ;
+        movingPiece.setPosition(newPosition);
+
+        if (collisionIndex > -1) {
+            removeChessPiece(oppList.get(collisionIndex));
+            oppList.remove(collisionIndex);
+        }
+    }
+
+    public void sendData(Piece pieceToMove) {
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                try { Thread.sleep(400); } catch (InterruptedException e) { e.printStackTrace(); }
+
+                boolean pieceIsWhite = pieceToMove.isWhite();
+                ArrayList<Piece> pieceList = pieceIsWhite ? chessPieces.getWhitePieces() : chessPieces.getBlackPieces();
+                ArrayList<Piece> oppList = pieceIsWhite ? chessPieces.getBlackPieces() : chessPieces.getWhitePieces();
+                int index = pieceList.indexOf(pieceToMove);
+                Vector3d pos = pieceToMove.getPosition();
+                double newXPos = pos.x;
+                double newZPos = pos.z;
+
+                int collisionIndex = -1;
+                if (Collision.isColliding) {
+                    collisionIndex = Collision.collidingIndex;
+                    System.out.println("COLLISION: " + collisionIndex);
+                }
+
+                System.out.println("Data to send: [" + pieceIsWhite + ", " + index + ", {" + newXPos + "," + newZPos + "}, " + collisionIndex + "]");
+
+            }
+        };
+
+        Thread t = new Thread(r);
+        t.start();
     }
 
     public void removeChessPiece(BranchGroup piece){
@@ -119,6 +168,8 @@ public class ChessBoard {
 
         Shape3D shape3D = new Shape3D(quadArray, appearance);
         shape3D.setUserData(0);
+        shape3D.setCollidable(false);
+        shape3D.setPickable(false);
         return shape3D;
     }
 
@@ -219,17 +270,20 @@ public class ChessBoard {
         coloringAttributes.setShadeModel(ColoringAttributes.SHADE_GOURAUD);
         appearance.setColoringAttributes(coloringAttributes); // add the color attribute to appearance
         appearance.setMaterial(setMaterial(clr));
-        scene_TG.addChild(new Shape3D(text3D, appearance));
+        Shape3D s = new Shape3D(text3D, appearance);
+        s.setCollidable(false);
+        s.setPickable(false);
+        scene_TG.addChild(s);
         return scene_TG;
     }
     public void addText(TransformGroup objTG){
         String[] bottomText = {"a", "b", "c", "d", "e", "f", "g", "h", "1", "2", "3", "4", "5", "6", "7", "8"};
         for(int i = 0; i < 16; i ++){
-            objTG.addChild(generateText3d(bottomText[i], 0.8f, new Vector3f(i < 8 ? -7 + 2f *( i % 8): -9 , 0, i < 8 ? 8.8f : 7 - 2f * (i % 8)), MONKEECHESS.White, false));
+            objTG.addChild(generateText3d(bottomText[i], 0.8f, new Vector3f(i < 8 ? -7 + 2f *( i % 8): -9 , -0.15f, i < 8 ? 8.8f : 7 - 2f * (i % 8)), MONKEECHESS.Black, false));
         }
 
         for(int i = 0; i < 16; i ++){
-            objTG.addChild(generateText3d(bottomText[i], 0.8f, new Vector3f(i < 8 ? 7 - 2f *( i % 8): 9 , 0, i < 8 ? -8.8f : -7 + 2f * (i % 8)), MONKEECHESS.White, true));
+            objTG.addChild(generateText3d(bottomText[i], 0.8f, new Vector3f(i < 8 ? 7 - 2f *( i % 8): 9 , -0.15f, i < 8 ? -8.8f : -7 + 2f * (i % 8)), MONKEECHESS.Black, true));
         }
     }
 
