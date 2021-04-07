@@ -85,7 +85,7 @@ public class SoundUtilityJOAL {
     /* function to load sound as a buffer and use it to initialize OpenAL source */
     public boolean load(String nm, boolean toLoop) {
         if (sourcesMap.get(nm) != null) {
-            System.out.println(nm + " already loaded");
+            //System.out.println(nm + " already loaded");
             return true;
         }
         int[] buffer = initBuffer(nm);
@@ -97,11 +97,11 @@ public class SoundUtilityJOAL {
             al.alDeleteBuffers(1, buffer, 0); // no need for the buffer anymore
             return false;
         }
-        if (toLoop)
-            System.out.println("Looping source created for " + nm);
-        else
-            System.out.println("Source created for " + nm);
-
+//        if (toLoop)
+//            //System.out.println("Looping source created for " + nm);
+//        else
+//            //System.out.println("Source created for " + nm);
+//
         buffersMap.put(nm, buffer);    // store sound name and buffer its hash map
         sourcesMap.put(nm, source);    // store sound name and source its hash map
         return true;
@@ -116,13 +116,13 @@ public class SoundUtilityJOAL {
         try {                               // load WAV file into data array first
             ALut.alutLoadWAVFile(fnm, format, data, size, freq, loop);
         } catch (ALException e) {
-            System.out.println("Error loading WAV file: " + fnm);
+            //System.out.println("Error loading WAV file: " + fnm);
             return null;
         }
         int[] buffer = new int[1];  // create an empty buffer to hold the sound data
         al.alGenBuffers(1, buffer, 0);     // initialize the buffer with loaded data
         if (al.alGetError() != AL.AL_NO_ERROR) {
-            System.out.println("Could not create a buffer for " + nm);
+            //System.out.println("Could not create a buffer for " + nm);
             return null;
         }                                   // store data in the buffer
         al.alBufferData(buffer[0], format[0], data[0], size[0], freq[0]);
@@ -137,7 +137,7 @@ public class SoundUtilityJOAL {
         int[] source = new int[1];
         al.alGenSources(1, source, 0);
         if (al.alGetError() != AL.AL_NO_ERROR) {
-            System.out.println("Error creating source for " + nm);
+            //System.out.println("Error creating source for " + nm);
             return null;
         }
 
@@ -153,7 +153,7 @@ public class SoundUtilityJOAL {
             al.alSourcei(source[0], AL.AL_LOOPING, AL.AL_FALSE);    // not looping
 
         if (al.alGetError() != AL.AL_NO_ERROR) {
-            System.out.println("Error configuring source for " + nm);
+            //System.out.println("Error configuring source for " + nm);
             return null;
         }
         return source;
@@ -163,7 +163,7 @@ public class SoundUtilityJOAL {
     public boolean setPos(String nm, float x, float y, float z) {
         int[] source = (int[]) sourcesMap.get(nm);
         if (source == null) {
-            System.out.println("No source found for " + nm);
+            //System.out.println("No source found for " + nm);
             return false;
         }
         al.alSource3f(source[0], AL.AL_POSITION, x, y, z);
@@ -182,10 +182,10 @@ public class SoundUtilityJOAL {
     public boolean play(String nm) {
         int[] source = (int[]) sourcesMap.get(nm);
         if (source == null) {
-            System.out.println("No source found for " + nm);
+            //System.out.println("No source found for " + nm);
             return false;
         }
-        System.out.println("Playing " + nm);
+        //System.out.println("Playing " + nm);
         al.alSourcePlay(source[0]);
         return true;
     }
@@ -194,10 +194,10 @@ public class SoundUtilityJOAL {
     public boolean stop(String nm) {
         int[] source = (int[]) sourcesMap.get(nm);
         if (source == null) {
-            System.out.println("No source found for " + nm);
+            //System.out.println("No source found for " + nm);
             return false;
         }
-        System.out.println("Stopping " + nm);
+        //System.out.println("Stopping " + nm);
         al.alSourceStop(source[0]);
         return true;
     }
@@ -207,10 +207,10 @@ public class SoundUtilityJOAL {
     {
         int[] source = (int[]) sourcesMap.get(nm);
         if (source == null) {
-            System.out.println("No source found for " + nm);
+            //System.out.println("No source found for " + nm);
             return false;
         }
-        System.out.println("Pausing " + nm);
+        //System.out.println("Pausing " + nm);
         al.alSourcePause(source[0]);
         return true;
     } // end of pause()
@@ -278,7 +278,7 @@ public class SoundUtilityJOAL {
             nm = iter.next();
 
             source = sourcesMap.get(nm);
-            System.out.println("Stopping " + nm);
+            //System.out.println("Stopping " + nm);
             al.alSourceStop(source[0]);
             al.alDeleteSources(1, source, 0);
 

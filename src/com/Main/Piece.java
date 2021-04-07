@@ -1,5 +1,7 @@
 package com.Main;
 
+import com.Util.SoundUtilityJOAL;
+import com.Util.Sounds;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.Color3f;
@@ -11,6 +13,7 @@ public class Piece extends BranchGroup {
     private String name, color, texture;
     private Vector3d oldPosition;
     private BranchGroup highlight;
+    public Sounds sounds;
 
     public Piece(Obj3D piece, String name, String color, Vector3d position, float scale, double rotation, String texture) {
         piece.setPiece(this);
@@ -45,6 +48,7 @@ public class Piece extends BranchGroup {
         System.out.println("Making piece with name " + name + " and texture " + texture);
         setApp(texture);
         this.oldPosition = getPosition();
+        sounds = MONKEECHESS.chessBoard.sounds;
     }
 
     public String getColor() {

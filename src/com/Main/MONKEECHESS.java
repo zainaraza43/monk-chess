@@ -41,7 +41,7 @@ public class MONKEECHESS extends JPanel {
     public static final Color3f[] Clrs = {Blue, Green, Red, Yellow,
             Cyan, Orange, Magenta, Grey};
     private static final long serialVersionUID = 1L;
-    private static ChessBoard chessBoard;
+    public static ChessBoard chessBoard;
     public static Canvas3D canvas3D;
     public static SimpleUniverse su;
     public static Point3d position;

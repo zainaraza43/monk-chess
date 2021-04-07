@@ -13,6 +13,7 @@ import Launcher.Launcher;
 import com.Behavior.MouseRotation;
 import com.Behavior.PickBehavior;
 import com.Util.SoundUtilityJOAL;
+import com.Util.Sounds;
 import jogamp.opengl.macosx.cgl.MacOSXOffscreenCGLDrawable;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
@@ -26,9 +27,7 @@ public class ChessBoard {
     public Canvas3D canvas3D;
     public BranchGroup sceneBG;
     public static boolean isWhite;
-    public  SoundUtilityJOAL soundJOAL;
-    public  String[] soundNames;
-    public String currentSound;
+    public Sounds sounds;
 
     public ChessBoard(String name, Canvas3D canvas3D, BranchGroup sceneBG){
         this.name = name;
@@ -36,7 +35,7 @@ public class ChessBoard {
         this.sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE | TransformGroup.ALLOW_CHILDREN_WRITE | TransformGroup.ALLOW_CHILDREN_EXTEND | TransformGroup.ALLOW_CHILDREN_READ);
         this.canvas3D = canvas3D;
         this.sceneBG = sceneBG;
-        soundNames = new String[10];
+        sounds = new Sounds();
     }
 
     public void createScene(TransformGroup sceneTG){
@@ -50,10 +49,8 @@ public class ChessBoard {
         PickBehavior pickBehavior = new PickBehavior(this, this.sceneBG, this.sceneTG, canvas3D); // pickBehaviour class
         pickBehavior.setSchedulingBounds(mouseBounds);
         this.sceneTG.addChild(pickBehavior);
-        loadSound();
-        currentSound = soundNames[0];
-        soundJOAL.setPos(currentSound, 0,0,isWhite ? -20 : 20);
-        playSound(currentSound);
+
+        sounds.playSound(sounds.getSoundNames()[0]);
 
         sceneTG.addChild(mouseRotation);
         addChessPieces(this.sceneTG);
@@ -67,36 +64,6 @@ public class ChessBoard {
             sceneTG.addChild(chessPieces.getBlackPieces().get(i));
             sceneTG.addChild(chessPieces.getWhitePieces().get(i));
         }
-    }
-
-    public void loadSound(){
-        soundJOAL = new SoundUtilityJOAL();
-        String path = "Background/";
-        for(int i = 1; i<11; i++){
-            String soundName = path + "sound" + i;
-            soundNames[i-1] = soundName;
-            if(!soundJOAL.load(soundName, 0, 0, -25, true )){
-                System.out.println(soundName + " not loaded :(");
-            }
-        }
-    }
-    public void playSound(String soundName){
-        soundJOAL.play(soundName);
-    }
-    public void stopSound(String soundName) {
-        soundJOAL.stop(soundName);
-    }
-
-    public String getCurrentSound() {
-        return currentSound;
-    }
-
-    public void setCurrentSound(String currentSound) {
-        this.currentSound = currentSound;
-    }
-
-    public String[] getSoundNames() {
-        return soundNames;
     }
 
     public void removeChessPiece(BranchGroup piece){

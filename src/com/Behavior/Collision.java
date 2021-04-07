@@ -84,20 +84,27 @@ public class Collision extends Behavior {
         OverlayPanels panels = pieceObj.isWhite() ? overlay.getRightPanel() : overlay.getLeftPanel();
         panels.addIcon(pieceObj.getColor() + "_" + pieceObj.getName());
         panels.repaint();
-
         if(pieceObj.getName().equals("King")){
             win(pieceObj);
+        }else{
+            piece.sounds.validMove();
         }
     }
 
     public void win(Piece pieceObj){
-        if(pieceObj.isWhite())
+        if(pieceObj.isWhite()) {
             System.out.println("GAME OVER, Black team wins");
-        else
+            piece.sounds.gameWon();
+        }
+        else {
             System.out.println("GAME OVER, White team wins");
+            piece.sounds.gameWon();
+        }
+
     }
 
     public void processOwnPiece(Piece pieceObj){
+        pieceObj.sounds.inValidMove();
         pieceObj.resetPos();
         pickBehavior.removeCollisionBehavior(removeBG);
     }
