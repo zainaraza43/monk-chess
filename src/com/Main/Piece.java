@@ -1,13 +1,17 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * Collision.java
+ */
 package com.Main;
-
-import com.Util.SoundUtilityJOAL;
 import com.Util.Sounds;
 import org.jogamp.java3d.*;
-import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Vector3d;
-
-import java.util.HashMap;
 
 public class Piece extends BranchGroup {
     private String name, color, texture;
@@ -45,7 +49,6 @@ public class Piece extends BranchGroup {
         scaledTG.addChild(piece);
         addChild(positionTG);
 
-        System.out.println("Making piece with name " + name + " and texture " + texture);
         setApp(texture);
         this.oldPosition = getPosition();
         sounds = MONKEECHESS.chessBoard.sounds;

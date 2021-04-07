@@ -1,13 +1,17 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * Collision.java
+ */
 package com.Behavior;
-import Launcher.ImagePanel;
 import com.Main.*;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Vector3d;
-
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -78,6 +82,7 @@ public class Collision extends Behavior {
     }
 
     public void processCollision(Piece pieceObj){
+        System.out.println(piece.getColor() + " " + piece.getName() + " collided with " +pieceObj.getColor() +" "+pieceObj.getName());
         oppositePieces.remove(pieceObj);
         chessBoard.removeChessPiece(pieceObj);
         pickBehavior.removeCollisionBehavior(removeBG);

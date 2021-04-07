@@ -64,12 +64,12 @@ public class ChessPieces {
         String [] endings = {"", "_green", "_red"};
         for (String ending:endings) {
             String k = textureNameBlack + ending;
-            System.out.println("Loading " + k);
+//            System.out.println("Loading " + k);
             Texture t = loadTexture(k);
             textures.put(k, t);
 
             k = textureNameWhite + ending;
-            System.out.println("Loading " + k);
+//            System.out.println("Loading " + k);
             t = loadTexture(k);
             textures.put(k, t);
         }
@@ -103,7 +103,7 @@ public class ChessPieces {
         ObjectFile objectFile = new ObjectFile(ObjectFile.STRIPIFY | ObjectFile.TRIANGULATE | ObjectFile.RESIZE);
         Scene scene = null;
         try {
-            System.out.println("attempting to load in object");
+//            System.out.println("attempting to load in object");
             scene = objectFile.load(new File("Assets/Objects/obj_sht/" + fileName + ".obj").toURI().toURL());
         } catch (FileNotFoundException | MalformedURLException e) {
             System.err.println(e);

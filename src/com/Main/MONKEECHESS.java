@@ -57,7 +57,7 @@ public class MONKEECHESS extends JPanel {
         return background;
     }
 
-    private static Shape3D generateAxis(Color3f yColor, float length) { // function to generate x, y, z axes
+    public static Shape3D generateAxis(Color3f yColor, float length) { // function to generate x, y, z axes
         LineArray lineArray = new LineArray(6, LineArray.COLOR_3 | LineArray.COORDINATES);
         Point3f[] coors = {new Point3f(length, 0,0), new Point3f(0,length,0), new Point3f(0,0,length)}; // array of the coordinates
         Color3f[] cols = {Green, yColor, Red}; // array of colors
@@ -129,13 +129,13 @@ public class MONKEECHESS extends JPanel {
     public static void createScene(BranchGroup sceneBG) {
         // create 'objsBG' for content
         TransformGroup sceneTG = new TransformGroup();
-        sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE | TransformGroup.ALLOW_CHILDREN_WRITE | TransformGroup.ALLOW_CHILDREN_EXTEND);
         sceneBG.addChild(sceneTG);
         addLights(sceneBG, White);
         sceneBG.addChild(generateBackground());
         sceneTG.addChild(generateAxis(Yellow, 1f));
-        chessBoard = new ChessBoard(board, canvas3D, sceneBG); // pass in texture name, canvas and sceneBG
-        chessBoard.createScene(sceneTG); // sceneTG is what all pieces and board will be on
+        chessBoard = new ChessBoard(board, canvas3D, sceneBG, sceneTG); // pass in texture name, canvas and sceneBG
+        chessBoard.createScene(); // sceneTG is what all pieces and board will be on
     }
 
     public static void addLights(BranchGroup sceneBG, Color3f clr) {

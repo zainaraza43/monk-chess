@@ -8,12 +8,9 @@
  * Overlay.java
  */
 package com.Main;
-
 import Launcher.Buttons;
 import com.Util.Sounds;
-import org.jogamp.java3d.MediaContainer;
 import org.jogamp.vecmath.Point3d;
-import org.jogamp.vecmath.Vector3d;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -139,6 +136,7 @@ public class Overlay extends JPanel implements ActionListener {
                         position.z = -position.z;
                         ChessBoard.isWhite = !ChessBoard.isWhite;
                         MONKEECHESS.resetViewer(MONKEECHESS.su, position);
+                        break;
                     case "Stop":
                         if(isPlaying){
                             sounds.stopSound(currentSound);

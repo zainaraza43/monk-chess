@@ -1,5 +1,12 @@
 /*
- * User defined Shape3D file that holds the obj file data and is also used for pick behavior
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * Obj3D.java
+ * User defined class used for picking
  */
 package com.Main;
 

@@ -1,3 +1,12 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * Sounds.java
+ */
 package com.Util;
 
 public class Sounds {
@@ -5,8 +14,6 @@ public class Sounds {
     public  SoundUtilityJOAL soundJOAL;
     public  String[] soundNames;
     private String BackPath = "Background/", soundPath = "SoundEffects/";
-    private Thread thread;
-    private boolean stop;
 
     public Sounds(){
         soundNames = new String[10];
@@ -58,7 +65,7 @@ public class Sounds {
         String sound = "invalid";
         soundJOAL.play(soundPath + sound);
         try{
-            Thread.sleep(450);
+            Thread.sleep(400);
         }catch (InterruptedException e){
             System.out.println(e);
         }
@@ -69,7 +76,7 @@ public class Sounds {
         String sound = "win";
         soundJOAL.play(soundPath + sound);
         try{
-            Thread.sleep(1500);
+            Thread.sleep(1600);
         }catch (InterruptedException e){
             System.out.println(e);
         }

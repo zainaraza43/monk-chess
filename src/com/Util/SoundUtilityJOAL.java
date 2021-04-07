@@ -1,12 +1,18 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * SoundUtilityJOAL.java
+ */
 package com.Util;
-
 import java.util.*;
-
 import com.jogamp.openal.AL;
 import com.jogamp.openal.ALException;
 import com.jogamp.openal.ALFactory;
 import com.jogamp.openal.util.ALut;
-
 import java.nio.ByteBuffer;
 
 public class SoundUtilityJOAL {

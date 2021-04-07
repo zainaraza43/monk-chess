@@ -7,21 +7,19 @@
  * Zain Raza
  * ChessBoard.java
  */
-
 package com.Main;
 import Launcher.Launcher;
 import com.Behavior.MouseRotation;
 import com.Behavior.PickBehavior;
-import com.Util.SoundUtilityJOAL;
 import com.Util.Sounds;
-import jogamp.opengl.macosx.cgl.MacOSXOffscreenCGLDrawable;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
+import java.awt.*;
 
 public class ChessBoard {
     private String name;
-    private TransformGroup sceneTG;
+    private TransformGroup sceneTG, objTG;
     public static MouseRotation mouseRotation;
     private ChessPieces chessPieces;
     public Canvas3D canvas3D;
@@ -29,32 +27,34 @@ public class ChessBoard {
     public static boolean isWhite;
     public Sounds sounds;
 
-    public ChessBoard(String name, Canvas3D canvas3D, BranchGroup sceneBG){
+    public ChessBoard(String name, Canvas3D canvas3D, BranchGroup sceneBG, TransformGroup sceneTG){
+        this.sceneTG = sceneTG;
         this.name = name;
-        this.sceneTG = new TransformGroup();
-        this.sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE | TransformGroup.ALLOW_CHILDREN_WRITE | TransformGroup.ALLOW_CHILDREN_EXTEND | TransformGroup.ALLOW_CHILDREN_READ);
         this.canvas3D = canvas3D;
         this.sceneBG = sceneBG;
         sounds = new Sounds();
     }
 
-    public void createScene(TransformGroup sceneTG){
-        generateBase(this.sceneTG, 8, name);
-        this.sceneTG.addChild(addSides());
+    public void createScene(){
+        objTG = new TransformGroup();
+        objTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE | TransformGroup.ALLOW_CHILDREN_WRITE | TransformGroup.ALLOW_CHILDREN_EXTEND | TransformGroup.ALLOW_CHILDREN_READ);
+        objTG.addChild(makeBoard(name));
+        objTG.addChild(addSides());
+        addText(objTG);
         BoundingSphere mouseBounds = new BoundingSphere(new Point3d(), 1000d);
 
-        mouseRotation = new MouseRotation(this.sceneTG); // mouseRotation used for rotating the board
+        mouseRotation = new MouseRotation(objTG); // mouseRotation used for rotating the board
         mouseRotation.setSchedulingBounds(mouseBounds);
 
-        PickBehavior pickBehavior = new PickBehavior(this, this.sceneBG, this.sceneTG, canvas3D); // pickBehaviour class
+        PickBehavior pickBehavior = new PickBehavior(this, this.sceneBG, objTG, canvas3D); // pickBehaviour class
         pickBehavior.setSchedulingBounds(mouseBounds);
-        this.sceneTG.addChild(pickBehavior);
+        objTG.addChild(pickBehavior);
 
         sounds.playSound(sounds.getSoundNames()[0]);
 
-        sceneTG.addChild(mouseRotation);
-        addChessPieces(this.sceneTG);
-        sceneTG.addChild(this.sceneTG);
+        objTG.addChild(mouseRotation);
+        addChessPieces(objTG);
+        this.sceneTG.addChild(objTG);
     }
 
     public void addChessPieces(TransformGroup sceneTG){ // will add the pieces to the chess board
@@ -67,29 +67,7 @@ public class ChessBoard {
     }
 
     public void removeChessPiece(BranchGroup piece){
-        sceneTG.removeChild(piece);
-    }
-
-    // function used to make bottom and sides of chess board
-    private static Shape3D generateRectangle(Color3f color, Point3f size, Vector2f scale){ // function to generate rectangle QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
-        QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
-        Point3f [] point3fs = new Point3f[4];
-        point3fs[0] = new Point3f(-size.x * scale.x, -size.y * scale.y, size.z); // first point -x and -y
-        point3fs[1] = new Point3f(size.x * scale.x, -size.y * scale.y, size.z); // second point +x and -y
-        point3fs[2] = new Point3f(size.x * scale.x,  size.y * scale.y, size.z); // third point +x and +y
-        point3fs[3] = new Point3f(-size.x * scale.x, size.y * scale.y, size.z); // last point in -x and +y
-        for (int i = 0; i < 4; i ++) {
-            quadArray.setCoordinate(i, point3fs[i]); // loop through and set the coordinates
-            quadArray.setColor(i, color); //set the color
-        }
-        Appearance appearance = new Appearance();
-        appearance.setMaterial(setMaterial(MONKEECHESS.White));
-        TransparencyAttributes transparencyAttributes = new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.2f);
-        appearance.setTransparencyAttributes(transparencyAttributes);
-
-        Shape3D shape3D = new Shape3D(quadArray, appearance);
-        shape3D.setUserData(0);
-        return shape3D;
+        objTG.removeChild(piece);
     }
 
     //function used to make textured top of board
@@ -109,42 +87,15 @@ public class ChessBoard {
         return shape3D;
     }
 
-    //function used to make the entire board
-    private static void generateBase(TransformGroup base, float scale, String texture){ // to scale down the base by factor of 0.06
-
-        float x, z;
-        Vector3f[] sides = new Vector3f[6];
-        sides[4] = new Vector3f(0, 0, 0); // location of top of base
-        sides[5] = new Vector3f(0, -(0.04f * scale), 0); // location of bottom of base
-        for(int i = 0; i < 6; i ++){
-            if(i < 4){ // calculate location of sides
-                double a  = (Math.PI/2) * i;
-                x = (float) Math.cos(a) * scale; // multiply by scale factor
-                z = (float) Math.sin(a) * scale; // multiply by scale factor
-                sides[i] = new Vector3f(x, -(0.04f * scale/2), z); // center the sides at -0.524f since they range from 0.024f to -0.24f (0.048 height diff) but 0.08 without scaling factor
-            }
-            Transform3D transform3D = new Transform3D(); // make a transform3d to move quad array
-            if(i < 4){ // rotating the sides accordingly
-                double angle = (i % 2 == 0) ? Math.cos(Math.PI/2 * i) * Math.PI/2 : ((i == 3) ? -Math.PI : 0);
-                transform3D.rotY(angle); // rotate the quadArray by angle if necessary red and cyan rotated to show properly (front, back) and yellow rotated by -180 to show on left
-            }
-            else { // rotating the top and bottom of base
-                transform3D.rotX(-Math.cos(Math.PI * (i % 4)) * Math.PI / 2); //rotate 90 degrees in positive for bottom and negative for top
-            }
-            transform3D.setTranslation(sides[i]); // apply the transition move it to the correct spot
-            TransformGroup tg = new TransformGroup(); // make a transform group
-            tg.setTransform(transform3D); // add the transformation to the group
-            if(i < 4){ // sides
-                tg.addChild(generateRectangle(MONKEECHESS.Grey, new Point3f(1, 0.04f, 0), new Vector2f(scale, scale/2)));
-            }
-            if(i == 4){ // textured top
-                tg.addChild(generateRectangle(texture, new Point3f(1, 1, 0), new Vector2f(scale, scale)));
-            }
-            if(i == 5){ // bottom
-                tg.addChild(generateRectangle(MONKEECHESS.Grey, new Point3f(1, 1, 0), new Vector2f(scale, scale)));
-            }
-            base.addChild(tg); // add the transform group to the baseTransformGroup
-        }
+    public TransformGroup makeBoard(String name){
+        Transform3D scalar = new Transform3D();
+        scalar.rotX(-Math.PI / 2);
+        scalar.setTranslation(new Vector3d(0, 0, 0));
+        TransformGroup boardTG = new TransformGroup();
+        boardTG.setTransform(scalar);
+        Shape3D board = generateRectangle(name, new Point3f(1, 1, 0), new Vector2f(8, 8));
+        boardTG.addChild(board);
+        return boardTG;
     }
 
     //function used to make the side border
@@ -240,4 +191,44 @@ public class ChessBoard {
         ma.setLightingEnable(true);
         return ma;
     }
+
+    public static TransformGroup generateText3d(String txt, double scl, Vector3f vector, Color3f clr, boolean isFlipped){ // function to generate text3D
+        Font font = new Font("Arial", Font.PLAIN, 1);
+        FontExtrusion myExtrude = new FontExtrusion();
+        Font3D font3d = new Font3D(font, myExtrude);
+        Text3D text3D = new Text3D(font3d, txt); // will add the text at the point
+
+        Transform3D scaler = new Transform3D();
+        Transform3D scalar2 = new Transform3D();
+        if(isFlipped){
+            scaler.rotY(Math.PI);
+            scalar2.rotX(-Math.PI / 2);
+        }else {
+            scaler.rotX(-Math.PI / 2);
+        }
+        scaler.setTranslation(vector);
+        scaler.mul(scaler, scalar2);
+        scaler.setScale(scl);
+        TransformGroup scene_TG = new TransformGroup();
+        scene_TG.setTransform(scaler);
+        Appearance appearance = new Appearance();
+        ColoringAttributes coloringAttributes = new ColoringAttributes(); // will add a colorAttribute to the text
+        coloringAttributes.setColor(clr); // set the color
+        coloringAttributes.setShadeModel(ColoringAttributes.SHADE_GOURAUD);
+        appearance.setColoringAttributes(coloringAttributes); // add the color attribute to appearance
+        appearance.setMaterial(setMaterial(clr));
+        scene_TG.addChild(new Shape3D(text3D, appearance));
+        return scene_TG;
+    }
+    public void addText(TransformGroup objTG){
+        String[] bottomText = {"a", "b", "c", "d", "e", "f", "g", "h", "1", "2", "3", "4", "5", "6", "7", "8"};
+        for(int i = 0; i < 16; i ++){
+            objTG.addChild(generateText3d(bottomText[i], 0.8f, new Vector3f(i < 8 ? -7 + 2f *( i % 8): -9 , 0, i < 8 ? 8.8f : 7 - 2f * (i % 8)), MONKEECHESS.White, false));
+        }
+
+        for(int i = 0; i < 16; i ++){
+            objTG.addChild(generateText3d(bottomText[i], 0.8f, new Vector3f(i < 8 ? 7 - 2f *( i % 8): 9 , 0, i < 8 ? -8.8f : -7 + 2f * (i % 8)), MONKEECHESS.White, true));
+        }
+    }
+
 }

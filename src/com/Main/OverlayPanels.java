@@ -1,5 +1,13 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi 105219637
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * Overlay.java
+ */
 package com.Main;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -29,6 +37,5 @@ public class OverlayPanels extends JPanel {
 
     public void addIcon(String name){
         icons.add(ChessPieces.icons.get(name));
-        System.out.println(name);
     }
 }

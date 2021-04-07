@@ -9,8 +9,6 @@
  */
 package com.Behavior;
 import Launcher.Launcher;
-import com.Main.ChessBoard;
-import com.Main.MONKEECHESS;
 import com.Main.Piece;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Vector3d;
