@@ -24,11 +24,12 @@ public class Obj3D extends Shape3D {
         this.piece = piece;
     }
 
-    public Piece getPiece() {
-        return piece;
-    }
 
     public void setPiece(Piece piece) {
         this.piece = piece;
+    }
+
+    public static Piece getPiece(Shape3D shape){
+       return (Piece) shape.getParent().getParent().getParent();
     }
 }

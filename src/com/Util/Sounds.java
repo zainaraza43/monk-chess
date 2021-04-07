@@ -52,35 +52,56 @@ public class Sounds {
 
     public void validMove(){
         String sound = "kill";
-        soundJOAL.play(soundPath + sound);
-        try{
-            Thread.sleep(150);
-        }catch (InterruptedException e){
-            System.out.println(e);
-        }
-        soundJOAL.stop(soundPath + sound);
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                soundJOAL.play(soundPath + sound);
+                try{
+                    Thread.sleep(150);
+                }catch (InterruptedException e){
+                    System.out.println(e);
+                }
+                soundJOAL.stop(soundPath + sound);
+            }
+        };
+        Thread t = new Thread(r);
+        t.start();
     }
 
     public void inValidMove(){
         String sound = "invalid";
-        soundJOAL.play(soundPath + sound);
-        try{
-            Thread.sleep(400);
-        }catch (InterruptedException e){
-            System.out.println(e);
-        }
-        soundJOAL.stop(soundPath + sound);
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                soundJOAL.play(soundPath + sound);
+                try{
+                    Thread.sleep(400);
+                }catch (InterruptedException e){
+                    System.out.println(e);
+                }
+                soundJOAL.stop(soundPath + sound);
+            }
+        };
+        Thread t = new Thread(r);
+        t.start();
     }
 
     public void gameWon(){
         String sound = "win";
-        soundJOAL.play(soundPath + sound);
-        try{
-            Thread.sleep(1600);
-        }catch (InterruptedException e){
-            System.out.println(e);
-        }
-        soundJOAL.stop(soundPath + sound);
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                soundJOAL.play(soundPath + sound);
+                try{
+                    Thread.sleep(1700);
+                }catch (InterruptedException e){
+                    System.out.println(e);
+                }
+                soundJOAL.stop(soundPath + sound);
+            }
+        };
+        Thread t = new Thread(r);
+        t.start();
     }
 
 }

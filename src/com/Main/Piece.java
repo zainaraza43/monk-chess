@@ -98,7 +98,7 @@ public class Piece extends BranchGroup {
         setPosition(oldPosition);
     }
 
-    private void setApp(String texture) {
+    public void setApp(String texture) {
         Appearance app = getPiece().getAppearance();
         app.setCapability(Appearance.ALLOW_TEXTURE_WRITE);
         app.setMaterial(setMaterial(MONKEECHESS.White));
@@ -158,6 +158,8 @@ public class Piece extends BranchGroup {
         tg.setTransform(highlightTransform);
 
         Shape3D shape3d = new Shape3D(quadArray);
+        shape3d.setCollidable(false);
+        shape3d.setPickable(false);
         shape3d.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE | Shape3D.ALLOW_APPEARANCE_READ);
         tg.addChild(shape3d);
 
@@ -178,6 +180,14 @@ public class Piece extends BranchGroup {
     public void removeHighlight() {
         getPositionTransform().removeChild(1);
         highlight = null;
+    }
+
+    @Override
+    public String toString() {
+        return "Piece{" +
+                "name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                '}';
     }
 
     public static Material setMaterial(Color3f clr) {

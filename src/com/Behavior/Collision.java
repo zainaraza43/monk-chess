@@ -10,23 +10,21 @@
 package com.Behavior;
 import com.Main.*;
 import org.jogamp.java3d.*;
-import org.jogamp.vecmath.Vector3d;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 
 public class Collision extends Behavior {
     private Piece piece;
-    private WakeupOnCollisionEntry wEnter;
-    private WakeupOnCollisionExit wExit;
+    private WakeupCriterion [] wakeupCriteria;
+    private WakeupCondition wakeupCondition;
     private TransformGroup sceneTG, positionTransform;
-    private boolean isColliding;
     private ArrayList<Piece> currentPieces, oppositePieces;
     private BranchGroup removeBG;
     private PickBehavior pickBehavior;
     private ChessBoard chessBoard;
     private Overlay overlay;
+    public static boolean isColliding;
 
     public Collision(ChessBoard chessBoard, PickBehavior p, BranchGroup removeBG, TransformGroup sceneTG, ArrayList<Piece> whitePiece, ArrayList<Piece> blackPieces, Piece piece){
         this.chessBoard = chessBoard;
@@ -43,46 +41,31 @@ public class Collision extends Behavior {
 
     @Override
     public void initialize() {
-        wEnter = new WakeupOnCollisionEntry(piece.getPiece(), WakeupOnCollisionEntry.USE_BOUNDS);
-        wakeupOn(wEnter);
+        wakeupCriteria = new WakeupCriterion[1];
+        wakeupCriteria[0] = new WakeupOnCollisionEntry(piece.getPiece());
+        wakeupCondition = new WakeupOr(wakeupCriteria);
+        wakeupOn(wakeupCondition);
     }
 
     @Override
     public void processStimulus(Iterator<WakeupCriterion> criteria) {
-        isColliding = !isColliding;
-        if(isColliding) {
-            for(Piece pieceBG : oppositePieces){
-                Rectangle rect1 = createRect(pieceBG.getPositionTransform());
-                Rectangle rect2 = createRect(piece.getPositionTransform());
-                if(rect1.intersects(rect2)){
-                    processCollision(pieceBG);
-                    return;
-                }
-            }
-            for(Piece pieceBG : currentPieces){
-                if(piece == pieceBG){
-                    continue;
-                }
-                Rectangle rect1 = createRect(pieceBG.getPositionTransform());
-                Rectangle rect2 = createRect(piece.getPositionTransform());
-                if(rect1.intersects(rect2)){
+        WakeupCriterion wc = (WakeupCriterion) criteria.next();
+        if(wc instanceof WakeupOnCollisionEntry) {
+            Shape3D tmpPiece = (Shape3D) ((WakeupOnCollisionEntry) wc).getTriggeringPath().getObject();
+            if (tmpPiece.getName() != null) {
+                Piece piece2 = Obj3D.getPiece(tmpPiece);
+                if (piece.getColor().equals(piece2.getColor())) {
                     processOwnPiece(piece);
-                    return;
+                    isColliding = true;
+                } else {
+                    processCollision(piece2);
+                    isColliding = true;
                 }
             }
         }
     }
 
-    public Rectangle createRect(TransformGroup targetTG){
-        Vector3d vector3d = new Vector3d();
-        Transform3D transform3D = new Transform3D();
-        targetTG.getTransform(transform3D);
-        transform3D.get(vector3d);
-        return new Rectangle((int)vector3d.x, (int)vector3d.z, 2, 2);
-    }
-
     public void processCollision(Piece pieceObj){
-        System.out.println(piece.getColor() + " " + piece.getName() + " collided with " +pieceObj.getColor() +" "+pieceObj.getName());
         oppositePieces.remove(pieceObj);
         chessBoard.removeChessPiece(pieceObj);
         pickBehavior.removeCollisionBehavior(removeBG);

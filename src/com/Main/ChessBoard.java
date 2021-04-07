@@ -94,6 +94,8 @@ public class ChessBoard {
         TransformGroup boardTG = new TransformGroup();
         boardTG.setTransform(scalar);
         Shape3D board = generateRectangle(name, new Point3f(1, 1, 0), new Vector2f(8, 8));
+        board.setPickable(false);
+        board.setCollidable(false);
         boardTG.addChild(board);
         return boardTG;
     }
