@@ -55,7 +55,7 @@ public class ChessPieces {
 
     public void loadPieces() { // will load all the objects in called at the start of game
         float[] sizes = {0.8f, 0.9f, 1.025f, 1.15f, 1.275f, 1.35f};
-        float[] yValues = {0.65f, 0.78f, 0.8f, 1.03f, 1.17f, 1.25f};
+        float[] yValues = {0.7f, 0.78f, 0.91f, 1.03f, 1.17f, 1.25f};
         for (int i = 0; i < objNames.length; i++) {
             pieces.put(objNames[i], new Pair<>(loadPiece(objNames[i]), new Vector2f(sizes[i], yValues[i])));
             icons.put("Black_" + objNames[i], new ImageIcon("Assets/Icons/Black_" + objNames[i] + ".png"));

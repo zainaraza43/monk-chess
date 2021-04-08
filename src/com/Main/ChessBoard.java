@@ -20,6 +20,7 @@ import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
 
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class ChessBoard {
     private TransformGroup sceneTG, objTG;
     private ChessPieces chessPieces;
     private Client client;
+    private GameOver gameOver;
 
     public static int turn = TURN_WHITE;
 
@@ -47,6 +49,7 @@ public class ChessBoard {
         this.sceneBG = sceneBG;
         sounds = new Sounds();
         rotate = false;
+        gameOver = new GameOver();
 
         if (Launcher.isMultiplayer) {
             client = new Client(this);
@@ -57,6 +60,10 @@ public class ChessBoard {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void gameWon(){ // call from collisions class
+        canvas3D.addKeyListener(gameOver); // add GameoverKeyListener  (add if statement for only if king is killed)
     }
 
     public void createScene() {
@@ -197,7 +204,7 @@ public class ChessBoard {
 
     //function used to make the side border
     private static Shape3D generateRectangle(Color3f color, Point3f size) { // function to generate rectangle
-        QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
+        QuadArray quadArray = new QuadArray(8, QuadArray.COLOR_3 | QuadArray.COORDINATES);
         Point3f[] point3fs = new Point3f[4];
         point3fs[0] = new Point3f(-size.x, -size.y, size.z); // first point  and
         point3fs[1] = new Point3f(size.x, -size.y, size.z); // second point  and
@@ -205,6 +212,7 @@ public class ChessBoard {
         point3fs[3] = new Point3f(-size.x, size.y, size.z); // last point in  and
         for (int i = 0; i < 4; i++) {
             quadArray.setCoordinate(i, point3fs[i]); // loop through and set the coordinates
+            quadArray.setCoordinate(4+3-i, point3fs[i]); // loop through and set the coordinates
             quadArray.setColor(i, color); //set the color
         }
         Appearance appearance = new Appearance();
