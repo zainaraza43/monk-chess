@@ -154,7 +154,7 @@ public class ChessBoard {
 
     //function used to make textured top of board
     private static Shape3D generateRectangle(String texture, Point3f size, Vector2f scale) { // function to generate rectangle QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES);
-        QuadArray quadArray = new QuadArray(4, QuadArray.TEXTURE_COORDINATE_2 | QuadArray.COORDINATES);
+        QuadArray quadArray = new QuadArray(8, QuadArray.TEXTURE_COORDINATE_2 | QuadArray.COORDINATES);
         Point3f[] point3fs = new Point3f[4];
         point3fs[0] = new Point3f(-size.x * scale.x, -size.y * scale.y, size.z); // first point -x and -y
         point3fs[1] = new Point3f(size.x * scale.x, -size.y * scale.y, size.z); // second point +x and -y
@@ -162,6 +162,7 @@ public class ChessBoard {
         point3fs[3] = new Point3f(-size.x * scale.x, size.y * scale.y, size.z); // last point in -x and +y
         for (int i = 0; i < 4; i++) {
             quadArray.setCoordinate(i, point3fs[i]); // loop through and set the coordinates
+            quadArray.setCoordinate(4+3-i, point3fs[i]); // loop through and set the coordinates
         }
         setAppearance(quadArray);
         Shape3D shape3D = new Shape3D(quadArray, texturedApp(texture));

@@ -11,6 +11,7 @@ package com.Behavior;
 
 import Launcher.Launcher;
 import com.Main.ChessBoard;
+import com.Main.MONKEECHESS;
 import com.Main.Piece;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Vector3d;
@@ -88,13 +89,11 @@ public class KeyBoardInput extends Behavior {
                 }
                 if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                     piece.moveYPos(-Piece.RAISE_AMOUNT);
-                    chessBoard.sendData(piece);
+                    if (Launcher.isMultiplayer) {
+                        chessBoard.sendData(piece);
+                    }
                     pickBehavior.removeKeyNav(removingBG);
                     piece.makePieceNormal();
-                }
-                if (keyEvent.getKeyCode() == KeyEvent.VK_M) {
-                    System.out.println("MOVING THE PIECE");
-                    chessBoard.updateBoard(true, 0, -0, 0, 1);
                 }
             }
         }
