@@ -46,7 +46,6 @@ public class MONKEECHESS extends JPanel {
     public static Point3d position;
     public static int PLAYER1 = 1, PLAYER2 = 2;
     public static String ground = "background0";
-    private static boolean isMultiplayer;
 
     private static Background generateBackground(){ // will return a background
         Background background = new Background(); // make a background
@@ -149,8 +148,7 @@ public class MONKEECHESS extends JPanel {
         sceneBG.addChild(ptLight);
     }
 
-    public MONKEECHESS(boolean isMultiplayer){
-        this.isMultiplayer = isMultiplayer;
+    public MONKEECHESS(){
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         canvas3D = new Canvas3D(config);//define a canvas
         Viewer viewer = new Viewer(canvas3D);
@@ -177,7 +175,7 @@ public class MONKEECHESS extends JPanel {
 
     public static class MyGUI extends JFrame {
         private static final long serialVersionUID = 1L;
-        public MyGUI(String title, boolean isMultiplayer) {
+        public MyGUI(String title) {
             JFrame frame = new JFrame(title);
             frame.setSize(1010, 850);    // set the size of the JFrame
             frame.setResizable(false);
@@ -186,7 +184,7 @@ public class MONKEECHESS extends JPanel {
             panel.setBounds(70, 2, 865,718);
             panel.setBackground(Color.black);
             panel.setVisible(true);
-            panel.add(new MONKEECHESS(isMultiplayer));
+            panel.add(new MONKEECHESS());
             frame.add(panel);
             overlay = new Overlay(frame);
             overlay.createPanels();

@@ -31,6 +31,7 @@ public class Launcher extends JPanel implements ActionListener {
     public static ChessPieces chessPieces;
     public static String black="mahogany";
     public static String white = "gold";
+    public static boolean isMultiplayer = false;
 
     public Launcher(){
         jFrame = new JFrame("MONKEECHESS");
@@ -132,18 +133,12 @@ public class Launcher extends JPanel implements ActionListener {
             if(e.getSource() == buttons.getButton()){
 
                 if(buttons.getButton().getText().equals("SINGLE PLAYER")){ // if single player is pressed
-                    jFrame.dispose(); // dispose of old frame
-                    chessPieces.loadPieces();
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            new MONKEECHESS.MyGUI("MONKEECHESS", false); // call the game
-
-                        }
-                    });
+                    isMultiplayer = false;
+                    startGame();
                 }
                 if(buttons.getButton().getText().equals("MULTIPLAYER")){ // if multiplayer is pressed
-                    System.out.println("hello");
+                    isMultiplayer = true;
+                    startGame();
                 }
                 if(buttons.getButton().getText().equals("OPTIONS")){ // if multiplayer is pressed
                     Options op = new Options(button_font);
@@ -153,5 +148,17 @@ public class Launcher extends JPanel implements ActionListener {
                 }
             }
         }
+    }
+
+    private void startGame() {
+        jFrame.dispose(); // dispose of old frame
+        chessPieces.loadPieces();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new MONKEECHESS.MyGUI("MONKEECHESS"); // call the game
+
+            }
+        });
     }
 }

@@ -77,6 +77,7 @@ public class ChessPieces {
     }
 
     public static Texture loadTexture(String name) {
+        System.out.println(name);
         TextureLoader loader = new TextureLoader("Assets/Textures/" + name + ".jpg", null); // load in the image
         ImageComponent2D imageComponent2D = loader.getImage(); //get image
         if (imageComponent2D == null) { // if image is not found
