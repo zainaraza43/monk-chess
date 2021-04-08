@@ -16,10 +16,14 @@ import com.Util.Sounds;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
+
+import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class ChessBoard {
+    public static final int TURN_WHITE = 0;
+    public static final int TURN_BLACK = 1;
     private String name;
     private TransformGroup sceneTG, objTG;
     public static MouseRotation mouseRotation;
@@ -28,6 +32,8 @@ public class ChessBoard {
     public BranchGroup sceneBG;
     public boolean rotate;
     public Sounds sounds;
+
+    public static int turn = TURN_WHITE;
 
     public ChessBoard(String name, Canvas3D canvas3D, BranchGroup sceneBG, TransformGroup sceneTG){
         this.sceneTG = sceneTG;
@@ -150,11 +156,15 @@ public class ChessBoard {
     }
 
     public void rotateBoard(){
-       Transform3D tmp = new Transform3D();
-       objTG.getTransform(tmp);
-       tmp.rotY(rotate ? 0: Math.PI);
-       objTG.setTransform(tmp);
-       rotate = !rotate;
+        Transform3D tmp = new Transform3D();
+        Transform3D tmp2 = new Transform3D();
+        objTG.getTransform(tmp);
+
+        tmp2.rotY(rotate ? -Math.PI: Math.PI);
+        tmp.mul(tmp, tmp2);
+
+        objTG.setTransform(tmp);
+        rotate = !rotate;
     }
 
     //function used to make the side border
