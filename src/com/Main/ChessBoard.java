@@ -57,6 +57,7 @@ public class ChessBoard {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            System.out.println("ChessBoard: id is " + client.getId());
         }
     }
 
