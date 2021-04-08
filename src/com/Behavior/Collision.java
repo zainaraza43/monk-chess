@@ -71,9 +71,7 @@ public class Collision extends Behavior {
         oppositePieces.remove(pieceObj);
         chessBoard.removeChessPiece(pieceObj);
         pickBehavior.removeCollisionBehavior(removeBG);
-        OverlayPanels panels = pieceObj.isWhite() ? overlay.getRightPanel() : overlay.getLeftPanel();
-        panels.addIcon(pieceObj.getColor() + "_" + pieceObj.getName());
-        panels.repaint();
+        chessBoard.addIcon(pieceObj);
         if(pieceObj.getName().equals("King")){
             win(pieceObj);
         }else{

@@ -13,25 +13,29 @@ import com.Behavior.Collision;
 import com.Behavior.MouseRotation;
 import com.Behavior.PickBehavior;
 import com.Util.Sounds;
+import com.net.Client;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
 
-import javax.swing.tree.TreeNode;
 import java.awt.*;
+import java.io.*;
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class ChessBoard {
     public static final int TURN_WHITE = 0;
     public static final int TURN_BLACK = 1;
-    private String name;
-    private TransformGroup sceneTG, objTG;
     public static MouseRotation mouseRotation;
-    private ChessPieces chessPieces;
     public Canvas3D canvas3D;
     public BranchGroup sceneBG;
     public boolean rotate;
     public Sounds sounds;
+
+    private String name;
+    private TransformGroup sceneTG, objTG;
+    private ChessPieces chessPieces;
+    private Client client;
 
     public static int turn = TURN_WHITE;
 
@@ -42,6 +46,12 @@ public class ChessBoard {
         this.sceneBG = sceneBG;
         sounds = new Sounds();
         rotate = false;
+
+        if (Launcher.isMultiplayer) {
+            client = new Client(this);
+            client.start();
+            try { Thread.sleep(1000); } catch (InterruptedException e) {e.printStackTrace();}
+        }
     }
 
     public void createScene(){
@@ -87,6 +97,7 @@ public class ChessBoard {
         movingPiece.setPosition(newPosition);
 
         if (collisionIndex > -1) {
+            addIcon(oppList.get(collisionIndex));
             removeChessPiece(oppList.get(collisionIndex));
             oppList.remove(collisionIndex);
         }
@@ -112,8 +123,9 @@ public class ChessBoard {
                     System.out.println("COLLISION: " + collisionIndex);
                 }
 
-                System.out.println("Data to send: [" + pieceIsWhite + ", " + index + ", {" + newXPos + "," + newZPos + "}, " + collisionIndex + "]");
-
+                String toSend = pieceIsWhite + " " + index + " " + newXPos + " " + newZPos + " " + collisionIndex;
+                System.out.println(toSend);
+                client.sendMessage(toSend);
             }
         };
 
@@ -123,6 +135,12 @@ public class ChessBoard {
 
     public void removeChessPiece(BranchGroup piece){
         objTG.removeChild(piece);
+    }
+
+    public void addIcon(Piece deadPiece) {
+        OverlayPanels panels = deadPiece.isWhite() ? MONKEECHESS.overlay.getRightPanel() : MONKEECHESS.overlay.getLeftPanel();
+        panels.addIcon(deadPiece.getColor() + "_" + deadPiece.getName());
+        panels.repaint();
     }
 
     //function used to make textured top of board

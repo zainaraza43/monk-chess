@@ -63,8 +63,8 @@ public class Server {
     }
 
     synchronized public void kill(int id) {
+        System.out.println("REMOVING ID " + id);
         this.handlers[id-1] = null;
         numPlayers--;
-        System.out.println("ID " + id + " IS DEAD LAMO!");
     }
 }

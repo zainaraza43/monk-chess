@@ -17,7 +17,6 @@ public class PlayerServerHandler extends Thread {
         this.server = server;
         this.clientSocket = clientSock;
 
-        System.out.println("Player is trying to connect");
         try {
             in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
             out = new PrintWriter(clientSock.getOutputStream(), true);     // autoflush
@@ -31,20 +30,18 @@ public class PlayerServerHandler extends Thread {
     public void run() {
         id = server.addPlayer(this);
 
-        out.println(id);
-        System.out.println(id);
+        System.out.println("Added player with id " + id);
 
         while (true) {
             try {
-                if (in.ready()) {
-                    String str = in.readLine();
-                    System.out.println("Received message: \"" + str + "\"");
-                }
-                else {
-                    System.out.println("DISCONNECTED?????????");
+                String str = in.readLine();
+                if (str == null){
                     server.kill(id);
                     return;
                 }
+                System.out.println("Received message: \"" + str + "\"");
+                server.tellOtherPlayer(id, str);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

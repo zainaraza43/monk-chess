@@ -43,7 +43,6 @@ public class ChessPieces {
         textures = new HashMap<>();
         this.textureNameBlack = black;
         this.textureNameWhite = white;
-        System.out.println("WORKING "+ black);
     }
 
     public void makePieces(){
@@ -65,19 +64,16 @@ public class ChessPieces {
         String [] endings = {"", "_green", "_red"};
         for (String ending:endings) {
             String k = textureNameBlack + ending;
-            System.out.println("Loading " + k);
             Texture t = loadTexture(k);
             textures.put(k, t);
 
             k = textureNameWhite + ending;
-            System.out.println("Loading " + k);
             t = loadTexture(k);
             textures.put(k, t);
         }
     }
 
     public static Texture loadTexture(String name) {
-        System.out.println(name);
         TextureLoader loader = new TextureLoader("Assets/Textures/" + name + ".jpg", null); // load in the image
         ImageComponent2D imageComponent2D = loader.getImage(); //get image
         if (imageComponent2D == null) { // if image is not found
