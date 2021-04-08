@@ -85,7 +85,12 @@ public class PickBehavior extends Behavior {
             int mouseX = mouseEvent.getX();
             int mouseY = mouseEvent.getY();
             if (!isMoving && mouseEvent.getID() == MouseEvent.MOUSE_PRESSED && mouseEvent.getButton() == MouseEvent.BUTTON1) { // if left click
-                pickBeh(mouseX, mouseY);
+                if(Launcher.isMultiplayer && chessBoard.enablePicking){
+                    pickBeh(mouseX, mouseY);
+                }
+                if(!Launcher.isMultiplayer){
+                    pickBeh(mouseX, mouseY);
+                }
             }
         }
     }

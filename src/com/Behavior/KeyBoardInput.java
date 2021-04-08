@@ -10,10 +10,7 @@
 package com.Behavior;
 
 import Launcher.Launcher;
-import com.Main.ChessBoard;
-import com.Main.MONKEECHESS;
-import com.Main.OverlayCanvas3D;
-import com.Main.Piece;
+import com.Main.*;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Vector3d;
 
@@ -95,6 +92,10 @@ public class KeyBoardInput extends Behavior {
                     }
                     pickBehavior.removeKeyNav(removingBG);
                     piece.makePieceNormal();
+                }
+
+                if(keyEvent.getKeyCode() == KeyEvent.VK_R){
+//                    piece.setObj3D(ChessPieces.pieces.get("Rook").getFirst());
                 }
             }
         }

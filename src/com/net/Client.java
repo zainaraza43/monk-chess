@@ -51,8 +51,7 @@ public class Client extends Thread {
         }
     }
 
-    @Override
-    public long getId() {
+    public int getPlayerID() {
         return id;
     }
 

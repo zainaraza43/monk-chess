@@ -5,7 +5,7 @@
  * Ghanem Ghanem
  * Ali-Al-Timimy
  * Zain Raza
- * Overlay.java
+ * OverlayPanels.java
  */
 package com.Main;
 

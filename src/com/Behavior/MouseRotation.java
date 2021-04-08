@@ -10,6 +10,8 @@
 
 package com.Behavior;
 
+import Launcher.Launcher;
+import com.Main.ChessBoard;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Matrix4d;
 import org.jogamp.vecmath.Vector3d;
@@ -26,8 +28,9 @@ public class MouseRotation extends Behavior {
     private double xFactor;
     private int xPrev;
     private Transform3D currTrans, transformX, transformY;
+    private ChessBoard chessBoard;
 
-    public MouseRotation(TransformGroup tg) { //will take in a transformGroup to apply rotation on
+    public MouseRotation(ChessBoard chessBoard, TransformGroup tg) { //will take in a transformGroup to apply rotation on
         this.targetTG = tg;
         this.currTrans = new Transform3D();
         this.transformX = new Transform3D(); //transformGroup for rotating in the x
@@ -35,6 +38,7 @@ public class MouseRotation extends Behavior {
         this.xPrev = 0;
         this.mouseClicked = true;
         this.rotation = true;
+        this.chessBoard = chessBoard;
         this.xFactor = 0.002;
     }
 
@@ -103,7 +107,12 @@ public class MouseRotation extends Behavior {
     public void resetRotation() {
         Transform3D rotation3D = new Transform3D();
         this.targetTG.getTransform(rotation3D);
-        rotation3D.rotY(0);
+        if(Launcher.isMultiplayer){
+            double angle = chessBoard.client.getPlayerID() == 1? 0 : -Math.PI;
+            rotation3D.rotY(angle);
+        }else {
+            rotation3D.rotY(0);
+        }
         this.targetTG.setTransform(rotation3D);
     }
 

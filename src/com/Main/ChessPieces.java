@@ -29,7 +29,7 @@ public class ChessPieces {
     public static String textureNameWhite="gold"; // will be used later for texture picking
     private ArrayList<Piece> blackPieces;
     private ArrayList<Piece> whitePieces;
-    public HashMap<String, Pair<Shape3D, Vector2f>> pieces;
+    public static HashMap<String, Pair<Shape3D, Vector2f>> pieces;
     public static String [] objNames;
     public static HashMap<String, ImageIcon> icons;
     public static HashMap<String, Texture> textures;

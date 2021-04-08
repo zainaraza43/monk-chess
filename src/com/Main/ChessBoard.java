@@ -23,21 +23,22 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class ChessBoard {
-    public static final int TURN_WHITE = 0;
-    public static final int TURN_BLACK = 1;
+    public static final int TURN_WHITE = 1;
+    public static final int TURN_BLACK = 2;
     public static MouseRotation mouseRotation;
     public OverlayCanvas3D overlayCanvas3D;
     public BranchGroup sceneBG;
     public boolean rotate;
+    public boolean enablePicking;
     public Sounds sounds;
 
     private String name;
     private TransformGroup sceneTG, objTG;
     private ChessPieces chessPieces;
-    private Client client;
+    public Client client;
     private GameOver gameOver;
 
-    public static int turn = TURN_WHITE;
+    public int turn = TURN_WHITE;
 
     public ChessBoard(String name, OverlayCanvas3D overlayCanvas3D, BranchGroup sceneBG, TransformGroup sceneTG) {
         this.sceneTG = sceneTG;
@@ -57,7 +58,9 @@ public class ChessBoard {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("ChessBoard: id is " + client.getId());
+            enablePicking = client.getPlayerID() == 1;
+            overlayCanvas3D.setColor(turn == client.getPlayerID() ? Color.GREEN: Color.RED);
+            overlayCanvas3D.setStatus(turn == client.getPlayerID() ? "Your move" : "Their move");
         }
     }
 
@@ -69,7 +72,7 @@ public class ChessBoard {
         addText(objTG);
         BoundingSphere mouseBounds = new BoundingSphere(new Point3d(), 1000d);
 
-        mouseRotation = new MouseRotation(objTG); // mouseRotation used for rotating the board
+        mouseRotation = new MouseRotation(this, objTG); // mouseRotation used for rotating the board
         mouseRotation.setSchedulingBounds(mouseBounds);
 
         PickBehavior pickBehavior = new PickBehavior(this, this.sceneBG, objTG, overlayCanvas3D); // pickBehaviour class
@@ -81,19 +84,34 @@ public class ChessBoard {
         objTG.addChild(mouseRotation);
         addChessPieces(objTG);
         this.sceneTG.addChild(objTG);
+        if(Launcher.isMultiplayer && client.getPlayerID() == TURN_BLACK) {
+            rotateBoard();
+        }
     }
 
     public void addChessPieces(TransformGroup sceneTG) { // will add the pieces to the chess board
         chessPieces = Launcher.chessPieces;
         chessPieces.makePieces();
         for (int i = 0; i < 16; i++) {
+            if (Launcher.isMultiplayer) {
+                Piece piece = client.getPlayerID() == 1 ? chessPieces.getBlackPieces().get(i) : chessPieces.getWhitePieces().get(i);
+                piece.getPiece().setPickable(false); // disable pick
+            }
             sceneTG.addChild(chessPieces.getBlackPieces().get(i));
             sceneTG.addChild(chessPieces.getWhitePieces().get(i));
         }
     }
 
+    public void swapTurn(){
+        enablePicking = !enablePicking;
+        turn = 3 - turn;
+        overlayCanvas3D.setColor(turn == client.getPlayerID() ? Color.GREEN: Color.RED);
+        overlayCanvas3D.setStatus(turn == client.getPlayerID() ? "Your move" : "Their move");
+    }
+
     //  [isWhite]   [index of piece to move]   [new x pos]    [new z pos]    [piece to remove]
     public void updateBoard(boolean pieceIsWhite, int indexOfMovingPiece, double newX, double newZ, int collisionIndex) {
+        swapTurn();
         ArrayList<Piece> pieceList = pieceIsWhite ? chessPieces.getWhitePieces() : chessPieces.getBlackPieces();
         ArrayList<Piece> oppList = pieceIsWhite ? chessPieces.getBlackPieces() : chessPieces.getWhitePieces();
 
@@ -136,6 +154,7 @@ public class ChessBoard {
 
                 String toSend = pieceIsWhite + " " + index + " " + newXPos + " " + newZPos + " " + collisionIndex;
                 System.out.println(toSend);
+                swapTurn();
                 client.sendMessage(toSend);
             }
         };
