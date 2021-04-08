@@ -9,6 +9,7 @@
  */
 package com.Behavior;
 
+import Launcher.GameEnd;
 import com.Main.*;
 import org.jogamp.java3d.*;
 
@@ -28,6 +29,7 @@ public class Collision extends Behavior {
     private Overlay overlay;
     public static boolean isColliding;
     public static int collidingIndex = -1;
+    private GameEnd GO;
 
     public Collision(ChessBoard chessBoard, PickBehavior p, BranchGroup removeBG, TransformGroup sceneTG, ArrayList<Piece> whitePiece, ArrayList<Piece> blackPieces, Piece piece) {
         this.chessBoard = chessBoard;
@@ -38,8 +40,10 @@ public class Collision extends Behavior {
         this.oppositePieces = piece.isWhite() ? blackPieces : whitePiece;
         this.positionTransform = piece.getPositionTransform();
         this.piece = piece;
+        this.GO = new GameEnd();
         overlay = MONKEECHESS.overlay;
         isColliding = false;
+
     }
 
     @Override
@@ -82,13 +86,12 @@ public class Collision extends Behavior {
     }
 
     public void win(Piece pieceObj) {
-        if (pieceObj.isWhite()) {
+        if (pieceObj.isWhite())
             System.out.println("GAME OVER, Black team wins");
-            piece.sounds.gameWon();
-        } else {
+        else
             System.out.println("GAME OVER, White team wins");
-            piece.sounds.gameWon();
-        }
+        piece.sounds.gameWon();
+        GO.EndGame();
 
     }
 

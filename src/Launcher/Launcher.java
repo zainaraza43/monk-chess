@@ -32,7 +32,7 @@ public class Launcher extends JPanel implements ActionListener {
     public static String black="mahogany";
     public static String white = "gold";
     public static boolean isMultiplayer = false;
-    private GameOver GO;
+    private GameEnd GO;
 
     public Launcher(){
         jFrame = new JFrame("MONKEECHESS");
@@ -41,8 +41,6 @@ public class Launcher extends JPanel implements ActionListener {
         jFrame.setIconImage(imageIcon.getImage());
         Frame(jFrame);
         chessPieces = new ChessPieces(black,white);
-        this.GO = new GameOver();
-        GO.EndGame();
     }
     public void Frame(JFrame frame){
 
