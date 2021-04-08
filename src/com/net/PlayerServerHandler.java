@@ -44,6 +44,8 @@ public class PlayerServerHandler extends Thread {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                server.kill(id);
+                return;
             }
         }
     }
