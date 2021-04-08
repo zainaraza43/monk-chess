@@ -8,6 +8,7 @@
  * KeyBoardInput.java
  */
 package com.Behavior;
+
 import Launcher.Launcher;
 import com.Main.ChessBoard;
 import com.Main.Piece;
@@ -32,7 +33,7 @@ public class KeyBoardInput extends Behavior {
     private Piece piece;
     private ChessBoard chessBoard;
 
-    public KeyBoardInput(Piece piece, BranchGroup removingBG, PickBehavior p, ChessBoard cb){
+    public KeyBoardInput(Piece piece, BranchGroup removingBG, PickBehavior p, ChessBoard cb) {
         this.piece = piece;
         this.removingBG = removingBG;
         this.positionTG = piece.getPositionTransform();
@@ -44,7 +45,6 @@ public class KeyBoardInput extends Behavior {
         keyCodes = new int[]{KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D};
         moves = new float[][]{{2f, 1}, {-2f, -2}, {2f, -1}, {-2f, 2}};
     }
-
 
 
     @Override
@@ -69,15 +69,15 @@ public class KeyBoardInput extends Behavior {
         this.wakeupOn(wakeupCondition);
     }
 
-    public void processEvent(AWTEvent[] events){
-        for(AWTEvent awtEvent : events){
+    public void processEvent(AWTEvent[] events) {
+        for (AWTEvent awtEvent : events) {
             KeyEvent keyEvent = (KeyEvent) awtEvent;
-            if(keyEvent.getID() == KeyEvent.KEY_PRESSED){
-                for(int i = 0; i < keyCodes.length; i ++){
-                    if(keyEvent.getKeyCode() == keyCodes[i]){
+            if (keyEvent.getID() == KeyEvent.KEY_PRESSED) {
+                for (int i = 0; i < keyCodes.length; i++) {
+                    if (keyEvent.getKeyCode() == keyCodes[i]) {
                         movePiece(moves[i][0], piece.isWhite() ? moves[i][1] : -moves[i][1]);
                         ArrayList<Piece> toCheck = piece.isWhite() ? Launcher.chessPieces.getWhitePieces() : Launcher.chessPieces.getBlackPieces();
-                        for (Piece p:toCheck) {
+                        for (Piece p : toCheck) {
                             if (piece.getPosition().x == p.getPosition().x && piece.getPosition().z == p.getPosition().z && piece.getPosition().y != p.getPosition().y) {
                                 piece.makePieceRed();
                                 return;
@@ -86,13 +86,13 @@ public class KeyBoardInput extends Behavior {
                         piece.makePieceGreen();
                     }
                 }
-                if(keyEvent.getKeyCode() == KeyEvent.VK_SPACE){
+                if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                     piece.moveYPos(-Piece.RAISE_AMOUNT);
                     chessBoard.sendData(piece);
                     pickBehavior.removeKeyNav(removingBG);
                     piece.makePieceNormal();
                 }
-                if(keyEvent.getKeyCode() == KeyEvent.VK_M){
+                if (keyEvent.getKeyCode() == KeyEvent.VK_M) {
                     System.out.println("MOVING THE PIECE");
                     chessBoard.updateBoard(true, 0, -0, 0, 1);
                 }
@@ -100,12 +100,12 @@ public class KeyBoardInput extends Behavior {
         }
     }
 
-    public void movePiece(float amount, float direction){
+    public void movePiece(float amount, float direction) {
         positionTG.getTransform(pieceTransform3D);
         Vector3d vector3d = new Vector3d();
         pieceTransform3D.get(vector3d);
 
-        switch ((int) direction){
+        switch ((int) direction) {
             case 1:
                 vector3d.z -= amount;
                 break;

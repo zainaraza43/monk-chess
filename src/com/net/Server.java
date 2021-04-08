@@ -64,7 +64,7 @@ public class Server {
 
     synchronized public void kill(int id) {
         System.out.println("REMOVING ID " + id);
-        this.handlers[id-1] = null;
+        this.handlers[id - 1] = null;
         numPlayers--;
     }
 }

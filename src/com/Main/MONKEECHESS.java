@@ -9,6 +9,7 @@
  */
 
 package com.Main;
+
 import java.awt.*;
 import java.util.Random;
 import javax.swing.*;
@@ -27,7 +28,7 @@ public class MONKEECHESS extends JPanel {
     // defining colors
     public static Overlay overlay;
     //public static String status;
-    public static String board ="chess0";
+    public static String board = "chess0";
     public static final Color3f Red = new Color3f(1.0f, 0.0f, 0.0f);
     public static final Color3f Green = new Color3f(0.0f, 1.0f, 0.0f);
     public static final Color3f Blue = new Color3f(0.0f, 0.0f, 1.0f);
@@ -47,10 +48,10 @@ public class MONKEECHESS extends JPanel {
     public static int PLAYER1 = 1, PLAYER2 = 2;
     public static String ground = "background0";
 
-    private static Background generateBackground(){ // will return a background
+    private static Background generateBackground() { // will return a background
         Background background = new Background(); // make a background
         background.setImageScaleMode(Background.SCALE_FIT_MAX); // scale it to max
-        TextureLoader loader = new TextureLoader("Assets/Images/"+ground+".jpg", null); // load the image
+        TextureLoader loader = new TextureLoader("Assets/Images/" + ground + ".jpg", null); // load the image
         background.setApplicationBounds(new BoundingSphere(new Point3d(), 1000d)); // set the bounds
         background.setImage(loader.getImage()); // set the image
         return background;
@@ -58,13 +59,13 @@ public class MONKEECHESS extends JPanel {
 
     public static Shape3D generateAxis(Color3f yColor, float length) { // function to generate x, y, z axes
         LineArray lineArray = new LineArray(6, LineArray.COLOR_3 | LineArray.COORDINATES);
-        Point3f[] coors = {new Point3f(length, 0,0), new Point3f(0,length,0), new Point3f(0,0,length)}; // array of the coordinates
+        Point3f[] coors = {new Point3f(length, 0, 0), new Point3f(0, length, 0), new Point3f(0, 0, length)}; // array of the coordinates
         Color3f[] cols = {Green, yColor, Red}; // array of colors
-        for (int i = 0; i < 6; i +=2){
-            lineArray.setCoordinate(i, new Point3f(0,0,0)); // will make point at origin
+        for (int i = 0; i < 6; i += 2) {
+            lineArray.setCoordinate(i, new Point3f(0, 0, 0)); // will make point at origin
             lineArray.setColor(i, cols[i % cols.length]); // will set the origin color % by length to get correct color and stay within size
             lineArray.setCoordinate(i + 1, coors[i % coors.length]); // will get the second point for x, y, z
-            lineArray.setColor(i+ 1, cols[i % cols.length]); // will set the color for the point
+            lineArray.setColor(i + 1, cols[i % cols.length]); // will set the color for the point
         }
         return new Shape3D(lineArray);
     }
@@ -86,7 +87,7 @@ public class MONKEECHESS extends JPanel {
         return mouseZoom;
     }
 
-    public static void changeViewer(SimpleUniverse su, Point3d eye){ // used to move the viewer to a top down view
+    public static void changeViewer(SimpleUniverse su, Point3d eye) { // used to move the viewer to a top down view
         TransformGroup viewTransform = su.getViewingPlatform().getViewPlatformTransform();
         Point3d center = new Point3d(1, 0, 0);               // define the point where the eye looks at
         Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
@@ -95,7 +96,8 @@ public class MONKEECHESS extends JPanel {
         view_TM.invert();
         viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
     }
-    public static void resetViewer(SimpleUniverse su, Point3d eye){ // function used to reset the viewer
+
+    public static void resetViewer(SimpleUniverse su, Point3d eye) { // function used to reset the viewer
         TransformGroup viewTransform = su.getViewingPlatform().getViewPlatformTransform();
         Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
         Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
@@ -141,14 +143,14 @@ public class MONKEECHESS extends JPanel {
         AmbientLight amLgt = new AmbientLight(new Color3f(0.7f, 0.7f, 0.7f));
         amLgt.setInfluencingBounds(bounds);
         sceneBG.addChild(amLgt);
-        Point3f pt  = new Point3f(0f, 2f, 0f);
+        Point3f pt = new Point3f(0f, 2f, 0f);
         Point3f atn = new Point3f(1, 0, 0);
         PointLight ptLight = new PointLight(clr, pt, atn);
         ptLight.setInfluencingBounds(bounds);
         sceneBG.addChild(ptLight);
     }
 
-    public MONKEECHESS(){
+    public MONKEECHESS() {
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         canvas3D = new Canvas3D(config);//define a canvas
         Viewer viewer = new Viewer(canvas3D);
@@ -175,13 +177,14 @@ public class MONKEECHESS extends JPanel {
 
     public static class MyGUI extends JFrame {
         private static final long serialVersionUID = 1L;
+
         public MyGUI(String title) {
             JFrame frame = new JFrame(title);
             frame.setSize(1010, 850);    // set the size of the JFrame
             frame.setResizable(false);
             frame.setLocationRelativeTo(null);
             JPanel panel = new JPanel();
-            panel.setBounds(70, 2, 865,718);
+            panel.setBounds(70, 2, 865, 718);
             panel.setBackground(Color.black);
             panel.setVisible(true);
             panel.add(new MONKEECHESS());

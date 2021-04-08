@@ -137,12 +137,12 @@ public class PickBehavior extends Behavior {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                try{
-                   Thread.sleep(150);
-                }catch (InterruptedException e){
+                try {
+                    Thread.sleep(150);
+                } catch (InterruptedException e) {
                     System.out.println(e);
                 }
-                if(!Collision.isColliding){
+                if (!Collision.isColliding) {
                     sceneTG.removeChild(collisionBG);
                     System.out.println("collision removed, did not happen");
                 }
@@ -153,12 +153,12 @@ public class PickBehavior extends Behavior {
 
     }
 
-    public void removeCollisionBehavior(BranchGroup bg){
+    public void removeCollisionBehavior(BranchGroup bg) {
         sceneTG.removeChild(bg);
     }
 
     public void addKeyNav(Piece piece) {
-        KeyBoardInput keyBoardInput = new KeyBoardInput(piece, movementBG,this, chessBoard);
+        KeyBoardInput keyBoardInput = new KeyBoardInput(piece, movementBG, this, chessBoard);
         keyBoardInput.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
         movementBG.addChild(keyBoardInput);
         sceneTG.addChild(movementBG);

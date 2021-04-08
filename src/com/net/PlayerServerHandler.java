@@ -35,7 +35,7 @@ public class PlayerServerHandler extends Thread {
         while (true) {
             try {
                 String str = in.readLine();
-                if (str == null){
+                if (str == null) {
                     server.kill(id);
                     return;
                 }

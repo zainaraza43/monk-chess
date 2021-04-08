@@ -8,6 +8,7 @@
  * Overlay.java
  */
 package com.Main;
+
 import Launcher.Buttons;
 import com.Util.Sounds;
 import org.jogamp.vecmath.Point3d;
@@ -28,22 +29,22 @@ public class Overlay extends JPanel implements ActionListener {
     private String currentSound;
     private int soundIndex;
 
-    public Overlay(JFrame frame){
-       this.frame = frame;
-       buttons = new ArrayList<>();
-       panels = new OverlayPanels[]{new OverlayPanels(), new OverlayPanels(), new OverlayPanels()};
-       sounds = MONKEECHESS.chessBoard.sounds;
-       currentSound = sounds.getSoundNames()[0];
-       isPlaying = true;
-       soundIndex = 0;
+    public Overlay(JFrame frame) {
+        this.frame = frame;
+        buttons = new ArrayList<>();
+        panels = new OverlayPanels[]{new OverlayPanels(), new OverlayPanels(), new OverlayPanels()};
+        sounds = MONKEECHESS.chessBoard.sounds;
+        currentSound = sounds.getSoundNames()[0];
+        isPlaying = true;
+        soundIndex = 0;
     }
 
-    public void createPanels(){ // function that will make the panels
+    public void createPanels() { // function that will make the panels
         Rectangle[] bounds = new Rectangle[3];
         bounds[0] = new Rectangle(70, 730, 860, 90);
         bounds[1] = new Rectangle(10, 10, 50, 800);
         bounds[2] = new Rectangle(945, 10, 50, 800);
-        for(int i = 0; i < 3; i ++) {
+        for (int i = 0; i < 3; i++) {
             OverlayPanels panel = panels[i];
             panel.setBounds(bounds[i]);
             BevelBorder border = new BevelBorder(BevelBorder.RAISED, Color.black, Color.black, Color.black, Color.black);
@@ -51,28 +52,27 @@ public class Overlay extends JPanel implements ActionListener {
             panel.setBackground(Color.gray);
             panel.setVisible(true);
             panel.setLayout(null);
-            if(i == 0){
+            if (i == 0) {
                 makeBottomLabels(panel);
-            }
-            else{
+            } else {
                 createLabel(panel, i);
             }
             this.frame.add(panel);
         }
     }
 
-    public OverlayPanels getLeftPanel(){
+    public OverlayPanels getLeftPanel() {
         return this.panels[1];
     }
 
-    public OverlayPanels getRightPanel(){
+    public OverlayPanels getRightPanel() {
         return this.panels[2];
     }
 
 
-    public void createLabel(JPanel panel, int k){
+    public void createLabel(JPanel panel, int k) {
         JLabel label = new JLabel();
-        label.setBounds(0,0, 50, 30);
+        label.setBounds(0, 0, 50, 30);
         BevelBorder border = new BevelBorder(BevelBorder.RAISED, Color.black, Color.black, Color.black, Color.black);
         label.setBorder(border);
         label.setBackground(Color.black);
@@ -81,12 +81,12 @@ public class Overlay extends JPanel implements ActionListener {
         panel.add(label);
     }
 
-    public void makeBottomLabels(JPanel panel){
-        String [] labels = {"View", "Sound", "Rotation"};
+    public void makeBottomLabels(JPanel panel) {
+        String[] labels = {"View", "Sound", "Rotation"};
 
-        String [][] buttonLabels = {{"Top", "Normal", "Opposite"}, {"Stop", "Play", "Change"}, {"Lock", "Unlock", "Reset"}};
+        String[][] buttonLabels = {{"Top", "Normal", "Opposite"}, {"Stop", "Play", "Change"}, {"Lock", "Unlock", "Reset"}};
 
-        for(int i = 0; i < 3; i ++){
+        for (int i = 0; i < 3; i++) {
             JLabel label = new JLabel(labels[i]);
             label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setVerticalAlignment(SwingConstants.TOP);
@@ -98,9 +98,10 @@ public class Overlay extends JPanel implements ActionListener {
             panel.add(label);
         }
     }
-    public void createButtons(JPanel panel, String [] labels, int x){
 
-        for(int i = 0; i < labels.length; i ++){
+    public void createButtons(JPanel panel, String[] labels, int x) {
+
+        for (int i = 0; i < labels.length; i++) {
             Buttons jbuttons = new Buttons(labels[i]);
             jbuttons.setBounds(x + i * 80, 40, 80, 20);
             jbuttons.makeButton(this);
@@ -111,10 +112,10 @@ public class Overlay extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        for(Buttons button : buttons){
+        for (Buttons button : buttons) {
             JButton jButton = button.getButton();
-            if (e.getSource() == jButton){
-                switch (jButton.getText()){
+            if (e.getSource() == jButton) {
+                switch (jButton.getText()) {
                     case "Reset":
                         ChessBoard.mouseRotation.resetRotation();
                         break;
@@ -135,24 +136,24 @@ public class Overlay extends JPanel implements ActionListener {
                         MONKEECHESS.chessBoard.rotateBoard();
                         break;
                     case "Stop":
-                        if(isPlaying){
+                        if (isPlaying) {
                             sounds.stopSound(currentSound);
                             isPlaying = false;
                         }
                         break;
                     case "Play":
-                        if(!isPlaying){
-                           sounds.playSound(currentSound);
+                        if (!isPlaying) {
+                            sounds.playSound(currentSound);
                             isPlaying = true;
                         }
                         break;
                     case "Change":
-                        if(soundIndex == 9){
+                        if (soundIndex == 9) {
                             soundIndex = 0;
                             sounds.soundJOAL.stop(currentSound);
                             currentSound = sounds.getSoundNames()[soundIndex];
                             sounds.playSound(currentSound);
-                        }else{
+                        } else {
                             soundIndex++;
                             sounds.soundJOAL.stop(currentSound);
                             currentSound = sounds.getSoundNames()[soundIndex];

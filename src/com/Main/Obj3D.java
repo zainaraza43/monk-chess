@@ -15,12 +15,12 @@ import org.jogamp.java3d.Shape3D;
 public class Obj3D extends Shape3D {
     private Piece piece;
 
-    public Obj3D(){
+    public Obj3D() {
         this.piece = null;
     }
 
 
-    public Obj3D(Piece piece){
+    public Obj3D(Piece piece) {
         this.piece = piece;
     }
 
@@ -29,7 +29,7 @@ public class Obj3D extends Shape3D {
         this.piece = piece;
     }
 
-    public static Piece getPiece(Shape3D shape){
-       return (Piece) shape.getParent().getParent().getParent();
+    public static Piece getPiece(Shape3D shape) {
+        return (Piece) shape.getParent().getParent().getParent();
     }
 }

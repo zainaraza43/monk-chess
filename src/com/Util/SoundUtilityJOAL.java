@@ -8,11 +8,14 @@
  * SoundUtilityJOAL.java
  */
 package com.Util;
+
 import java.util.*;
+
 import com.jogamp.openal.AL;
 import com.jogamp.openal.ALException;
 import com.jogamp.openal.ALFactory;
 import com.jogamp.openal.util.ALut;
+
 import java.nio.ByteBuffer;
 
 public class SoundUtilityJOAL {
@@ -31,7 +34,7 @@ public class SoundUtilityJOAL {
     private int angleLis = 0;
     // anti-clockwise rotation anyway from -z axis
 
-    public static void main(String[] args){  // cow ocean
+    public static void main(String[] args) {  // cow ocean
         String soundName = "ocean";
         // the listener is at (0,0,0) facing along the -z axis
         SoundUtilityJOAL soundMan = new SoundUtilityJOAL();
@@ -75,14 +78,15 @@ public class SoundUtilityJOAL {
     }
 
     /* function to position the listener at (0, 0, 0) facing towards (0, 0, -1) */
-    private void initListener()	{
-        xLis = yLis = 0; zLis = 0.0f;                     // position the listener
+    private void initListener() {
+        xLis = yLis = 0;
+        zLis = 0.0f;                     // position the listener
         al.alListener3f(AL.AL_POSITION, xLis, yLis, zLis);
         al.alListener3i(AL.AL_VELOCITY, 0, 0, 0);         // no velocity
 
         // (xAt, yAt, zAt, xUp, yUp, zUp) defines "look-at" and "up" directions
         // Therefore, listener now faces along -z axis, with up being the +y axis
-        oriLis = new float[] { xLis, yLis, zLis - 1.0f, 0.0f, 1.0f, 0.0f};
+        oriLis = new float[]{xLis, yLis, zLis - 1.0f, 0.0f, 1.0f, 0.0f};
         al.alListenerfv(AL.AL_ORIENTATION, oriLis, 0);
     }
 
@@ -167,7 +171,7 @@ public class SoundUtilityJOAL {
 
     /* function to move the sound named 'nm' to position at (x,y,z) */
     public boolean setPos(String nm, float x, float y, float z) {
-        int[] source = (int[])sourcesMap.get(nm);
+        int[] source = (int[]) sourcesMap.get(nm);
         if (source == null) {
             //System.out.println("No source found for " + nm);
             return false;
@@ -209,8 +213,7 @@ public class SoundUtilityJOAL {
     }
 
     /* function to pause the playing of the sound named 'nm' */
-    public boolean pause(String nm)
-    {
+    public boolean pause(String nm) {
         int[] source = (int[]) sourcesMap.get(nm);
         if (source == null) {
             //System.out.println("No source found for " + nm);
@@ -246,16 +249,22 @@ public class SoundUtilityJOAL {
         al.alListenerfv(AL.AL_ORIENTATION, oriLis, 0);
     }
 
-    public float getX() { return xLis; }
+    public float getX() {
+        return xLis;
+    }
 
-    public float getZ() { return zLis; }
+    public float getZ() {
+        return zLis;
+    }
 
     /* function to turn the listener anti-clockwise by degrees */
     public void turnListener(int degrees) {
         setListenerOri(angleLis + degrees);
     }
 
-    public int getAngle() { return angleLis; }
+    public int getAngle() {
+        return angleLis;
+    }
 
     /* function to set the listener's orientation to 'ang' degrees (in the
      * anti-clockwise direction around the y-axis) */

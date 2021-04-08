@@ -9,9 +9,11 @@
  */
 
 package com.Behavior;
+
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Matrix4d;
 import org.jogamp.vecmath.Vector3d;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
@@ -68,11 +70,9 @@ public class MouseRotation extends Behavior {
             mouseX = mouseEvent.getX();
             if (rotation && mouseEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
                 processDrag(mouseX);
-            }
-            else if(rotation && mouseEvent.getID() == MouseEvent.MOUSE_PRESSED && mouseEvent.getButton() == MouseEvent.BUTTON1){
+            } else if (rotation && mouseEvent.getID() == MouseEvent.MOUSE_PRESSED && mouseEvent.getButton() == MouseEvent.BUTTON1) {
                 this.xPrev = mouseX;
-            }
-            else if (rotation && mouseEvent.getID() == MouseEvent.MOUSE_RELEASED) {
+            } else if (rotation && mouseEvent.getID() == MouseEvent.MOUSE_RELEASED) {
                 mouseClicked = false;
             }
         }
@@ -100,21 +100,21 @@ public class MouseRotation extends Behavior {
         this.xFactor = xFactor;
     }
 
-    public void resetRotation(){
+    public void resetRotation() {
         Transform3D rotation3D = new Transform3D();
         this.targetTG.getTransform(rotation3D);
         rotation3D.rotY(0);
         this.targetTG.setTransform(rotation3D);
     }
 
-    public void pauseRotation(){
-        if(rotation){
+    public void pauseRotation() {
+        if (rotation) {
             rotation = false;
         }
     }
 
-    public void resumeRotation(){
-        if(!rotation){
+    public void resumeRotation() {
+        if (!rotation) {
             rotation = true;
         }
     }

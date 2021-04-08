@@ -8,15 +8,17 @@
  * Collision.java
  */
 package com.Behavior;
+
 import com.Main.*;
 import org.jogamp.java3d.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
 
 public class Collision extends Behavior {
     private Piece piece;
-    private WakeupCriterion [] wakeupCriteria;
+    private WakeupCriterion[] wakeupCriteria;
     private WakeupCondition wakeupCondition;
     private TransformGroup sceneTG, positionTransform;
     private ArrayList<Piece> currentPieces, oppositePieces;
@@ -27,7 +29,7 @@ public class Collision extends Behavior {
     public static boolean isColliding;
     public static int collidingIndex = -1;
 
-    public Collision(ChessBoard chessBoard, PickBehavior p, BranchGroup removeBG, TransformGroup sceneTG, ArrayList<Piece> whitePiece, ArrayList<Piece> blackPieces, Piece piece){
+    public Collision(ChessBoard chessBoard, PickBehavior p, BranchGroup removeBG, TransformGroup sceneTG, ArrayList<Piece> whitePiece, ArrayList<Piece> blackPieces, Piece piece) {
         this.chessBoard = chessBoard;
         this.pickBehavior = p;
         this.removeBG = removeBG;
@@ -51,7 +53,7 @@ public class Collision extends Behavior {
     @Override
     public void processStimulus(Iterator<WakeupCriterion> criteria) {
         WakeupCriterion wc = (WakeupCriterion) criteria.next();
-        if(wc instanceof WakeupOnCollisionEntry) {
+        if (wc instanceof WakeupOnCollisionEntry) {
             Shape3D tmpPiece = (Shape3D) ((WakeupOnCollisionEntry) wc).getTriggeringPath().getObject();
             if (tmpPiece.getName() != null) {
                 Piece piece2 = Obj3D.getPiece(tmpPiece);
@@ -66,32 +68,31 @@ public class Collision extends Behavior {
         }
     }
 
-    public void processCollision(Piece pieceObj){
+    public void processCollision(Piece pieceObj) {
         collidingIndex = oppositePieces.indexOf(pieceObj);
         oppositePieces.remove(pieceObj);
         chessBoard.removeChessPiece(pieceObj);
         pickBehavior.removeCollisionBehavior(removeBG);
         chessBoard.addIcon(pieceObj);
-        if(pieceObj.getName().equals("King")){
+        if (pieceObj.getName().equals("King")) {
             win(pieceObj);
-        }else{
+        } else {
             piece.sounds.validMove();
         }
     }
 
-    public void win(Piece pieceObj){
-        if(pieceObj.isWhite()) {
+    public void win(Piece pieceObj) {
+        if (pieceObj.isWhite()) {
             System.out.println("GAME OVER, Black team wins");
             piece.sounds.gameWon();
-        }
-        else {
+        } else {
             System.out.println("GAME OVER, White team wins");
             piece.sounds.gameWon();
         }
 
     }
 
-    public void processOwnPiece(Piece pieceObj){
+    public void processOwnPiece(Piece pieceObj) {
         pieceObj.sounds.inValidMove();
         pieceObj.resetPos();
         pickBehavior.removeCollisionBehavior(removeBG);

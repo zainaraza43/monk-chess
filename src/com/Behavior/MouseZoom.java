@@ -8,10 +8,12 @@
  * PickBehavior.java
  */
 package com.Behavior;
+
 import com.Main.ChessBoard;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
+
 import java.awt.*;
 import java.awt.event.MouseWheelEvent;
 import java.util.Iterator;
@@ -58,15 +60,16 @@ public class MouseZoom extends Behavior {
     public void mouseScroll(AWTEvent[] events) {
         for (AWTEvent e : events) {
             MouseWheelEvent mouseWheelEvent = (MouseWheelEvent) e;
-            if(mouseWheelEvent.getWheelRotation() < 0){
+            if (mouseWheelEvent.getWheelRotation() < 0) {
                 moveViewer(-speed);
-            }else{
+            } else {
                 moveViewer(speed);
             }
 
         }
     }
-    public void moveViewer(double speed){
+
+    public void moveViewer(double speed) {
         this.targetTG.getTransform(currX);
         Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
         Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction

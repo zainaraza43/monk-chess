@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class Client extends Thread {
     private static final int PORT = 6969;
-    private static final String HOST = "localhost";
+    private static final String HOST = "192.168.2.22";
 
     private Socket sock;
     private PrintWriter out;
@@ -69,8 +69,7 @@ public class Client extends Thread {
     public void close() {
         try {
             sock.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Couldn't close the socket");
             e.printStackTrace();
         }

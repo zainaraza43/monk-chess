@@ -8,6 +8,7 @@
  * Overlay.java
  */
 package com.Main;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 public class OverlayPanels extends JPanel {
     private ArrayList<ImageIcon> icons;
 
-    public OverlayPanels(){
+    public OverlayPanels() {
         super();
         icons = new ArrayList<>();
     }
@@ -26,16 +27,16 @@ public class OverlayPanels extends JPanel {
         Rectangle r = getBounds();
         int width = (int) r.getWidth();
         int height = (int) r.getHeight();
-        g.fillRect(0 , 0, width, height);
+        g.fillRect(0, 0, width, height);
 
-        for(int i = 0; i < icons.size(); i ++){
+        for (int i = 0; i < icons.size(); i++) {
             Image image = icons.get(i).getImage();
-            g.drawImage(image, 10, 40 + 40 * i, 30, 30,null);
+            g.drawImage(image, 10, 40 + 40 * i, 30, 30, null);
         }
 
     }
 
-    public void addIcon(String name){
+    public void addIcon(String name) {
         icons.add(ChessPieces.icons.get(name));
     }
 }

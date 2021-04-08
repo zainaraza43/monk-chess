@@ -8,6 +8,7 @@
  * Collision.java
  */
 package com.Main;
+
 import com.Util.Sounds;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Color3f;
@@ -178,7 +179,7 @@ public class Piece extends BranchGroup {
 
     public void changeHighlightColor(Color3f color) {
         if (highlight != null) {
-            QuadArray quadArray = (QuadArray) ((Shape3D)((TransformGroup) highlight.getChild(0)).getChild(0)).getGeometry();
+            QuadArray quadArray = (QuadArray) ((Shape3D) ((TransformGroup) highlight.getChild(0)).getChild(0)).getGeometry();
             for (int i = 0; i < quadArray.getVertexCount(); i++) {
                 quadArray.setColor(i, color);
             }
