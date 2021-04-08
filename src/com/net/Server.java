@@ -2,6 +2,7 @@ package com.net;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Random;
 
 public class Server {
     private static final int PORT = 6969;
@@ -37,23 +38,28 @@ public class Server {
         new Server();
     }
 
-    synchronized public boolean enoughPlayers() {
-        return (numPlayers == MAX_PLAYERS);
-    }
-
     synchronized public int addPlayer(PlayerServerHandler h) {
-        for (int i = 0; i < MAX_PLAYERS; i++)
+        boolean full = true;
+        for (int i = 0; i < MAX_PLAYERS; i++) {
             if (handlers[i] == null) {
-                handlers[i] = h;
-                numPlayers++;
-                if (enoughPlayers()) {
-                    System.out.println("WE HAVE REACHED THE MAX AMOUNT OF PLAYERS");
-                }
-                return i + 1; // playerID is 1 or 2 (array index + 1)
+                full = false;
+                break;
             }
+        }
 
-
-        return -1; // means we have enough players already
+        if (full) {
+            System.out.println("WE HAVE REACHED THE MAX AMOUNT OF PLAYERS");
+            return -1;
+        }
+        Random r = new Random();
+        int i = -1;
+        do {
+            i = r.nextInt(MAX_PLAYERS);
+            System.out.println("trying to assign id: " + i);
+        } while (handlers[i] != null);
+        handlers[i] = h;
+        numPlayers++;
+        return i + 1;
     }
 
     synchronized public void tellOtherPlayer(int playerID, String msg) {

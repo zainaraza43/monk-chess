@@ -15,10 +15,12 @@ public class Client extends Thread {
     private BufferedReader in;
     private boolean isConnecting;
     private ChessBoard chessBoard;
+    private int id;
 
     public Client(ChessBoard chessBoard) {
         isConnecting = true;
         this.chessBoard = chessBoard;
+        id = -1;
     }
 
     private void parseData(String line) {
@@ -36,15 +38,22 @@ public class Client extends Thread {
 
         while (true) {
             try {
-                if (in.ready()) {
-                    String line = in.readLine();
-                    System.out.println("Received data: " + line);
-                    parseData(line);
+                String line = in.readLine();
+                System.out.println("Received data: " + line);
+                if (id == -1) {
+                    id = Integer.parseInt(line);
+                    continue;
                 }
+                parseData(line);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public long getId() {
+        return id;
     }
 
     private void makeContact() {

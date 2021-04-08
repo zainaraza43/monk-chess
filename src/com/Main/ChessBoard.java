@@ -20,9 +20,6 @@ import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
 
 import java.awt.*;
-import java.awt.event.KeyListener;
-import java.io.*;
-import java.net.Socket;
 import java.util.ArrayList;
 
 public class ChessBoard {
@@ -59,6 +56,7 @@ public class ChessBoard {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            System.out.println("ChessBoard: id is " + client.getId());
         }
     }
 

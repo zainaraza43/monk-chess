@@ -31,6 +31,7 @@ public class PlayerServerHandler extends Thread {
         id = server.addPlayer(this);
 
         System.out.println("Added player with id " + id);
+        out.println(id);
 
         while (true) {
             try {
