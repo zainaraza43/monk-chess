@@ -65,6 +65,9 @@ public class ChessBoard {
     public void gameWon(){ // call from collisions class
         canvas3D.addKeyListener(gameOver); // add GameoverKeyListener  (add if statement for only if king is killed)
     }
+    public ChessBoard(){
+
+    }
 
     public void createScene() {
         objTG = new TransformGroup();

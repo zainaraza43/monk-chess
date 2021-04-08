@@ -9,7 +9,6 @@
  */
 
 package Launcher;
-
 import com.Main.ChessPieces;
 import com.Main.MONKEECHESS;
 
@@ -23,27 +22,29 @@ import java.util.ArrayList;
 
 public class Launcher extends JPanel implements ActionListener {
     private ImageIcon background;
-    private JLabel mylabel, textlabel, backlabel, smalllabel;
-    private Font font, fontOver, fontBack, button_font, fontsmall;
+    private JLabel mylabel, textlabel, backlabel,smalllabel;
+    private Font font, fontOver, fontBack,button_font,fontsmall;
     private JPanel Panel;
     private Buttons jbuttons;
     private ArrayList<Buttons> buttons = new ArrayList<>();
     private JFrame jFrame;
     public static ChessPieces chessPieces;
-    public static String black = "mahogany";
+    public static String black="mahogany";
     public static String white = "gold";
     public static boolean isMultiplayer = false;
+    private GameOver GO;
 
-    public Launcher() {
+    public Launcher(){
         jFrame = new JFrame("MONKEECHESS");
         jFrame.setSize(1000, 600);
         ImageIcon imageIcon = new ImageIcon("Assets/Launcher/icon.png"); // setting the image icon
         jFrame.setIconImage(imageIcon.getImage());
         Frame(jFrame);
-        chessPieces = new ChessPieces(black, white);
+        chessPieces = new ChessPieces(black,white);
+        this.GO = new GameOver();
+        GO.EndGame();
     }
-
-    public void Frame(JFrame frame) {
+    public void Frame(JFrame frame){
 
         Panel = new JPanel();
         Panel.setBounds(0, 0, 1000, 600);
@@ -64,19 +65,20 @@ public class Launcher extends JPanel implements ActionListener {
 
     }
 
-    public Font ttfFontloader(float size) { // will load in the ttf font
+    public Font ttfFontloader(float size){ // will load in the ttf font
 
-        try {
+        try{
             font = Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/RockFont.ttf")).deriveFont(size);
             GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
             graphicsEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/RockFont.ttf")));
-        } catch (IOException | FontFormatException e) {
+        }
+        catch (IOException | FontFormatException e){
 
         }
         return font;
     }
 
-    public void fontLoader(JPanel jPanel) { // will load the fonts in
+    public void fontLoader(JPanel jPanel){ // will load the fonts in
         fontOver = ttfFontloader(55f);
         fontBack = ttfFontloader(75f);
         fontsmall = ttfFontloader(25f);
@@ -98,24 +100,25 @@ public class Launcher extends JPanel implements ActionListener {
 
     }
 
-    public JLabel loadImage() { // will load in the background image
+    public JLabel loadImage(){ // will load in the background image
         background = new ImageIcon("Assets/Launcher/Background1.jpg");// load background
-        mylabel = new JLabel(background, JLabel.CENTER); // new label
+        mylabel  = new JLabel(background, JLabel.CENTER); // new label
         mylabel.setAlignmentX(0.55f);
         mylabel.setAlignmentY(0.25f);
 
         return mylabel;
     }
 
-    public void makeButtons(JFrame jframe) {
+    public void makeButtons(JFrame jframe){
         try {
             button_font = Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/minecraft.ttf")).deriveFont(20f);
-        } catch (IOException | FontFormatException e) {
+        }
+        catch (IOException | FontFormatException e){
 
         }
-        String[] options = {"SINGLE PLAYER", "MULTIPLAYER", "OPTIONS", "EXIT"};
-        for (int i = 0; i < 4; i++) {
-            jbuttons = new Buttons(0, 250 + (i * 60), 260 + (2 * options[i].length()), 40, options[i], button_font);
+        String [] options = {"SINGLE PLAYER", "MULTIPLAYER", "OPTIONS", "EXIT"};
+        for(int i = 0; i < 4; i ++){
+            jbuttons = new Buttons(0, 250 + (i * 60), 260 + (2 * options[i].length()), 40, options[i],button_font);
             jbuttons.setX(690 - jbuttons.getWidth() / 2);
             jbuttons.makeButton(this); // make the button and add actionListener to each button
             buttons.add(jbuttons); // add the buton to ArrayList
@@ -129,21 +132,21 @@ public class Launcher extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        for (Buttons buttons : buttons) {
-            if (e.getSource() == buttons.getButton()) {
+        for(Buttons buttons : buttons){
+            if(e.getSource() == buttons.getButton()){
 
-                if (buttons.getButton().getText().equals("SINGLE PLAYER")) { // if single player is pressed
+                if(buttons.getButton().getText().equals("SINGLE PLAYER")){ // if single player is pressed
                     isMultiplayer = false;
                     startGame();
                 }
-                if (buttons.getButton().getText().equals("MULTIPLAYER")) { // if multiplayer is pressed
+                if(buttons.getButton().getText().equals("MULTIPLAYER")){ // if multiplayer is pressed
                     isMultiplayer = true;
                     startGame();
                 }
-                if (buttons.getButton().getText().equals("OPTIONS")) { // if multiplayer is pressed
+                if(buttons.getButton().getText().equals("OPTIONS")){ // if multiplayer is pressed
                     Options op = new Options(button_font);
                 }
-                if (buttons.getButton().getText().equals("EXIT")) { // if exit is pressed
+                if(buttons.getButton().getText().equals("EXIT")){ // if exit is pressed
                     System.exit(0); // exit
                 }
             }
