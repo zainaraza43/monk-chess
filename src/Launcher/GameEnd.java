@@ -18,6 +18,7 @@ public class GameEnd extends JPanel {
     public void EndGame(){
         JFrame frame = new JFrame("GAME OVER");
         setLayout(null);
+        frame.setResizable(false);
         frame.setSize(400,200);
         frame.setLocation(850,500);
         frame.add(this);
@@ -41,8 +42,6 @@ public class GameEnd extends JPanel {
         restart.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ChessPieces chessPieces = new ChessPieces(black,white);
-                chessPieces.restart();
                 System.out.println("Reset pieces and score");
                 System.out.println("This is the reset button it should reset all the pieces and the position of those" +
                         "pieces but as you can see am a fat fuck who is sleep deprived and can barely keep his eyes open." +

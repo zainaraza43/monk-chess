@@ -42,7 +42,7 @@ public class MONKEECHESS extends JPanel {
     public static final Color3f[] Clrs = {Blue, Green, Red, Yellow,
             Cyan, Orange, Magenta, Grey};
     public static ChessBoard chessBoard;
-    public Canvas3D canvas3D;
+    public static OverlayCanvas3D overlayCanvas3D;
     public static SimpleUniverse su;
     public static Point3d position;
     public static int PLAYER1 = 1, PLAYER2 = 2;
@@ -134,7 +134,7 @@ public class MONKEECHESS extends JPanel {
         sceneBG.addChild(sceneTG);
         addLights(sceneBG, White);
         sceneBG.addChild(generateBackground());
-        chessBoard = new ChessBoard(board, canvas3D, sceneBG, sceneTG); // pass in texture name, canvas and sceneBG
+        chessBoard = new ChessBoard(board, overlayCanvas3D, sceneBG, sceneTG); // pass in texture name, canvas and sceneBG
         chessBoard.createScene(); // sceneTG is what all pieces and board will be on
     }
 
@@ -152,8 +152,8 @@ public class MONKEECHESS extends JPanel {
 
     public MONKEECHESS() {
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
-        canvas3D = new Canvas3D(config);//define a canvas
-        Viewer viewer = new Viewer(canvas3D);
+        overlayCanvas3D = new OverlayCanvas3D(config);//define a canvas
+        Viewer viewer = new Viewer(overlayCanvas3D);
         viewer.getView().setFrontClipDistance(0.05);
         viewer.getView().setBackClipDistance(100);
 
@@ -169,9 +169,8 @@ public class MONKEECHESS extends JPanel {
         scene.addChild(mouseZoom(su));
         scene.compile();                                     // compile the BranchGroup
         su.addBranchGraph(scene);                            // attach the scene to SimpleUniverse
-        canvas3D.setBounds(10, 0, 850, 700);
-        add("Center", canvas3D);
-
+        overlayCanvas3D.setBounds(10, 0, 850, 700);
+        add("Center", overlayCanvas3D);
         setVisible(true);
     }
 
@@ -192,7 +191,7 @@ public class MONKEECHESS extends JPanel {
             overlay = new Overlay(frame);
             overlay.createPanels();
 
-            frame.setLayout(null);
+            frame.setLayout(new BorderLayout());
             frame.setVisible(true);
             pack();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // will exit the program on close

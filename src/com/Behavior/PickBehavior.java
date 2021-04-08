@@ -29,19 +29,19 @@ public class PickBehavior extends Behavior {
     private Point3d mousePos, center;
     private boolean isMoving, isWhite;
     private Transform3D currX, transformX, transformZ, imWorld3D;
-    private Canvas3D canvas3D;
+    private OverlayCanvas3D OverlayCanvas3D;
     private PickTool pickTool;
     private BranchGroup sceneBG, movementBG, collisionBG;
     private ChessPieces chessPieces;
     private ChessBoard chessBoard;
 
-    public PickBehavior(ChessBoard chessBoard, BranchGroup sceneBG, TransformGroup sceneTG, Canvas3D canvas) {
+    public PickBehavior(ChessBoard chessBoard, BranchGroup sceneBG, TransformGroup sceneTG, OverlayCanvas3D canvas) {
         this.chessBoard = chessBoard;
         this.sceneTG = sceneTG;
         this.sceneTG.setCapability(TransformGroup.ALLOW_CHILDREN_EXTEND);
         this.sceneTG.setCapability(TransformGroup.ALLOW_CHILDREN_WRITE);
         this.sceneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-        this.canvas3D = canvas;
+        this.OverlayCanvas3D = canvas;
         this.sceneBG = sceneBG;
         isMoving = false;
         currX = new Transform3D();
@@ -91,10 +91,10 @@ public class PickBehavior extends Behavior {
     }
 
     public void pickBeh(int mouseX, int mouseY) {
-        canvas3D.getPixelLocationInImagePlate(mouseX, mouseY, mousePos); // calculate the position in 3D world
-        canvas3D.getImagePlateToVworld(imWorld3D); // grab current 3D transform
+        OverlayCanvas3D.getPixelLocationInImagePlate(mouseX, mouseY, mousePos); // calculate the position in 3D world
+        OverlayCanvas3D.getImagePlateToVworld(imWorld3D); // grab current 3D transform
         center = new Point3d();
-        canvas3D.getCenterEyeInImagePlate(center); // grab the center
+        OverlayCanvas3D.getCenterEyeInImagePlate(center); // grab the center
         imWorld3D.transform(mousePos); // apply position
         imWorld3D.transform(center); // apply center position
 

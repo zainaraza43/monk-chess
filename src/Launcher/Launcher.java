@@ -76,6 +76,19 @@ public class Launcher extends JPanel implements ActionListener {
         return font;
     }
 
+    public static Font ttfFontloaderStatic(float size){ // will load in the ttf font
+        Font font = null;
+        try{
+            font = Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/RockFont.ttf")).deriveFont(size);
+            GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            graphicsEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Fonts/RockFont.ttf")));
+        }
+        catch (IOException | FontFormatException e){
+
+        }
+        return font;
+    }
+
     public void fontLoader(JPanel jPanel){ // will load the fonts in
         fontOver = ttfFontloader(55f);
         fontBack = ttfFontloader(75f);

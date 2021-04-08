@@ -127,12 +127,5 @@ public class ChessPieces {
     public ArrayList<Piece> getBlackPieces() {
         return blackPieces;
     }
-    public void restart(){
-        loadPieces();
-        makePieces();
-        ChessBoard board = new ChessBoard();
-
-
-    }
 
 }

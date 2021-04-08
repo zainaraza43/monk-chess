@@ -20,16 +20,13 @@ import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
 
 import java.awt.*;
-import java.awt.event.KeyListener;
-import java.io.*;
-import java.net.Socket;
 import java.util.ArrayList;
 
 public class ChessBoard {
     public static final int TURN_WHITE = 0;
     public static final int TURN_BLACK = 1;
     public static MouseRotation mouseRotation;
-    public Canvas3D canvas3D;
+    public OverlayCanvas3D overlayCanvas3D;
     public BranchGroup sceneBG;
     public boolean rotate;
     public Sounds sounds;
@@ -42,16 +39,17 @@ public class ChessBoard {
 
     public static int turn = TURN_WHITE;
 
-    public ChessBoard(String name, Canvas3D canvas3D, BranchGroup sceneBG, TransformGroup sceneTG) {
+    public ChessBoard(String name, OverlayCanvas3D overlayCanvas3D, BranchGroup sceneBG, TransformGroup sceneTG) {
         this.sceneTG = sceneTG;
         this.name = name;
-        this.canvas3D = canvas3D;
+        this.overlayCanvas3D = overlayCanvas3D;
         this.sceneBG = sceneBG;
         sounds = new Sounds();
         rotate = false;
         gameOver = new GameOver();
 
         if (Launcher.isMultiplayer) {
+            overlayCanvas3D.setStatus("Waiting for players....");
             client = new Client(this);
             client.start();
             try {
@@ -60,13 +58,6 @@ public class ChessBoard {
                 e.printStackTrace();
             }
         }
-    }
-
-    public void gameWon(){ // call from collisions class
-        canvas3D.addKeyListener(gameOver); // add GameoverKeyListener  (add if statement for only if king is killed)
-    }
-    public ChessBoard(){
-
     }
 
     public void createScene() {
@@ -80,7 +71,7 @@ public class ChessBoard {
         mouseRotation = new MouseRotation(objTG); // mouseRotation used for rotating the board
         mouseRotation.setSchedulingBounds(mouseBounds);
 
-        PickBehavior pickBehavior = new PickBehavior(this, this.sceneBG, objTG, canvas3D); // pickBehaviour class
+        PickBehavior pickBehavior = new PickBehavior(this, this.sceneBG, objTG, overlayCanvas3D); // pickBehaviour class
         pickBehavior.setSchedulingBounds(mouseBounds);
         objTG.addChild(pickBehavior);
 
