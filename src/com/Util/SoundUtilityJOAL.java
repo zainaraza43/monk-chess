@@ -31,7 +31,7 @@ public class SoundUtilityJOAL {
     private int angleLis = 0;
     // anti-clockwise rotation anyway from -z axis
 
-    public static void main(String[] args) {  // cow ocean
+    public static void main(String[] args){  // cow ocean
         String soundName = "ocean";
         // the listener is at (0,0,0) facing along the -z axis
         SoundUtilityJOAL soundMan = new SoundUtilityJOAL();
@@ -167,7 +167,7 @@ public class SoundUtilityJOAL {
 
     /* function to move the sound named 'nm' to position at (x,y,z) */
     public boolean setPos(String nm, float x, float y, float z) {
-        int[] source = (int[]) sourcesMap.get(nm);
+        int[] source = (int[])sourcesMap.get(nm);
         if (source == null) {
             //System.out.println("No source found for " + nm);
             return false;

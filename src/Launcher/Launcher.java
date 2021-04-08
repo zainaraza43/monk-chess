@@ -39,8 +39,6 @@ public class Launcher extends JPanel implements ActionListener {
         jFrame.setIconImage(imageIcon.getImage());
         Frame(jFrame);
         chessPieces = new ChessPieces(black,white);
-        chessPieces.loadPieces();
-
     }
     public void Frame(JFrame frame){
 
@@ -132,8 +130,10 @@ public class Launcher extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         for(Buttons buttons : buttons){
             if(e.getSource() == buttons.getButton()){
+
                 if(buttons.getButton().getText().equals("SINGLE PLAYER")){ // if single player is pressed
                     jFrame.dispose(); // dispose of old frame
+                    chessPieces.loadPieces();
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         @Override
                         public void run() {
