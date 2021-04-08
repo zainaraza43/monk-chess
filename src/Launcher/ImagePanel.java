@@ -22,8 +22,10 @@ public class ImagePanel extends JPanel{
     private ArrayList<JLabel> label = new ArrayList<>();
     private ArrayList<JLabel> label1 = new ArrayList<>();
     private ArrayList<JLabel> label2 = new ArrayList<>();
+    private ChessPieces chessPieces;
     AudioClip click;
     public ImagePanel() {
+        chessPieces = new ChessPieces("mahogany","gold");
         check();
     }
     @Override
@@ -108,13 +110,11 @@ public class ImagePanel extends JPanel{
             public void mouseReleased(MouseEvent e) {
             }
         });
-
-
         label1.get(0).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 click.play();
-                Launcher.black="mahogany";
-                Launcher.white="gold";
+                chessPieces.textureNameWhite = "mahogeny";
+                chessPieces.textureNameBlack = "gold";
                 System.out.println("black");
             }
             public void mouseReleased(MouseEvent e) {
@@ -124,19 +124,18 @@ public class ImagePanel extends JPanel{
         label1.get(1).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 click.play();
-                ChessPieces.textureNameWhite = "piece0";
-                ChessPieces.textureNameBlack = "piece";
+                chessPieces.textureNameWhite = "piece0";
+                chessPieces.textureNameBlack = "piece1";
                 System.out.println("SHUT RAT");
             }
             public void mouseReleased(MouseEvent e) {
             }
         });
-
         label1.get(2).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 click.play();
                 ChessPieces.textureNameWhite = "piece1";
-                ChessPieces.textureNameBlack = "piece2";
+                ChessPieces.textureNameBlack = "piece";
                 System.out.println("black");
             }
             public void mouseReleased(MouseEvent e) {
@@ -146,12 +145,11 @@ public class ImagePanel extends JPanel{
         label1.get(3).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 click.play();
-                ChessPieces.textureNameWhite = "piece1";
-                ChessPieces.textureNameBlack = "piece2";
+                ChessPieces.textureNameWhite = "gold";
+                ChessPieces.textureNameBlack = "piece";
                 System.out.println("black");
             }
             public void mouseReleased(MouseEvent e) {
-
             }
         });
 
@@ -194,6 +192,7 @@ public class ImagePanel extends JPanel{
             public void mouseReleased(MouseEvent e) {
             }
         });
+
     }
 
 }

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ChessPieces {
-    public static  String textureNameBlack="mahogany";
+    public static String textureNameBlack="mahogany";
     public static String textureNameWhite="gold"; // will be used later for texture picking
     private ArrayList<Piece> blackPieces;
     private ArrayList<Piece> whitePieces;
@@ -41,8 +41,9 @@ public class ChessPieces {
         pieces = new HashMap<>();
         icons = new HashMap<>();
         textures = new HashMap<>();
-        textureNameBlack = black;
-        textureNameWhite = white;
+        this.textureNameBlack = black;
+        this.textureNameWhite = white;
+        System.out.println("WORKING "+ black);
     }
 
     public void makePieces(){
@@ -64,12 +65,12 @@ public class ChessPieces {
         String [] endings = {"", "_green", "_red"};
         for (String ending:endings) {
             String k = textureNameBlack + ending;
-//            System.out.println("Loading " + k);
+            System.out.println("Loading " + k);
             Texture t = loadTexture(k);
             textures.put(k, t);
 
             k = textureNameWhite + ending;
-//            System.out.println("Loading " + k);
+            System.out.println("Loading " + k);
             t = loadTexture(k);
             textures.put(k, t);
         }

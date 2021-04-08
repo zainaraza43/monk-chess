@@ -142,6 +142,7 @@ public class Piece extends BranchGroup {
         removeHighlight();
     }
 
+
     public void makeHighlight() {
         QuadArray quadArray = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.NORMALS | QuadArray.COORDINATES);
         quadArray.setCapability(QuadArray.ALLOW_COLOR_WRITE);
