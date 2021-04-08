@@ -113,8 +113,8 @@ public class ImagePanel extends JPanel{
         label1.get(0).addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 click.play();
-                chessPieces.textureNameWhite = "mahogeny";
-                chessPieces.textureNameBlack = "gold";
+                chessPieces.textureNameWhite = "gold";
+                chessPieces.textureNameBlack = "piece";
                 System.out.println("black");
             }
             public void mouseReleased(MouseEvent e) {

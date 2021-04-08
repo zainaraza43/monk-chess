@@ -1,5 +1,7 @@
 package com.net;
 
+import com.Main.ChessBoard;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -7,15 +9,27 @@ public class Client extends Thread {
     private static final int PORT = 6969;
     private static final String HOST = "localhost";
 
-    long startTime, endTime;
-    int id;
     private Socket sock;
     private PrintWriter out;
     private BufferedReader in;
+    private boolean isConnecting;
+    private ChessBoard chessBoard;
 
-    public Client() throws IOException {
+    public Client(ChessBoard chessBoard) {
+        isConnecting = true;
+        this.chessBoard = chessBoard;
     }
 
+    private void parseData(String line) {
+        String[] parts = line.split(" ");
+        boolean isWhite = Boolean.parseBoolean(parts[0]);
+        int pieceIndex = Integer.parseInt(parts[1]);
+        double newX = Double.parseDouble(parts[2]), newZ = Double.parseDouble(parts[3]);
+        int collisionIndex = Integer.parseInt(parts[4]);
+        chessBoard.updateBoard(isWhite, pieceIndex, newX, newZ, collisionIndex);
+    }
+
+    @Override
     public void run() {
         makeContact();
 
@@ -23,12 +37,10 @@ public class Client extends Thread {
             try {
                 if (in.ready()) {
                     String line = in.readLine();
-                    System.out.println(line);
-
+                    System.out.println("Received data: " + line);
+                    parseData(line);
                 }
-
             } catch (IOException e) {
-                System.out.println(e);
                 e.printStackTrace();
             }
         }
@@ -39,21 +51,31 @@ public class Client extends Thread {
             sock = new Socket(HOST, PORT);
             in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
             out = new PrintWriter(sock.getOutputStream(), true);
-
         } catch (Exception e) {
             System.out.println("Cannot contact the server");
             System.exit(0);
         }
     }
 
+    synchronized public void sendMessage(String s) {
+        System.out.println("SENDING: " + s);
+        out.println(s);
+    }
+
+    public boolean isConnecting() {
+        return isConnecting;
+    }
+
+    public void close() {
+        try {
+            sock.close();
+        }
+        catch (IOException e) {
+            System.out.println("Couldn't close the socket");
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) throws IOException {
-        Client c = new Client();
-        c.makeContact();
-
-        c.out.println("FUCK JAVA3D");
-        String line = c.in.readLine();
-        System.out.println(line);
-
-        c.sock.close();
     }
 }
