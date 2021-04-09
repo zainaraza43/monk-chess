@@ -73,6 +73,7 @@ public class Collision extends Behavior {
     }
 
     public void processCollision(Piece pieceObj) {
+        piece.sounds.validMove(); // play the valid move sound
         collidingIndex = oppositePieces.indexOf(pieceObj);
         oppositePieces.remove(pieceObj);
         chessBoard.removeChessPiece(pieceObj);
@@ -99,14 +100,6 @@ public class Collision extends Behavior {
         }
         ChessPieces.isChangedPiece = true;
     }
-    public void setPiece(Piece piece) {
-        this.piece = piece;
-    }
-
-    public BranchGroup getRemoveBG() {
-        return removeBG;
-    }
-
     public void processOwnPiece(Piece pieceObj) {
         ownPiece = true;
         pieceObj.sounds.inValidMove();

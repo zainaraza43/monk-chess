@@ -240,8 +240,7 @@ public class Piece extends BranchGroup {
         isColliding = colliding;
     }
 
-    @Override
-    public boolean getCollidable() {
-        return super.getCollidable();
+    public boolean getIsColliding(){
+        return this.isColliding;
     }
 }

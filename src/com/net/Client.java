@@ -7,7 +7,8 @@ import java.net.Socket;
 
 public class Client extends Thread {
     private static final int PORT = 6969;
-    private static final String HOST = "137.207.82.53";
+//    private static final String HOST = "homeserver.bigboisinc.me";
+    private static final String HOST = "localhost";
 
     private Socket sock;
     private PrintWriter out;

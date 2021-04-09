@@ -104,4 +104,21 @@ public class Sounds {
         t.start();
     }
 
+    public void check(){
+        String sound = "check";
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                soundJOAL.play(soundPath + sound);
+                try {
+                    Thread.sleep(1700);
+                } catch (InterruptedException e) {
+                    System.out.println(e);
+                }
+                soundJOAL.stop(soundPath + sound);
+            }
+        };
+        Thread t = new Thread(r);
+        t.start();
+    }
 }

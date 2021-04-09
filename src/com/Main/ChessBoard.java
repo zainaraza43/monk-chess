@@ -132,6 +132,7 @@ public class ChessBoard {
 
         if (collisionIndex > -1) {
             addIcon(oppList.get(collisionIndex));
+            sounds.validMove();
             removeChessPiece(oppList.get(collisionIndex));
             oppList.remove(collisionIndex);
         }
@@ -167,6 +168,7 @@ public class ChessBoard {
                 if(gameOver){
                     overlayCanvas3D.setColor(Color.GREEN);
                     overlayCanvas3D.setStatus("You won!");
+                    sounds.gameWon();
                     gameOverScreen.endGame();
                 }
             }
