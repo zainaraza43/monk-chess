@@ -196,11 +196,6 @@ public class MONKEECHESS extends JPanel {
             frame.setVisible(true);
             pack();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // will exit the program on close
-
-        }
-
-        public void closeFrame() {
-          this.dispose();
         }
     }
 }

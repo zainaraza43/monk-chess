@@ -1,7 +1,5 @@
 package com.Main;
 
-import Launcher.Launcher;
-
 import javax.swing.*;
 public class GameOver extends JPanel {
 
@@ -24,7 +22,6 @@ public class GameOver extends JPanel {
         add(label);
         frame.getContentPane().add(this);
         frame.setVisible(true);
-
         exit.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
