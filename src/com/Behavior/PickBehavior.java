@@ -152,12 +152,10 @@ public class PickBehavior extends Behavior {
                     System.out.println(e);
                 }
                 if (!Collision.isColliding) {
-                    System.out.println("removed");
                     sceneTG.removeChild(collisionBG);
                     makeQueen(p);
                 }
                 if (Launcher.isMultiplayer && !Collision.ownPiece && !p.isSameSpot()) {
-                    System.out.println("sending data");
                     chessBoard.sendData(pieceIndex);
                 }
             }

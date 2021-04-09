@@ -24,13 +24,11 @@ public class PlayerServerHandler extends Thread {
             System.out.println("Couldn't connect");
             e.printStackTrace();
         }
-
     }
 
     public void run() {
         id = server.addPlayer(this);
 
-        System.out.println("Added player with id " + id);
         out.println(id);
 
         while (true) {

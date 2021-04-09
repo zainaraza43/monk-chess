@@ -55,10 +55,10 @@ public class Server {
         int i = -1;
         do {
             i = r.nextInt(MAX_PLAYERS);
-            System.out.println("trying to assign id: " + i);
         } while (handlers[i] != null);
         handlers[i] = h;
         numPlayers++;
+        System.out.println("PLAYER " + (i+1) + " JOINED");
         return i + 1;
     }
 

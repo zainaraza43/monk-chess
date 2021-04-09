@@ -7,8 +7,7 @@ import java.net.Socket;
 
 public class Client extends Thread {
     private static final int PORT = 6969;
-//    private static final String HOST = "homeserver.bigboisinc.me";
-    private static final String HOST = "localhost";
+    private static final String HOST = "137.207.82.53";
 
     private Socket sock;
     private PrintWriter out;
@@ -44,6 +43,7 @@ public class Client extends Thread {
         while (true) {
             try {
                 String line = in.readLine();
+                System.out.println("Received: " + line);
                 if (id == -1) {
                     id = Integer.parseInt(line);
                     continue;

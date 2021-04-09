@@ -161,6 +161,7 @@ public class ChessBoard {
                     collisionIndex = Collision.collidingIndex;
                 }
                 String toSend = pieceIsWhite + " " + index + " " + newXPos + " " + newZPos + " " + collisionIndex + " " + gameOver + " " + newPieceIndex;
+                System.out.println("SENDING: " + toSend);
                 swapTurn();
                 client.sendMessage(toSend);
                 if(gameOver){

@@ -210,7 +210,6 @@ public class Piece extends BranchGroup {
 
     public boolean isSameSpot(){
         if(oldPosition.z == getPosition().z && oldPosition.x == getPosition().x){
-            System.out.println("Same spot");
             return true;
         }
         return false;
