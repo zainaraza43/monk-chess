@@ -94,6 +94,10 @@ public class KeyBoardInput extends Behavior {
                     piece.removeHighlight();
                     piece.moveYPos(-Piece.RAISE_AMOUNT);
                     pickBehavior.removeKeyNav(removingBG, piece, pieceIndex);
+                    ArrayList<Piece> list = chessBoard.client.getPlayerID() == 1 ? chessBoard.chessPieces.getWhitePieces() : chessBoard.chessPieces.getBlackPieces();
+                    for (Piece p : list) {
+                        p.makePieceNormal();
+                    }
                 }
             }
         }
