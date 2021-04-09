@@ -32,7 +32,6 @@ public class Launcher extends JPanel implements ActionListener {
     public static String black="mahogany";
     public static String white = "gold";
     public static boolean isMultiplayer = false;
-    private GameEnd GO;
 
     public Launcher(){
         jFrame = new JFrame("MONKEECHESS");
@@ -171,7 +170,6 @@ public class Launcher extends JPanel implements ActionListener {
             @Override
             public void run() {
                 new MONKEECHESS.MyGUI("MONKEECHESS"); // call the game
-
             }
         });
     }

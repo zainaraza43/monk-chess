@@ -11,6 +11,7 @@
 package com.Main;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.Random;
 import javax.swing.*;
 
@@ -196,6 +197,10 @@ public class MONKEECHESS extends JPanel {
             pack();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // will exit the program on close
 
+        }
+
+        public void closeFrame() {
+          this.dispose();
         }
     }
 }

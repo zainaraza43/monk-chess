@@ -9,7 +9,6 @@
  */
 package com.Behavior;
 
-import Launcher.GameEnd;
 import Launcher.Launcher;
 import com.Main.*;
 import org.jogamp.java3d.*;
@@ -17,7 +16,6 @@ import org.jogamp.vecmath.Vector3d;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
 
 public class Collision extends Behavior {
     private Piece piece;
@@ -31,6 +29,7 @@ public class Collision extends Behavior {
     private Overlay overlay;
     public static boolean isColliding, ownPiece;
     public static int collidingIndex = -1;
+    private GameOver GO;
 
     public Collision(ChessBoard chessBoard, PickBehavior p, BranchGroup removeBG, TransformGroup sceneTG, ArrayList<Piece> whitePiece, ArrayList<Piece> blackPieces, Piece piece) {
         this.chessBoard = chessBoard;
@@ -43,6 +42,7 @@ public class Collision extends Behavior {
         this.piece = piece;
         overlay = MONKEECHESS.overlay;
         isColliding = false;
+        GO=  new GameOver();
 
     }
 
@@ -78,11 +78,15 @@ public class Collision extends Behavior {
         chessBoard.removeChessPiece(pieceObj);
         pickBehavior.removeCollisionBehavior(removeBG);
         chessBoard.addIcon(pieceObj);
-        if (pieceObj.getName().equals("King")) {
+        if (pieceObj.getName().equals("King") && Launcher.isMultiplayer)
             chessBoard.gameOver = true;
-        }
+        if(pieceObj.getName().equals("King") && !Launcher.isMultiplayer)
+            win();
         makeQueen();
+    }
 
+    public void win(){
+        GO.endGame();
     }
 
     public void makeQueen(){
