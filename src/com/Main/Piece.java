@@ -22,14 +22,7 @@ public class Piece extends BranchGroup {
     public Sounds sounds;
     private float scale;
     private double rotation;
-
-    public Piece(){
-
-    }
-
-    public Piece(Piece piece, Obj3D Objpiece){
-        this(Objpiece, piece.getName(), piece.getColor(), piece.getPosition(), piece.scale, piece.rotation, piece.texture);
-    }
+    private boolean isColliding;
 
     public Piece(Obj3D piece, String name, String color, Vector3d position, float scale, double rotation, String texture) {
         piece.setPiece(this);
@@ -114,10 +107,6 @@ public class Piece extends BranchGroup {
 
     public double getRotation() {
         return rotation;
-    }
-
-    public Obj3D getObjPiece() {
-        return (Obj3D) ((TransformGroup) getPositionTransform().getChild(0)).getChild(0);
     }
 
     public void oldPos() {
@@ -246,5 +235,14 @@ public class Piece extends BranchGroup {
         ma.setShininess(SH);
         ma.setLightingEnable(true);
         return ma;
+    }
+
+    public void setColliding(boolean colliding) {
+        isColliding = colliding;
+    }
+
+    @Override
+    public boolean getCollidable() {
+        return super.getCollidable();
     }
 }

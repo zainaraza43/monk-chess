@@ -80,7 +80,6 @@ public class ImagePanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 click.play();
                 MONKEECHESS.board = "chess0";
-                System.out.println("black");
             }
             public void mouseReleased(MouseEvent e) {
 
@@ -90,7 +89,6 @@ public class ImagePanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 click.play();
                 MONKEECHESS.board = "chess1";
-                System.out.println("gold");
             }
             public void mouseReleased(MouseEvent e) {
             }
@@ -100,7 +98,6 @@ public class ImagePanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 click.play();
                 MONKEECHESS.board = "chess3";
-                System.out.println("gray");
             }
             public void mouseReleased(MouseEvent e) {
 
@@ -110,7 +107,6 @@ public class ImagePanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 click.play();
                 MONKEECHESS.board="chess2";
-                System.out.println("red");
             }
             public void mouseReleased(MouseEvent e) {
             }
@@ -120,7 +116,6 @@ public class ImagePanel extends JPanel{
                 click.play();
                 chessPieces.textureNameWhite = "mahogany";
                 chessPieces.textureNameBlack = "gold";
-                System.out.println("black");
             }
             public void mouseReleased(MouseEvent e) {
 
@@ -131,7 +126,6 @@ public class ImagePanel extends JPanel{
                 click.play();
                 chessPieces.textureNameWhite = "piece0";
                 chessPieces.textureNameBlack = "piece1";
-                System.out.println("SHUT RAT");
             }
             public void mouseReleased(MouseEvent e) {
             }
@@ -141,7 +135,6 @@ public class ImagePanel extends JPanel{
                 click.play();
                 ChessPieces.textureNameWhite = "piece1";
                 ChessPieces.textureNameBlack = "piece";
-                System.out.println("black");
             }
             public void mouseReleased(MouseEvent e) {
             }
@@ -152,7 +145,6 @@ public class ImagePanel extends JPanel{
                 click.play();
                 ChessPieces.textureNameWhite = "gold";
                 ChessPieces.textureNameBlack = "piece";
-                System.out.println("black");
             }
             public void mouseReleased(MouseEvent e) {
             }
@@ -162,7 +154,6 @@ public class ImagePanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 click.play();
                 MONKEECHESS.ground="background0";
-                System.out.println("space");
             }
             public void mouseReleased(MouseEvent e) {
             }
@@ -172,7 +163,6 @@ public class ImagePanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 click.play();
                 MONKEECHESS.ground="background1";
-                System.out.println("jungle");
             }
             public void mouseReleased(MouseEvent e) {
             }
@@ -182,7 +172,6 @@ public class ImagePanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 click.play();
                 MONKEECHESS.ground="background2";
-                System.out.println("rainbow");
             }
             public void mouseReleased(MouseEvent e) {
             }
@@ -192,7 +181,6 @@ public class ImagePanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 click.play();
                 MONKEECHESS.ground="background3";
-                System.out.println("rainbow");
             }
             public void mouseReleased(MouseEvent e) {
             }

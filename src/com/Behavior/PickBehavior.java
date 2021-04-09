@@ -131,7 +131,6 @@ public class PickBehavior extends Behavior {
                         collisionBG.setCapability(BranchGroup.ALLOW_DETACH);
 
                         piece.oldPos(); // store old position before movement
-//                        setYValue(piece, 4);
                         piece.moveYPos(Piece.RAISE_AMOUNT);
                         piece.makeHighlight();
                         addKeyNav(piece);

@@ -93,21 +93,12 @@ public class Launcher extends JPanel implements ActionListener {
         fontBack = ttfFontloader(75f);
         fontsmall = ttfFontloader(25f);
 
-//        smalllabel = new JLabel("FUCK JAVA3D EDITION", JLabel.CENTER); // make a label and center it also the top font
-//        smalllabel.setFont(fontsmall);
-//        smalllabel.setAlignmentX(0.09f); // align
-//        smalllabel.setAlignmentY(0.2f);
-//        smalllabel.setForeground(new Color(255, 255, 255)); // set the color
-
         textlabel = new JLabel("MONKEECHESS", JLabel.CENTER); // make a label and center it also the top font
         textlabel.setFont(fontOver);
         textlabel.setAlignmentX(0.2f); // align
         textlabel.setAlignmentY(1.0f);
         textlabel.setForeground(new Color(236, 202, 21)); // set the color
-
-//        jPanel.add(smalllabel);
         jPanel.add(textlabel);
-
     }
 
     public JLabel loadImage(){ // will load in the background image
