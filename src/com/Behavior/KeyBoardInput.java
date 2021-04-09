@@ -92,10 +92,7 @@ public class KeyBoardInput extends Behavior {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                     piece.makePieceNormal();
                     piece.moveYPos(-Piece.RAISE_AMOUNT);
-                    if (Launcher.isMultiplayer) {
-                        chessBoard.sendData(pieceIndex);
-                    }
-                    pickBehavior.removeKeyNav(removingBG, piece);
+                    pickBehavior.removeKeyNav(removingBG, piece, pieceIndex);
                 }
             }
         }

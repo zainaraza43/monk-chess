@@ -118,6 +118,7 @@ public class PickBehavior extends Behavior {
                     if ((int) pickPiece.getUserData() == 0 && pickPiece.getName() != null) { // if userData is 0
                         Piece piece = (Piece) pickPiece.getParent().getParent().getParent();
                         ChessPieces.isChangedPiece = false;
+                        Collision.ownPiece = false;
                         chessPieces.pieceChangedIndex = -1;
                         isMoving = true;
                         isWhite = piece.isWhite();
@@ -140,7 +141,7 @@ public class PickBehavior extends Behavior {
         }
     }
 
-    public void removeKeyNav(BranchGroup bg, Piece p) {
+    public void removeKeyNav(BranchGroup bg, Piece p, int pieceIndex) {
         sceneTG.removeChild(bg);
         isMoving = false;
         Runnable r = new Runnable() {
@@ -152,8 +153,13 @@ public class PickBehavior extends Behavior {
                     System.out.println(e);
                 }
                 if (!Collision.isColliding) {
+                    System.out.println("removed");
                     sceneTG.removeChild(collisionBG);
                     makeQueen(p);
+                }
+                if (Launcher.isMultiplayer && !Collision.ownPiece) {
+                    System.out.println("sending data");
+                    chessBoard.sendData(pieceIndex);
                 }
             }
         };

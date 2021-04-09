@@ -29,7 +29,7 @@ public class Collision extends Behavior {
     private PickBehavior pickBehavior;
     private ChessBoard chessBoard;
     private Overlay overlay;
-    public static boolean isColliding;
+    public static boolean isColliding, ownPiece;
     public static int collidingIndex = -1;
 
     public Collision(ChessBoard chessBoard, PickBehavior p, BranchGroup removeBG, TransformGroup sceneTG, ArrayList<Piece> whitePiece, ArrayList<Piece> blackPieces, Piece piece) {
@@ -104,6 +104,7 @@ public class Collision extends Behavior {
     }
 
     public void processOwnPiece(Piece pieceObj) {
+        ownPiece = true;
         pieceObj.sounds.inValidMove();
         pieceObj.resetPos();
         pickBehavior.removeCollisionBehavior(removeBG);
