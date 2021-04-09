@@ -110,7 +110,7 @@ public class PickBehavior extends Behavior {
         mouseVec.normalize();
         pickTool.setShapeRay(mousePos, mouseVec); // send pickArray
 
-        if (pickTool.pickClosest() != null) { // if pickRay is not null
+        if (!chessBoard.gameOver && pickTool.pickClosest() != null) { // if pickRay is not null
             PickResult pickResult = pickTool.pickClosest(); // get closest node
             if (pickResult.getNode(PickResult.SHAPE3D) instanceof Shape3D) { // if node is Shape3D
                 Shape3D pickPiece = (Shape3D) pickResult.getNode(PickResult.SHAPE3D); // grab the Shape3D
@@ -157,7 +157,7 @@ public class PickBehavior extends Behavior {
                     sceneTG.removeChild(collisionBG);
                     makeQueen(p);
                 }
-                if (Launcher.isMultiplayer && !Collision.ownPiece) {
+                if (Launcher.isMultiplayer && !Collision.ownPiece && !p.isSameSpot()) {
                     System.out.println("sending data");
                     chessBoard.sendData(pieceIndex);
                 }

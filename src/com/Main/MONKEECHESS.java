@@ -176,9 +176,9 @@ public class MONKEECHESS extends JPanel {
 
     public static class MyGUI extends JFrame {
         private static final long serialVersionUID = 1L;
-
+        public static JFrame frame;
         public MyGUI(String title) {
-            JFrame frame = new JFrame(title);
+            frame = new JFrame(title);
             frame.setSize(1010, 850);    // set the size of the JFrame
             frame.setResizable(false);
             frame.setLocationRelativeTo(null);

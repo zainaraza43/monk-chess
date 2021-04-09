@@ -19,6 +19,7 @@ import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -116,7 +117,7 @@ public class ChessBoard {
             String piece = pieceIsWhite ? "White" : "Black";
             overlayCanvas3D.setColor(Color.RED);
             overlayCanvas3D.setStatus("GameOver " + piece + " won!");
-            gameOverScreen.endGame();
+            System.exit(0);
         }
         swapTurn();
         ArrayList<Piece> pieceList = pieceIsWhite ? chessPieces.getWhitePieces() : chessPieces.getBlackPieces();

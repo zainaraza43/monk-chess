@@ -219,6 +219,14 @@ public class Piece extends BranchGroup {
         highlight = null;
     }
 
+    public boolean isSameSpot(){
+        if(oldPosition.z == getPosition().z && oldPosition.x == getPosition().x){
+            System.out.println("Same spot");
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "Piece{" +
