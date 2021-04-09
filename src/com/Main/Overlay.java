@@ -1,6 +1,6 @@
 /*
  * Comp 2800 Java3D Final Project
- * Usman Farooqi 105219637
+ * Usman Farooqi
  * Jagraj Aulakh
  * Ghanem Ghanem
  * Ali-Al-Timimy
@@ -8,11 +8,9 @@
  * Overlay.java
  */
 package com.Main;
-
 import Launcher.Buttons;
 import com.Util.Sounds;
 import org.jogamp.vecmath.Point3d;
-
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
@@ -28,6 +26,7 @@ public class Overlay extends JPanel implements ActionListener {
     private Sounds sounds;
     private String currentSound;
     private int soundIndex;
+    private ChessBoard chessBoard;
 
     public Overlay(JFrame frame) {
         this.frame = frame;
@@ -37,6 +36,7 @@ public class Overlay extends JPanel implements ActionListener {
         currentSound = sounds.getSoundNames()[0];
         isPlaying = true;
         soundIndex = 0;
+        chessBoard = MONKEECHESS.chessBoard;
     }
 
     public void createPanels() { // function that will make the panels
@@ -117,7 +117,7 @@ public class Overlay extends JPanel implements ActionListener {
             if (e.getSource() == jButton) {
                 switch (jButton.getText()) {
                     case "Reset":
-                        ChessBoard.mouseRotation.resetRotation();
+                        chessBoard.mouseRotation.resetRotation();
                         break;
                     case "Top":
 
@@ -127,10 +127,10 @@ public class Overlay extends JPanel implements ActionListener {
                         MONKEECHESS.resetViewer(MONKEECHESS.su, MONKEECHESS.position);
                         break;
                     case "Lock":
-                        ChessBoard.mouseRotation.pauseRotation();
+                        chessBoard.mouseRotation.pauseRotation();
                         break;
                     case "Unlock":
-                        ChessBoard.mouseRotation.resumeRotation();
+                        chessBoard.mouseRotation.resumeRotation();
                         break;
                     case "Opposite":
                         MONKEECHESS.chessBoard.rotateBoard();

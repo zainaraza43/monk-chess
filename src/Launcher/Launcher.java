@@ -1,17 +1,15 @@
 /*
  * Comp 2800 Java3D Final Project
- * Usman Farooqi 105219637
+ * Usman Farooqi
  * Jagraj Aulakh
  * Ghanem Ghanem
  * Ali-Al-Timimy
  * Zain Raza
  * Launcher.java
  */
-
 package Launcher;
 import com.Main.ChessPieces;
 import com.Main.MONKEECHESS;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,16 +20,16 @@ import java.util.ArrayList;
 
 public class Launcher extends JPanel implements ActionListener {
     private ImageIcon background;
-    private JLabel mylabel, textlabel, backlabel,smalllabel;
+    private JLabel mylabel, textlabel;
     private Font font, fontOver, fontBack,button_font,fontsmall;
     private JPanel Panel;
     private Buttons jbuttons;
     private ArrayList<Buttons> buttons = new ArrayList<>();
     private JFrame jFrame;
     public static ChessPieces chessPieces;
-    public static String black="mahogany";
+    public static String black="mahogany"; // default texture
     public static String white = "gold";
-    public static boolean isMultiplayer = false;
+    public static boolean isMultiplayer = false; // if multiplayer option is clicked
 
     public Launcher(){
         jFrame = new JFrame("MONKEECHESS");
@@ -155,7 +153,7 @@ public class Launcher extends JPanel implements ActionListener {
     }
     private void startGame() {
         jFrame.dispose(); // dispose of old frame
-        chessPieces.loadPieces();
+        chessPieces.loadPieces(); // begin loading the chess piece in the background
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {

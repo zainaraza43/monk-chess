@@ -1,21 +1,18 @@
 /*
  * Comp 2800 Java3D Final Project
- * Usman Farooqi 105219637
+ * Usman Farooqi
  * Jagraj Aulakh
  * Ghanem Ghanem
  * Ali-Al-Timimy
  * Zain Raza
- * Overlay.java
+ * MouseRotation.java
  */
-
 package com.Behavior;
-
 import Launcher.Launcher;
 import com.Main.ChessBoard;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Matrix4d;
 import org.jogamp.vecmath.Vector3d;
-
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
@@ -27,19 +24,18 @@ public class MouseRotation extends Behavior {
     private boolean mouseClicked, rotation;
     private double xFactor;
     private int xPrev;
-    private Transform3D currTrans, transformX, transformY;
+    private Transform3D currTrans, transformY;
     private ChessBoard chessBoard;
 
     public MouseRotation(ChessBoard chessBoard, TransformGroup tg) { //will take in a transformGroup to apply rotation on
         this.targetTG = tg;
         this.currTrans = new Transform3D();
-        this.transformX = new Transform3D(); //transformGroup for rotating in the x
         this.transformY = new Transform3D(); // transformGrpup for rotating in the y
         this.xPrev = 0;
         this.mouseClicked = true;
-        this.rotation = true;
+        this.rotation = true; // if rotation is true
         this.chessBoard = chessBoard;
-        this.xFactor = 0.002;
+        this.xFactor = 0.002; // rotation factor
     }
 
     @Override
@@ -83,7 +79,7 @@ public class MouseRotation extends Behavior {
     }
 
     public void processDrag(int mouseX) {
-        if (mouseClicked) {
+        if (mouseClicked) { // if already dragging
             mouseClicked = false;
         } else {
             int dx = mouseX - this.xPrev;
@@ -104,7 +100,7 @@ public class MouseRotation extends Behavior {
         this.xFactor = xFactor;
     }
 
-    public void resetRotation() {
+    public void resetRotation() { // reset rotation
         Transform3D rotation3D = new Transform3D();
         this.targetTG.getTransform(rotation3D);
         if(Launcher.isMultiplayer){
@@ -116,16 +112,15 @@ public class MouseRotation extends Behavior {
         this.targetTG.setTransform(rotation3D);
     }
 
-    public void pauseRotation() {
+    public void pauseRotation() { // pause the rotation
         if (rotation) {
             rotation = false;
         }
     }
 
-    public void resumeRotation() {
+    public void resumeRotation() { // unpause the rotation
         if (!rotation) {
             rotation = true;
         }
     }
-
 }

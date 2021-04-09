@@ -1,11 +1,17 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * OverlayCanvas3D.java
+ */
 package com.Main;
 
 import Launcher.Launcher;
 import org.jogamp.java3d.Canvas3D;
-import org.jogamp.vecmath.Color3f;
-
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 
 public class OverlayCanvas3D extends Canvas3D {
     private Font msgFont;
@@ -21,7 +27,7 @@ public class OverlayCanvas3D extends Canvas3D {
 
     }
     @Override
-    public void postRender(){
+    public void postRender(){ // will update the status
         Graphics2D  g2D = getGraphics2D();
         g2D.setColor(color);
         g2D.setFont(msgFont);
@@ -29,11 +35,11 @@ public class OverlayCanvas3D extends Canvas3D {
         if(status != null){
             int width = g2D.getFontMetrics().stringWidth(status);
             g2D.drawString(status, 850 / 2 - width / 2, 50);
-            getGraphics2D().flush(false);
+            getGraphics2D().flush(false); // prevents flickering
         }
     }
 
-    public void setColor(Color color){
+    public void setColor(Color color){ // set the color of the text
        this.color = color;
     }
 
@@ -50,5 +56,5 @@ public class OverlayCanvas3D extends Canvas3D {
 
     public void setStatus(String status) {
         this.status = status;
-    }
+    } // update the status
 }

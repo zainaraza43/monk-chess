@@ -1,6 +1,6 @@
 /*
  * Comp 2800 Java3D Final Project
- * Usman Farooqi 105219637
+ * Usman Farooqi
  * Jagraj Aulakh
  * Ghanem Ghanem
  * Ali-Al-Timimy
@@ -8,28 +8,22 @@
  * PickBehavior.java
  */
 package com.Behavior;
-
-import com.Main.ChessBoard;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
-
 import java.awt.*;
 import java.awt.event.MouseWheelEvent;
 import java.util.Iterator;
 
 public class MouseZoom extends Behavior {
     private TransformGroup targetTG;
-    private Transform3D currX, transformX;
-    private int direction;
+    private Transform3D currX;
     private double speed;
     private WakeupCriterion[] wakeupCriteria;
     private WakeupCondition wakeupCondition;
 
     public MouseZoom(TransformGroup tg) {
-        this.direction = 0;
         this.currX = new Transform3D();
-        this.transformX = new Transform3D();
         this.speed = 1;
         this.targetTG = tg;
     }

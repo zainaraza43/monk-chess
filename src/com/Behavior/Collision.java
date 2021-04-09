@@ -1,6 +1,6 @@
 /*
  * Comp 2800 Java3D Final Project
- * Usman Farooqi 105219637
+ * Usman Farooqi
  * Jagraj Aulakh
  * Ghanem Ghanem
  * Ali-Al-Timimy
@@ -8,12 +8,10 @@
  * Collision.java
  */
 package com.Behavior;
-
 import Launcher.Launcher;
 import com.Main.*;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Vector3d;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -29,7 +27,7 @@ public class Collision extends Behavior {
     private Overlay overlay;
     public static boolean isColliding, ownPiece;
     public static int collidingIndex = -1;
-    private GameOver GO;
+    private GameOver gameOver;
 
     public Collision(ChessBoard chessBoard, PickBehavior p, BranchGroup removeBG, TransformGroup sceneTG, ArrayList<Piece> whitePiece, ArrayList<Piece> blackPieces, Piece piece) {
         this.chessBoard = chessBoard;
@@ -42,8 +40,7 @@ public class Collision extends Behavior {
         this.piece = piece;
         overlay = MONKEECHESS.overlay;
         isColliding = false;
-        GO=  new GameOver();
-
+        gameOver = new GameOver();
     }
 
     @Override
@@ -72,25 +69,26 @@ public class Collision extends Behavior {
         }
     }
 
-    public void processCollision(Piece pieceObj) {
+    public void processCollision(Piece pieceObj) { // will process collision
         piece.sounds.validMove(); // play the valid move sound
-        collidingIndex = oppositePieces.indexOf(pieceObj);
-        oppositePieces.remove(pieceObj);
-        chessBoard.removeChessPiece(pieceObj);
-        pickBehavior.removeCollisionBehavior(removeBG);
-        chessBoard.addIcon(pieceObj);
-        if (pieceObj.getName().equals("King") && Launcher.isMultiplayer)
+        collidingIndex = oppositePieces.indexOf(pieceObj); // get the collidingIndex and update it
+        oppositePieces.remove(pieceObj); // remove the piece that was captured from ArrayList
+        chessBoard.removeChessPiece(pieceObj); // remove the piece that was collided with
+        pickBehavior.removeCollisionBehavior(removeBG); // remove collision behaviour from the piecee
+        chessBoard.addIcon(pieceObj); // update panel
+
+        if (pieceObj.getName().equals("King") && Launcher.isMultiplayer) // if the piece captured is a king
             chessBoard.gameOver = true;
         if(pieceObj.getName().equals("King") && !Launcher.isMultiplayer)
             win();
-        makeQueen();
+        makeQueen(); // make a queen
     }
 
     public void win(){
-        GO.endGame();
+        gameOver.endGame();
     }
 
-    public void makeQueen(){
+    public void makeQueen(){ // will make a pawn a queen if a pawn captures a piece on the other end of the board
         if(piece.getName().equals("Pawn")){
             double valueToCheck = piece.isWhite() ? -7 : 7;
             Vector3d pos = piece.getPosition();
@@ -100,7 +98,7 @@ public class Collision extends Behavior {
         }
         ChessPieces.isChangedPiece = true;
     }
-    public void processOwnPiece(Piece pieceObj) {
+    public void processOwnPiece(Piece pieceObj) { // will make sure if a piece tries to capture a peice of it's own color the collision is ignored
         ownPiece = true;
         pieceObj.sounds.inValidMove();
         pieceObj.resetPos();

@@ -1,6 +1,6 @@
 /*
  * Comp 2800 Java3D Final Project
- * Usman Farooqi 105219637
+ * Usman Farooqi
  * Jagraj Aulakh
  * Ghanem Ghanem
  * Ali-Al-Timimy
@@ -8,16 +8,13 @@
  * PickBehavior.java
  */
 package com.Behavior;
-
 import Launcher.Launcher;
 import com.Main.*;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.picking.PickResult;
 import org.jogamp.java3d.utils.picking.PickTool;
-import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
-
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
@@ -28,7 +25,7 @@ public class PickBehavior extends Behavior {
     private TransformGroup sceneTG;
     private Point3d mousePos, center;
     private boolean isMoving, isWhite;
-    private Transform3D currX, transformX, transformZ, imWorld3D;
+    private Transform3D imWorld3D;
     private OverlayCanvas3D OverlayCanvas3D;
     private PickTool pickTool;
     private BranchGroup sceneBG, movementBG, collisionBG;
@@ -46,15 +43,11 @@ public class PickBehavior extends Behavior {
         this.OverlayCanvas3D = canvas;
         this.sceneBG = sceneBG;
         isMoving = false;
-        currX = new Transform3D();
-        transformX = new Transform3D();
-        transformZ = new Transform3D();
         imWorld3D = new Transform3D();
         mousePos = new Point3d();
         pickTool = new PickTool(this.sceneBG);
         pickTool.setMode(PickTool.GEOMETRY);
         chessPieces = Launcher.chessPieces;
-
     }
 
 
@@ -84,7 +77,7 @@ public class PickBehavior extends Behavior {
     public void processEvent(AWTEvent[] events) {
         for (AWTEvent e : events) {
             MouseEvent mouseEvent = (MouseEvent) e;
-            int mouseX = mouseEvent.getX();
+            int mouseX = mouseEvent.getX(); // used for pickBeh
             int mouseY = mouseEvent.getY();
             if (!isMoving && mouseEvent.getID() == MouseEvent.MOUSE_PRESSED && mouseEvent.getButton() == MouseEvent.BUTTON1) { // if left click
                 if(Launcher.isMultiplayer && chessBoard.enablePicking){
@@ -117,21 +110,21 @@ public class PickBehavior extends Behavior {
                 if (pickPiece != null) { // if it's not null
                     if ((int) pickPiece.getUserData() == 0 && pickPiece.getName() != null) { // if userData is 0
                         Piece piece = (Piece) pickPiece.getParent().getParent().getParent();
-                        ChessPieces.isChangedPiece = false;
-                        Collision.ownPiece = false;
+                        ChessPieces.isChangedPiece = false; // set isChanged to false
+                        Collision.ownPiece = false; // set own collision to false
                         chessPieces.pieceChangedIndex = -1;
                         isMoving = true;
                         isWhite = piece.isWhite();
                         piece.makePieceGreen();
 
-                        movementBG = new BranchGroup();
+                        movementBG = new BranchGroup(); // branchGroup needed for movement
                         movementBG.setCapability(BranchGroup.ALLOW_DETACH);
 
-                        collisionBG = new BranchGroup();
+                        collisionBG = new BranchGroup(); // branchGroup needed for collision
                         collisionBG.setCapability(BranchGroup.ALLOW_DETACH);
 
                         piece.oldPos(); // store old position before movement
-                        piece.moveYPos(Piece.RAISE_AMOUNT);
+                        piece.moveYPos(Piece.RAISE_AMOUNT); // move the piece up to make it hover
                         piece.makeHighlight();
                         addKeyNav(piece);
                     }
@@ -151,11 +144,11 @@ public class PickBehavior extends Behavior {
                 } catch (InterruptedException e) {
                     System.out.println(e);
                 }
-                if (!Collision.isColliding) {
+                if (!Collision.isColliding) { // if collision did not occure remove the collision behaviour
                     sceneTG.removeChild(collisionBG);
                     makeQueen(p);
                 }
-                if (Launcher.isMultiplayer && !Collision.ownPiece && !p.isSameSpot()) {
+                if (Launcher.isMultiplayer && !Collision.ownPiece && !p.isSameSpot()) { //send msg to server to update board on client side
                     chessBoard.sendData(pieceIndex);
                 }
             }
@@ -179,7 +172,7 @@ public class PickBehavior extends Behavior {
         sceneTG.removeChild(bg);
     }
 
-    public void addKeyNav(Piece piece) {
+    public void addKeyNav(Piece piece) { // will add a keyNav
         keyNav = new KeyBoardInput(piece, movementBG, this, chessBoard);
         keyNav.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
         movementBG.addChild(keyNav);
@@ -188,7 +181,7 @@ public class PickBehavior extends Behavior {
         addCollisionBehavior(piece);
     }
 
-    public void addCollisionBehavior(Piece piece) {
+    public void addCollisionBehavior(Piece piece) { // will add a collision
         collision = new Collision(chessBoard, this, collisionBG, sceneTG, chessPieces.getWhitePieces(), chessPieces.getBlackPieces(), piece);
         collision.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
         collisionBG.addChild(collision);

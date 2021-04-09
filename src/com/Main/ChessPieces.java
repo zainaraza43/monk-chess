@@ -1,6 +1,6 @@
 /*
  * Comp 2800 Java3D Final Project
- * Usman Farooqi 105219637
+ * Usman Farooqi
  * Jagraj Aulakh
  * Ghanem Ghanem
  * Ali-Al-Timimy
@@ -15,43 +15,41 @@ import org.jogamp.java3d.loaders.objectfile.ObjectFile;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.Vector2f;
 import org.jogamp.vecmath.Vector3d;
-
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class ChessPieces {
     public static String textureNameBlack="mahogany";
     public static String textureNameWhite="gold"; // will be used later for texture picking
-    private ArrayList<Piece> blackPieces, whitePieces;
-    public static ArrayList<Piece> staticBlackPieces, staticWhitePieces;
-    public static HashMap<String, Pair<Shape3D, Vector2f>> pieces;
-    public static String [] objNames;
     public static HashMap<String, ImageIcon> icons;
     public static HashMap<String, Texture> textures;
-    public ChessBoard chessBoard;
+    public static ArrayList<Piece> staticBlackPieces, staticWhitePieces;
     public static boolean isChangedPiece;
+    public static HashMap<String, Pair<Shape3D, Vector2f>> pieces;
+    public static String [] objNames;
+
+    public ChessBoard chessBoard;
     public int pieceChangedIndex;
+    private ArrayList<Piece> blackPieces, whitePieces;
 
     public ChessPieces(String black,String white ){
-        blackPieces = new ArrayList<Piece>();
-        whitePieces = new ArrayList<Piece>();
-        staticBlackPieces = new ArrayList<>();
-        staticWhitePieces = new ArrayList<>();
+        blackPieces = new ArrayList<>(); // will hold all the black pieces
+        whitePieces = new ArrayList<>(); // will hold all the white pieces
+        staticBlackPieces = new ArrayList<>(); // a static list which is a copy of the black pieces
+        staticWhitePieces = new ArrayList<>(); // a static list which is a copy of the white pieces
         objNames = new String[]{"Pawn", "Rook", "Knight", "Bishop", "Queen", "King"}; // string array to hold names
-        pieces = new HashMap<>();
-        icons = new HashMap<>();
-        textures = new HashMap<>();
+        pieces = new HashMap<>(); // hashmap to hold the objects
+        icons = new HashMap<>(); // hashmap to hold the icons
+        textures = new HashMap<>(); // hashmap to hold the textures
         this.textureNameBlack = black;
         this.textureNameWhite = white;
     }
 
-    public void makePieces(){
+    public void makePieces(){ // will make the pieces
        String [] pieceNames = {"Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Pawn","Rook", "Knight", "Bishop", "Queen", "King", "Bishop",
        "Knight", "Rook"};
         createPieces(pieceNames, blackPieces, textureNameBlack, false);
@@ -59,7 +57,7 @@ public class ChessPieces {
         copyPieces();
     }
 
-    public void copyPieces(){
+    public void copyPieces(){ // will copy over the arrays
         staticBlackPieces = (ArrayList<Piece>) blackPieces.clone();
         staticWhitePieces = (ArrayList<Piece>) whitePieces.clone();
     }
@@ -85,7 +83,7 @@ public class ChessPieces {
         }
     }
 
-    public Piece changePiece(Piece currentPiece){
+    public Piece changePiece(Piece currentPiece){ // will change a piece into a queen used for when pawn gets to the other side
         Shape3D pieceToChange = pieces.get("Queen").getFirst();
         chessBoard = MONKEECHESS.chessBoard;
         ArrayList<Piece> listToCheck = currentPiece.isWhite() ? staticWhitePieces : staticBlackPieces;
@@ -111,12 +109,12 @@ public class ChessPieces {
         return newPiece;
     }
 
-    public void changePiece(boolean isWhite, int index){
+    public void changePiece(boolean isWhite, int index){ // called by client
        ArrayList<Piece> listToModify = isWhite ? whitePieces : blackPieces;
        changePiece(listToModify.get(index)).getPiece().setPickable(false);
 
     }
-    public static Texture loadTexture(String name) {
+    public static Texture loadTexture(String name) { // loads in the textures
         TextureLoader loader = new TextureLoader("Assets/Textures/" + name + ".jpg", null); // load in the image
         ImageComponent2D imageComponent2D = loader.getImage(); //get image
         if (imageComponent2D == null) { // if image is not found
@@ -129,7 +127,7 @@ public class ChessPieces {
         return texture2D; // return the texture with the image
     }
 
-    public void createPieces(String [] pieceList, ArrayList<Piece> list, String texture, boolean isWhite) {
+    public void createPieces(String [] pieceList, ArrayList<Piece> list, String texture, boolean isWhite) { // will create the pieces and populate array
         for (int i = 0; i < 16; i++) {
             float z = isWhite ? 1 : -1;
             Obj3D tmp = new Obj3D();

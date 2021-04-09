@@ -1,6 +1,6 @@
 /*
  * Comp 2800 Java3D Final Project
- * Usman Farooqi 105219637
+ * Usman Farooqi
  * Jagraj Aulakh
  * Ghanem Ghanem
  * Ali-Al-Timimy
@@ -29,7 +29,7 @@ public class OverlayPanels extends JPanel {
         int height = (int) r.getHeight();
         g.fillRect(0, 0, width, height);
 
-        for (int i = 0; i < icons.size(); i++) {
+        for (int i = 0; i < icons.size(); i++) { // will add on the image of a captured piece
             Image image = icons.get(i).getImage();
             g.drawImage(image, 10, 40 + 40 * i, 30, 30, null);
         }

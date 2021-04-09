@@ -1,6 +1,6 @@
 /*
  * Comp 2800 Java3D Final Project
- * Usman Farooqi 105219637
+ * Usman Farooqi
  * Jagraj Aulakh
  * Ghanem Ghanem
  * Ali-Al-Timimy
@@ -8,7 +8,6 @@
  * ChessBoard.java
  */
 package com.Main;
-
 import Launcher.Launcher;
 import com.Behavior.CheckKeyboardBehaviour;
 import com.Behavior.Collision;
@@ -19,20 +18,17 @@ import com.net.Client;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.*;
-
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class ChessBoard {
     public static final int TURN_WHITE = 1;
     public static final int TURN_BLACK = 2;
-    public static MouseRotation mouseRotation;
+    public MouseRotation mouseRotation;
     public OverlayCanvas3D overlayCanvas3D;
     public BranchGroup sceneBG;
     public boolean rotate, enablePicking, gameOver;
     public Sounds sounds;
-
     private String name;
     public TransformGroup sceneTG, objTG;
     public ChessPieces chessPieces;
@@ -40,7 +36,6 @@ public class ChessBoard {
     public PickBehavior pickBehavior;
     private GameOver gameOverScreen;
     private CheckKeyboardBehaviour checkKeyboardBeh;
-
     public int turn = TURN_WHITE;
 
     public ChessBoard(String name, OverlayCanvas3D overlayCanvas3D, BranchGroup sceneBG, TransformGroup sceneTG) {
@@ -52,7 +47,7 @@ public class ChessBoard {
         rotate = false;
         gameOverScreen = new GameOver();
 
-        if (Launcher.isMultiplayer) {
+        if (Launcher.isMultiplayer) { // if multiplayer is selected
 
             overlayCanvas3D.setStatus("Waiting for players....");
             client = new Client(this);
@@ -68,6 +63,8 @@ public class ChessBoard {
 
             checkKeyboardBeh = new CheckKeyboardBehaviour(this);
             overlayCanvas3D.addKeyListener(checkKeyboardBeh);
+        }else{ // if single player is selected
+            overlayCanvas3D.setStatus("Single player");
         }
     }
 
@@ -109,7 +106,7 @@ public class ChessBoard {
         }
     }
 
-    public void swapTurn(){
+    public void swapTurn(){ // will swap the turn
         enablePicking = !enablePicking;
         turn = 3 - turn;
         overlayCanvas3D.setColor(turn == client.getPlayerID() ? Color.GREEN: Color.RED);
@@ -147,7 +144,7 @@ public class ChessBoard {
         }
     }
 
-    public void sendData(int pieceIndex) {
+    public void sendData(int pieceIndex) { // data to send over to the other client
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -170,11 +167,12 @@ public class ChessBoard {
                 if (Collision.isColliding) {
                     collisionIndex = Collision.collidingIndex;
                 }
+                //                        [piece color]       [piece index]  [new posX]     [new posZ]       [colliding index]      [if game ended]   [new piece for pawn-->queen]
                 String toSend = "data " + pieceIsWhite + " " + index + " " + newXPos + " " + newZPos + " " + collisionIndex + " " + gameOver + " " + newPieceIndex;
-                System.out.println("SENDING: " + toSend);
+                System.out.println("SENDING: " + toSend); // printing msg to send
                 swapTurn();
                 client.sendMessage(toSend);
-                if(gameOver){
+                if(gameOver){ // if game ended and the current client won
                     overlayCanvas3D.setColor(Color.GREEN);
                     overlayCanvas3D.setStatus("You won!");
                     sounds.gameWon();
@@ -187,14 +185,14 @@ public class ChessBoard {
         t.start();
     }
 
-    public void removeChessPiece(BranchGroup piece) {
+    public void removeChessPiece(BranchGroup piece) { // will remove a chessPiece
         objTG.removeChild(piece);
     }
 
-    public void addChessPiece(Piece piece) {
+    public void addChessPiece(Piece piece) { // will add a chessPiece
         objTG.addChild(piece);
     }
-    public void addIcon(Piece deadPiece) {
+    public void addIcon(Piece deadPiece) { // will update the iconPanels
         OverlayPanels panels = deadPiece.isWhite() ? MONKEECHESS.overlay.getRightPanel() : MONKEECHESS.overlay.getLeftPanel();
         panels.addIcon(deadPiece.getColor() + "_" + deadPiece.getName());
         panels.repaint();
@@ -218,7 +216,7 @@ public class ChessBoard {
         return shape3D;
     }
 
-    public TransformGroup makeBoard(String name) {
+    public TransformGroup makeBoard(String name) { // will make the chess board
         Transform3D scalar = new Transform3D();
         scalar.rotX(-Math.PI / 2);
         scalar.setTranslation(new Vector3d(0, 0, 0));
@@ -231,7 +229,7 @@ public class ChessBoard {
         return boardTG;
     }
 
-    public void rotateBoard() {
+    public void rotateBoard() { // will rotate the board if needed
         Transform3D tmp = new Transform3D();
         Transform3D tmp2 = new Transform3D();
         objTG.getTransform(tmp);
@@ -382,5 +380,4 @@ public class ChessBoard {
             objTG.addChild(generateText3d(bottomText[i], 0.8f, new Vector3f(i < 8 ? 7 - 2f * (i % 8) : 9, -0.15f, i < 8 ? -8.8f : -7 + 2f * (i % 8)), MONKEECHESS.Black, true));
         }
     }
-
 }

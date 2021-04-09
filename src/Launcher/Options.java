@@ -1,5 +1,13 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * Options.java
+ */
 package Launcher;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,7 +15,7 @@ import java.awt.event.ActionListener;
 public class Options extends JPanel implements ActionListener {
     JFrame frame;
 
-    public Options(Font f) {
+    public Options(Font f) { // makes the options panel
         frame = new JFrame("MONKEECHESS");
 
         ImagePanel panel = new ImagePanel();

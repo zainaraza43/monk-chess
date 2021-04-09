@@ -1,14 +1,18 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * Client.java
+ */
 package com.net;
-
 import com.Main.ChessBoard;
-import com.Main.MONKEECHESS;
 import com.Main.Piece;
-import com.Util.SoundUtilityJOAL;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Client extends Thread {
     private static final int PORT = 6969;
@@ -28,7 +32,7 @@ public class Client extends Thread {
         id = -1;
     }
 
-    private void parseData(String line) {
+    private void parseData(String line) { // parse the data coming in from the other client
         String[] parts = line.split(" ");
         boolean isWhite = Boolean.parseBoolean(parts[1]);
         int pieceIndex = Integer.parseInt(parts[2]);
@@ -36,14 +40,13 @@ public class Client extends Thread {
         int collisionIndex = Integer.parseInt(parts[5]);
         boolean gameOver = Boolean.parseBoolean(parts[6]);
         int newPieceIndex = Integer.parseInt(parts[7]);
-        if(newPieceIndex != -1){
+        if(newPieceIndex != -1){ // if a pawn was changed into a queen
             chessBoard.chessPieces.changePiece(isWhite, newPieceIndex);
         }
-        chessBoard.updateBoard(isWhite, pieceIndex, newX, newZ, collisionIndex, gameOver);
+        chessBoard.updateBoard(isWhite, pieceIndex, newX, newZ, collisionIndex, gameOver); // call the update board
     }
 
-    private void handleCheck(String line) {
-        System.out.println("I'M HANDLING THE CHECK");
+    private void handleCheck(String line) { // if check occured
         String[] parts = line.split(" ");
         int id = Integer.parseInt(parts[1]);
         ArrayList<Piece> list = id==1 ? chessBoard.chessPieces.getBlackPieces() : chessBoard.chessPieces.getWhitePieces();

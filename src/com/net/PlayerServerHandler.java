@@ -1,8 +1,15 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * PlayerServerHandler.java
+ */
 package com.net;
-
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class PlayerServerHandler extends Thread {
 

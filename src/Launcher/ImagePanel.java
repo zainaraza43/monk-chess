@@ -1,8 +1,15 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * ImagePanel.java
+ */
 package Launcher;
-
 import com.Main.ChessPieces;
 import com.Main.MONKEECHESS;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,7 +21,7 @@ import javax.swing.JPanel;
 import java.awt.event.*;
 import java.io.File;
 
-public class ImagePanel extends JPanel{
+public class ImagePanel extends JPanel{ // makes the imagePanels which are clickable and set the textures, backgrounds, and the board
     private ArrayList<ImageIcon> images = new ArrayList<>();
     private ArrayList<ImageIcon> pieces = new ArrayList<>();
     private ArrayList<ImageIcon> background = new ArrayList<>();

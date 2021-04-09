@@ -1,5 +1,13 @@
+/*
+ * Comp 2800 Java3D Final Project
+ * Usman Farooqi
+ * Jagraj Aulakh
+ * Ghanem Ghanem
+ * Ali-Al-Timimy
+ * Zain Raza
+ * GameOver.java
+ */
 package com.Main;
-
 import javax.swing.*;
 public class GameOver extends JPanel {
 

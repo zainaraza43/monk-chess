@@ -1,6 +1,6 @@
 /*
  * Comp 2800 Java3D Final Project
- * Usman Farooqi 105219637
+ * Usman Farooqi
  * Jagraj Aulakh
  * Ghanem Ghanem
  * Ali-Al-Timimy
@@ -8,14 +8,11 @@
  * SoundUtilityJOAL.java
  */
 package com.Util;
-
 import java.util.*;
-
 import com.jogamp.openal.AL;
 import com.jogamp.openal.ALException;
 import com.jogamp.openal.ALFactory;
 import com.jogamp.openal.util.ALut;
-
 import java.nio.ByteBuffer;
 
 public class SoundUtilityJOAL {
@@ -33,29 +30,6 @@ public class SoundUtilityJOAL {
     private float[] oriLis; // orientation
     private int angleLis = 0;
     // anti-clockwise rotation anyway from -z axis
-
-    public static void main(String[] args) {  // cow ocean
-        String soundName = "ocean";
-        // the listener is at (0,0,0) facing along the -z axis
-        SoundUtilityJOAL soundMan = new SoundUtilityJOAL();
-        soundMan.moveListener(0, 0.25f);      // place the listener at (0,0,0.25) now
-
-        if (!soundMan.load(soundName, 2, 0, 0, true)) // load the sound at (2,0,0)
-            System.exit(1);
-        soundMan.play(soundName);                     // play the sound
-
-        float x = -31f;
-        for (int i = 0; i < 60; i++) {
-            // soundMan.turnListener(6);  // rotate listener anti-clockwise 6 degrees
-            soundMan.setPos(soundName, ++x / 10, 0, 0);
-            try {
-                Thread.sleep(250); // sleep for 0.25 secs
-            } catch (InterruptedException ex) {
-            }
-        }
-
-        soundMan.cleanUp();
-    }
 
     /* construction linking to OpenAL via JOAL and positioning listener at origin */
     public SoundUtilityJOAL() {

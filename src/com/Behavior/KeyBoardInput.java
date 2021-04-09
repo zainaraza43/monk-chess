@@ -1,6 +1,6 @@
 /*
  * Comp 2800 Java3D Final Project
- * Usman Farooqi 105219637
+ * Usman Farooqi
  * Jagraj Aulakh
  * Ghanem Ghanem
  * Ali-Al-Timimy
@@ -8,12 +8,10 @@
  * KeyBoardInput.java
  */
 package com.Behavior;
-
 import Launcher.Launcher;
 import com.Main.*;
 import org.jogamp.java3d.*;
 import org.jogamp.vecmath.Vector3d;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -32,7 +30,6 @@ public class KeyBoardInput extends Behavior {
     private Piece piece;
     private int pieceIndex;
     private ChessBoard chessBoard;
-    private Rectangle [] rectangles;
 
     public KeyBoardInput(Piece piece, BranchGroup removingBG, PickBehavior p, ChessBoard cb) {
         this.piece = piece;
@@ -43,8 +40,8 @@ public class KeyBoardInput extends Behavior {
         isMoving = true;
         pieceTransform3D = new Transform3D();
         highlightTransform3D = new Transform3D();
-        keyCodes = new int[]{KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D};
-        moves = new float[][]{{2f, 1}, {-2f, -2}, {2f, -1}, {-2f, 2}};
+        keyCodes = new int[]{KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D}; // all possible keyboard inputs
+        moves = new float[][]{{2f, 1}, {-2f, -2}, {2f, -1}, {-2f, 2}}; // all possible places to move and their direction
         ArrayList<Piece> pieceList = piece.isWhite() ? chessBoard.chessPieces.getWhitePieces() : chessBoard.chessPieces.getBlackPieces();
         pieceIndex = pieceList.indexOf(piece);
     }
@@ -94,24 +91,18 @@ public class KeyBoardInput extends Behavior {
                     piece.removeHighlight();
                     piece.moveYPos(-Piece.RAISE_AMOUNT);
                     pickBehavior.removeKeyNav(removingBG, piece, pieceIndex);
-                    ArrayList<Piece> list = chessBoard.client.getPlayerID() == 1 ? chessBoard.chessPieces.getWhitePieces() : chessBoard.chessPieces.getBlackPieces();
-                    for (Piece p : list) {
-                        p.makePieceNormal();
+                    if(Launcher.isMultiplayer){
+                        ArrayList<Piece> list = chessBoard.client.getPlayerID() == 1 ? chessBoard.chessPieces.getWhitePieces() : chessBoard.chessPieces.getBlackPieces();
+                        for (Piece p : list) {
+                            p.makePieceNormal();
+                        }
                     }
                 }
             }
         }
     }
 
-    public void setPiece(Piece piece) {
-        this.piece = piece;
-    }
-
-    public BranchGroup getRemovingBG() {
-        return removingBG;
-    }
-
-    public void movePiece(float amount, float direction) {
+    public void movePiece(float amount, float direction) { // will move a piece based on keyboard input
         positionTG.getTransform(pieceTransform3D);
         Vector3d vector3d = new Vector3d();
         pieceTransform3D.get(vector3d);
@@ -133,7 +124,7 @@ public class KeyBoardInput extends Behavior {
         // Make sure that piece can't go off the board
         bindCoords(vector3d, -7, 7);
 
-        pieceTransform3D.setTranslation(vector3d);
+        pieceTransform3D.setTranslation(vector3d); // update the movement
         positionTG.setTransform(pieceTransform3D);
     }
 
