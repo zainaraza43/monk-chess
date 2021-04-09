@@ -1,6 +1,5 @@
 package Launcher;
 
-import com.Main.ChessBoard;
 import com.Main.ChessPieces;
 import com.Main.MONKEECHESS;
 

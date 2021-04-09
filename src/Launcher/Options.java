@@ -4,16 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-
 public class Options extends JPanel implements ActionListener {
-    private ArrayList<Buttons> buttons = new ArrayList<>();
-    private JPanel option;
-    private Buttons exit;
-    private ArrayList<ImageIcon> images = new ArrayList<>();
-    JLabel label;
     JFrame frame;
 
     public Options(Font f) {

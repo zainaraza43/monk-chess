@@ -40,13 +40,10 @@ public class MONKEECHESS extends JPanel {
     public static final Color3f White = new Color3f(1.0f, 1.0f, 1.0f);
     public static final Color3f Grey = new Color3f(0.5f, 0.5f, 0.5f);
     public static final Color3f Black = new Color3f(0, 0, 0);
-    public static final Color3f[] Clrs = {Blue, Green, Red, Yellow,
-            Cyan, Orange, Magenta, Grey};
     public static ChessBoard chessBoard;
     public static OverlayCanvas3D overlayCanvas3D;
     public static SimpleUniverse su;
     public static Point3d position;
-    public static int PLAYER1 = 1, PLAYER2 = 2;
     public static String ground = "background0";
 
     private static Background generateBackground() { // will return a background
@@ -56,19 +53,6 @@ public class MONKEECHESS extends JPanel {
         background.setApplicationBounds(new BoundingSphere(new Point3d(), 1000d)); // set the bounds
         background.setImage(loader.getImage()); // set the image
         return background;
-    }
-
-    public static Shape3D generateAxis(Color3f yColor, float length) { // function to generate x, y, z axes
-        LineArray lineArray = new LineArray(6, LineArray.COLOR_3 | LineArray.COORDINATES);
-        Point3f[] coors = {new Point3f(length, 0, 0), new Point3f(0, length, 0), new Point3f(0, 0, length)}; // array of the coordinates
-        Color3f[] cols = {Green, yColor, Red}; // array of colors
-        for (int i = 0; i < 6; i += 2) {
-            lineArray.setCoordinate(i, new Point3f(0, 0, 0)); // will make point at origin
-            lineArray.setColor(i, cols[i % cols.length]); // will set the origin color % by length to get correct color and stay within size
-            lineArray.setCoordinate(i + 1, coors[i % coors.length]); // will get the second point for x, y, z
-            lineArray.setColor(i + 1, cols[i % cols.length]); // will set the color for the point
-        }
-        return new Shape3D(lineArray);
     }
 
     private KeyNavigatorBehavior keyNavigation(SimpleUniverse simple_U) {
@@ -116,15 +100,6 @@ public class MONKEECHESS extends JPanel {
         view_TM.lookAt(eye, center, up);
         view_TM.invert();
         viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
-    }
-
-    public static RotationInterpolator rotateBehavior(TransformGroup rotTG, Alpha rotAlpha) {
-        Transform3D yAxis = new Transform3D();                        // y-axis is the default
-        RotationInterpolator rot_beh = new RotationInterpolator(
-                rotAlpha, rotTG, yAxis, 0.0f, (float) Math.PI * 2.0f);  // 360 degrees of rotation
-        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
-        rot_beh.setSchedulingBounds(bounds);
-        return rot_beh;
     }
 
     /* a function to create and return the scene BranchGroup */
