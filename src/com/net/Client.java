@@ -1,9 +1,12 @@
 package com.net;
 
 import com.Main.ChessBoard;
+import com.Main.MONKEECHESS;
+import com.Util.SoundUtilityJOAL;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class Client extends Thread {
     private static final int PORT = 6969;
@@ -24,7 +27,7 @@ public class Client extends Thread {
     }
 
     private void parseData(String line) {
-        String[] parts = line.split(" ");
+        String[] parts = line.substring(5).split(" ");
         boolean isWhite = Boolean.parseBoolean(parts[0]);
         int pieceIndex = Integer.parseInt(parts[1]);
         double newX = Double.parseDouble(parts[2]), newZ = Double.parseDouble(parts[3]);
@@ -35,6 +38,10 @@ public class Client extends Thread {
             chessBoard.chessPieces.changePiece(isWhite, newPieceIndex);
         }
         chessBoard.updateBoard(isWhite, pieceIndex, newX, newZ, collisionIndex, gameOver);
+    }
+
+    private void playCheckSound() {
+        chessBoard.sounds.playSound("check");
     }
 
     @Override
@@ -49,7 +56,14 @@ public class Client extends Thread {
                     id = Integer.parseInt(line);
                     continue;
                 }
-                parseData(line);
+
+                if (line.startsWith("data")) {
+                    parseData(line);
+                }
+
+                if (line.equals("check")) {
+                    playCheckSound();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
