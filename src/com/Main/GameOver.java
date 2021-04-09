@@ -8,22 +8,16 @@ public class GameOver extends JPanel {
     public GameOver(){
     }
     public void endGame(){
-
         JFrame frame = new JFrame("GAME OVER");
         setLayout(null);
         frame.setResizable(false);
         frame.setSize(400,200);
         frame.setLocation(850,500);
         frame.add(this);
-
         JLabel label = new JLabel();
         label.setText("The game is now over the king is dead");
         label.setBounds(80, 25,400, 50);
-        JButton restart = new JButton("Restart");
         JButton exit = new JButton("Exit Game");
-
-        restart.setSize(75,75);
-
         exit.setBounds(150,100,100,40);
 
         add(exit);
