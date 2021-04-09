@@ -22,29 +22,33 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class ChessPieces {
     public static String textureNameBlack="mahogany";
     public static String textureNameWhite="gold"; // will be used later for texture picking
-    private ArrayList<Piece> blackPieces;
-    private ArrayList<Piece> whitePieces;
+    private ArrayList<Piece> blackPieces, whitePieces;
+    public static ArrayList<Piece> staticBlackPieces, staticWhitePieces;
     public static HashMap<String, Pair<Shape3D, Vector2f>> pieces;
     public static String [] objNames;
     public static HashMap<String, ImageIcon> icons;
     public static HashMap<String, Texture> textures;
+    public ChessBoard chessBoard;
+    public static boolean isChangedPiece;
+    public int pieceChangedIndex;
 
     public ChessPieces(String black,String white ){
         blackPieces = new ArrayList<Piece>();
         whitePieces = new ArrayList<Piece>();
+        staticBlackPieces = new ArrayList<>();
+        staticWhitePieces = new ArrayList<>();
         objNames = new String[]{"Pawn", "Rook", "Knight", "Bishop", "Queen", "King"}; // string array to hold names
         pieces = new HashMap<>();
         icons = new HashMap<>();
         textures = new HashMap<>();
         this.textureNameBlack = black;
         this.textureNameWhite = white;
-
-        System.out.println("WORKING "+ black);
     }
 
     public void makePieces(){
@@ -52,6 +56,12 @@ public class ChessPieces {
        "Knight", "Rook"};
         createPieces(pieceNames, blackPieces, textureNameBlack, false);
         createPieces(pieceNames, whitePieces, textureNameWhite, true);
+        copyPieces();
+    }
+
+    public void copyPieces(){
+        staticBlackPieces = (ArrayList<Piece>) blackPieces.clone();
+        staticWhitePieces = (ArrayList<Piece>) whitePieces.clone();
     }
 
     public void loadPieces() { // will load all the objects in called at the start of game
@@ -66,19 +76,47 @@ public class ChessPieces {
         String [] endings = {"", "_green", "_red"};
         for (String ending:endings) {
             String k = textureNameBlack + ending;
-            System.out.println("Loading " + k);
             Texture t = loadTexture(k);
             textures.put(k, t);
 
             k = textureNameWhite + ending;
-            System.out.println("Loading " + k);
             t = loadTexture(k);
             textures.put(k, t);
         }
     }
 
+    public Piece changePiece(Piece currentPiece){
+        Shape3D pieceToChange = pieces.get("Queen").getFirst();
+        chessBoard = MONKEECHESS.chessBoard;
+        ArrayList<Piece> listToCheck = currentPiece.isWhite() ? staticWhitePieces : staticBlackPieces;
+        ArrayList<Piece> listToPopulate = currentPiece.isWhite() ? whitePieces : blackPieces;
+
+        pieceChangedIndex = listToPopulate.indexOf(currentPiece);
+        chessBoard.removeChessPiece(currentPiece);
+        listToPopulate.remove(currentPiece);
+        Obj3D clonedShape = new Obj3D();
+        Piece newPiece = null;
+        for(Piece p : listToCheck){
+            if(p.getName().equals("Queen")){
+                clonedShape.duplicateNode(pieceToChange, true);
+                clonedShape.setCapability(Shape3D.ALLOW_PICKABLE_WRITE);
+                Vector3d tmp = currentPiece.getPosition();
+                tmp.y = p.getPosition().y;
+                newPiece = new Piece(clonedShape, p.getName(), p.getColor(), tmp, p.getScale(), p.getRotation(), p.getTexture());
+                listToPopulate.add(pieceChangedIndex, newPiece);
+                break;
+            }
+        }
+        chessBoard.addChessPiece(listToPopulate.get(pieceChangedIndex));
+        return newPiece;
+    }
+
+    public void changePiece(boolean isWhite, int index){
+       ArrayList<Piece> listToModify = isWhite ? whitePieces : blackPieces;
+       changePiece(listToModify.get(index)).getPiece().setPickable(false);
+
+    }
     public static Texture loadTexture(String name) {
-        System.out.println(name);
         TextureLoader loader = new TextureLoader("Assets/Textures/" + name + ".jpg", null); // load in the image
         ImageComponent2D imageComponent2D = loader.getImage(); //get image
         if (imageComponent2D == null) { // if image is not found
@@ -106,7 +144,6 @@ public class ChessPieces {
         ObjectFile objectFile = new ObjectFile(ObjectFile.STRIPIFY | ObjectFile.TRIANGULATE | ObjectFile.RESIZE);
         Scene scene = null;
         try {
-//            System.out.println("attempting to load in object");
             scene = objectFile.load(new File("Assets/Objects/obj_sht/" + fileName + ".obj").toURI().toURL());
         } catch (FileNotFoundException | MalformedURLException e) {
             System.err.println(e);

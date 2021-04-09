@@ -1,31 +1,46 @@
 package com.Main;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import Launcher.Launcher;
 
-public class GameOver implements KeyListener {
+import javax.swing.*;
+public class GameOver extends JPanel {
+    public void endGame(){
 
-    public GameOver(){
+        JFrame frame = new JFrame("GAME OVER");
+        setLayout(null);
+        frame.setResizable(false);
+        frame.setSize(400,200);
+        frame.setLocation(850,500);
+        frame.add(this);
 
-    }
+        JLabel label = new JLabel();
+        label.setText("The game is now over the king is dead");
+        label.setBounds(80, 25,400, 50);
+        JButton restart = new JButton("Restart");
+        JButton exit = new JButton("Exit Game");
 
-    @Override
-    public void keyTyped(KeyEvent e) {
+        restart.setSize(75,75);
+        restart.setBounds(80,100,100,40);
+        exit.setBounds(200,100,100,40);
 
-    }
+        add(restart);
+        add(exit);
+        add(label);
+        frame.getContentPane().add(this);
+        frame.setVisible(true);
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_Q){
-            System.out.println("QuitGame");
-        }
-        if(e.getKeyCode() == KeyEvent.VK_R){
-            System.out.println("Restart");
-        }
-    }
+        restart.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                new Launcher();
+            }
+        });
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-
+        exit.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                System.exit(0);
+            }
+        });
     }
 }

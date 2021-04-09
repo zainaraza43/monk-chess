@@ -34,6 +34,8 @@ public class PickBehavior extends Behavior {
     private BranchGroup sceneBG, movementBG, collisionBG;
     private ChessPieces chessPieces;
     private ChessBoard chessBoard;
+    public Collision collision;
+    public KeyBoardInput keyNav;
 
     public PickBehavior(ChessBoard chessBoard, BranchGroup sceneBG, TransformGroup sceneTG, OverlayCanvas3D canvas) {
         this.chessBoard = chessBoard;
@@ -115,6 +117,8 @@ public class PickBehavior extends Behavior {
                 if (pickPiece != null) { // if it's not null
                     if ((int) pickPiece.getUserData() == 0 && pickPiece.getName() != null) { // if userData is 0
                         Piece piece = (Piece) pickPiece.getParent().getParent().getParent();
+                        ChessPieces.isChangedPiece = false;
+                        chessPieces.pieceChangedIndex = -1;
                         isMoving = true;
                         isWhite = piece.isWhite();
                         piece.makePieceGreen();
@@ -136,7 +140,7 @@ public class PickBehavior extends Behavior {
         }
     }
 
-    public void removeKeyNav(BranchGroup bg) {
+    public void removeKeyNav(BranchGroup bg, Piece p) {
         sceneTG.removeChild(bg);
         isMoving = false;
         Runnable r = new Runnable() {
@@ -149,7 +153,7 @@ public class PickBehavior extends Behavior {
                 }
                 if (!Collision.isColliding) {
                     sceneTG.removeChild(collisionBG);
-                    System.out.println("collision removed, did not happen");
+                    makeQueen(p);
                 }
             }
         };
@@ -157,22 +161,32 @@ public class PickBehavior extends Behavior {
         t.start();
 
     }
+    public void makeQueen(Piece piece){
+        if(piece.getName().equals("Pawn")){
+            double valueToCheck = piece.isWhite() ? -7 : 7;
+            Vector3d pos = piece.getPosition();
+            if(pos.z == valueToCheck){
+                Launcher.chessPieces.changePiece(piece);
+            }
+        }
+        ChessPieces.isChangedPiece = true;
+    }
 
     public void removeCollisionBehavior(BranchGroup bg) {
         sceneTG.removeChild(bg);
     }
 
     public void addKeyNav(Piece piece) {
-        KeyBoardInput keyBoardInput = new KeyBoardInput(piece, movementBG, this, chessBoard);
-        keyBoardInput.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
-        movementBG.addChild(keyBoardInput);
+        keyNav = new KeyBoardInput(piece, movementBG, this, chessBoard);
+        keyNav.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
+        movementBG.addChild(keyNav);
         sceneTG.addChild(movementBG);
 
         addCollisionBehavior(piece);
     }
 
     public void addCollisionBehavior(Piece piece) {
-        Collision collision = new Collision(chessBoard, this, collisionBG, sceneTG, chessPieces.getWhitePieces(), chessPieces.getBlackPieces(), piece);
+        collision = new Collision(chessBoard, this, collisionBG, sceneTG, chessPieces.getWhitePieces(), chessPieces.getBlackPieces(), piece);
         collision.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000d));
         collisionBG.addChild(collision);
         sceneTG.addChild(collisionBG);

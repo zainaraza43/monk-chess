@@ -29,7 +29,12 @@ public class Client extends Thread {
         int pieceIndex = Integer.parseInt(parts[1]);
         double newX = Double.parseDouble(parts[2]), newZ = Double.parseDouble(parts[3]);
         int collisionIndex = Integer.parseInt(parts[4]);
-        chessBoard.updateBoard(isWhite, pieceIndex, newX, newZ, collisionIndex);
+        boolean gameOver = Boolean.parseBoolean(parts[5]);
+        int newPieceIndex = Integer.parseInt(parts[6]);
+        if(newPieceIndex != -1){
+            chessBoard.chessPieces.changePiece(isWhite, newPieceIndex);
+        }
+        chessBoard.updateBoard(isWhite, pieceIndex, newX, newZ, collisionIndex, gameOver);
     }
 
     @Override
@@ -39,7 +44,6 @@ public class Client extends Thread {
         while (true) {
             try {
                 String line = in.readLine();
-                System.out.println("Received data: " + line);
                 if (id == -1) {
                     id = Integer.parseInt(line);
                     continue;
@@ -67,7 +71,6 @@ public class Client extends Thread {
     }
 
     synchronized public void sendMessage(String s) {
-        System.out.println("SENDING: " + s);
         out.println(s);
     }
 

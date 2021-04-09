@@ -30,7 +30,9 @@ public class KeyBoardInput extends Behavior {
     private PickBehavior pickBehavior;
     private BranchGroup removingBG;
     private Piece piece;
+    private int pieceIndex;
     private ChessBoard chessBoard;
+    private Rectangle [] rectangles;
 
     public KeyBoardInput(Piece piece, BranchGroup removingBG, PickBehavior p, ChessBoard cb) {
         this.piece = piece;
@@ -43,6 +45,8 @@ public class KeyBoardInput extends Behavior {
         highlightTransform3D = new Transform3D();
         keyCodes = new int[]{KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D};
         moves = new float[][]{{2f, 1}, {-2f, -2}, {2f, -1}, {-2f, 2}};
+        ArrayList<Piece> pieceList = piece.isWhite() ? chessBoard.chessPieces.getWhitePieces() : chessBoard.chessPieces.getBlackPieces();
+        pieceIndex = pieceList.indexOf(piece);
     }
 
 
@@ -86,19 +90,23 @@ public class KeyBoardInput extends Behavior {
                     }
                 }
                 if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
+                    piece.makePieceNormal();
                     piece.moveYPos(-Piece.RAISE_AMOUNT);
                     if (Launcher.isMultiplayer) {
-                        chessBoard.sendData(piece);
+                        chessBoard.sendData(pieceIndex);
                     }
-                    pickBehavior.removeKeyNav(removingBG);
-                    piece.makePieceNormal();
-                }
-
-                if(keyEvent.getKeyCode() == KeyEvent.VK_R){
-//                    piece.setObj3D(ChessPieces.pieces.get("Rook").getFirst());
+                    pickBehavior.removeKeyNav(removingBG, piece);
                 }
             }
         }
+    }
+
+    public void setPiece(Piece piece) {
+        this.piece = piece;
+    }
+
+    public BranchGroup getRemovingBG() {
+        return removingBG;
     }
 
     public void movePiece(float amount, float direction) {

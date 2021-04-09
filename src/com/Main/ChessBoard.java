@@ -28,15 +28,15 @@ public class ChessBoard {
     public static MouseRotation mouseRotation;
     public OverlayCanvas3D overlayCanvas3D;
     public BranchGroup sceneBG;
-    public boolean rotate;
-    public boolean enablePicking;
+    public boolean rotate, enablePicking, gameOver;
     public Sounds sounds;
 
     private String name;
-    private TransformGroup sceneTG, objTG;
-    private ChessPieces chessPieces;
+    public TransformGroup sceneTG, objTG;
+    public ChessPieces chessPieces;
     public Client client;
-    private GameOver gameOver;
+    public PickBehavior pickBehavior;
+    private GameOver gameOverScreen;
 
     public int turn = TURN_WHITE;
 
@@ -47,7 +47,7 @@ public class ChessBoard {
         this.sceneBG = sceneBG;
         sounds = new Sounds();
         rotate = false;
-        gameOver = new GameOver();
+        gameOverScreen = new GameOver();
 
         if (Launcher.isMultiplayer) {
             overlayCanvas3D.setStatus("Waiting for players....");
@@ -75,7 +75,7 @@ public class ChessBoard {
         mouseRotation = new MouseRotation(this, objTG); // mouseRotation used for rotating the board
         mouseRotation.setSchedulingBounds(mouseBounds);
 
-        PickBehavior pickBehavior = new PickBehavior(this, this.sceneBG, objTG, overlayCanvas3D); // pickBehaviour class
+        pickBehavior = new PickBehavior(this, this.sceneBG, objTG, overlayCanvas3D); // pickBehaviour class
         pickBehavior.setSchedulingBounds(mouseBounds);
         objTG.addChild(pickBehavior);
 
@@ -110,11 +110,17 @@ public class ChessBoard {
     }
 
     //  [isWhite]   [index of piece to move]   [new x pos]    [new z pos]    [piece to remove]
-    public void updateBoard(boolean pieceIsWhite, int indexOfMovingPiece, double newX, double newZ, int collisionIndex) {
+    public void updateBoard(boolean pieceIsWhite, int indexOfMovingPiece, double newX, double newZ, int collisionIndex, boolean isGameOver) {
+        if(isGameOver){
+            gameOver = isGameOver;
+            String piece = pieceIsWhite ? "White" : "Black";
+            overlayCanvas3D.setColor(Color.RED);
+            overlayCanvas3D.setStatus("GameOver " + piece + " won!");
+            gameOverScreen.endGame();
+        }
         swapTurn();
         ArrayList<Piece> pieceList = pieceIsWhite ? chessPieces.getWhitePieces() : chessPieces.getBlackPieces();
         ArrayList<Piece> oppList = pieceIsWhite ? chessPieces.getBlackPieces() : chessPieces.getWhitePieces();
-
         Piece movingPiece = pieceList.get(indexOfMovingPiece);
         Vector3d newPosition = movingPiece.getPosition();
         newPosition.x = newX;
@@ -128,7 +134,7 @@ public class ChessBoard {
         }
     }
 
-    public void sendData(Piece pieceToMove) {
+    public void sendData(int pieceIndex) {
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -137,25 +143,28 @@ public class ChessBoard {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
+                ArrayList<Piece> pieceList = client.getPlayerID() == TURN_WHITE ? chessPieces.getWhitePieces() : chessPieces.getBlackPieces();
+                ArrayList<Piece> oppList = client.getPlayerID() == TURN_WHITE ? chessPieces.getBlackPieces() : chessPieces.getWhitePieces();
+                Piece pieceToMove = pieceList.get(pieceIndex);
                 boolean pieceIsWhite = pieceToMove.isWhite();
-                ArrayList<Piece> pieceList = pieceIsWhite ? chessPieces.getWhitePieces() : chessPieces.getBlackPieces();
-                ArrayList<Piece> oppList = pieceIsWhite ? chessPieces.getBlackPieces() : chessPieces.getWhitePieces();
                 int index = pieceList.indexOf(pieceToMove);
                 Vector3d pos = pieceToMove.getPosition();
                 double newXPos = pos.x;
                 double newZPos = pos.z;
+                int newPieceIndex = ChessPieces.isChangedPiece ? chessPieces.pieceChangedIndex : -1;
 
                 int collisionIndex = -1;
                 if (Collision.isColliding) {
                     collisionIndex = Collision.collidingIndex;
-                    System.out.println("COLLISION: " + collisionIndex);
                 }
-
-                String toSend = pieceIsWhite + " " + index + " " + newXPos + " " + newZPos + " " + collisionIndex;
-                System.out.println(toSend);
+                String toSend = pieceIsWhite + " " + index + " " + newXPos + " " + newZPos + " " + collisionIndex + " " + gameOver + " " + newPieceIndex;
                 swapTurn();
                 client.sendMessage(toSend);
+                if(gameOver){
+                    overlayCanvas3D.setColor(Color.GREEN);
+                    overlayCanvas3D.setStatus("You won!");
+                    gameOverScreen.endGame();
+                }
             }
         };
 
@@ -167,6 +176,9 @@ public class ChessBoard {
         objTG.removeChild(piece);
     }
 
+    public void addChessPiece(Piece piece) {
+        objTG.addChild(piece);
+    }
     public void addIcon(Piece deadPiece) {
         OverlayPanels panels = deadPiece.isWhite() ? MONKEECHESS.overlay.getRightPanel() : MONKEECHESS.overlay.getLeftPanel();
         panels.addIcon(deadPiece.getColor() + "_" + deadPiece.getName());

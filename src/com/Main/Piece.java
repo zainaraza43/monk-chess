@@ -20,6 +20,16 @@ public class Piece extends BranchGroup {
     private Vector3d oldPosition;
     private BranchGroup highlight;
     public Sounds sounds;
+    private float scale;
+    private double rotation;
+
+    public Piece(){
+
+    }
+
+    public Piece(Piece piece, Obj3D Objpiece){
+        this(Objpiece, piece.getName(), piece.getColor(), piece.getPosition(), piece.scale, piece.rotation, piece.texture);
+    }
 
     public Piece(Obj3D piece, String name, String color, Vector3d position, float scale, double rotation, String texture) {
         piece.setPiece(this);
@@ -27,6 +37,8 @@ public class Piece extends BranchGroup {
         this.color = color;
         this.texture = texture;
         this.highlight = null;
+        this.scale = scale;
+        this.rotation = rotation;
         this.setCapability(BranchGroup.ALLOW_DETACH);
         TransformGroup positionTG = new TransformGroup();
         positionTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -60,6 +72,14 @@ public class Piece extends BranchGroup {
         return color;
     }
 
+    public float getScale() {
+        return scale;
+    }
+
+    public String getTexture() {
+        return texture;
+    }
+
     @Override
     public String getName() {
         return name;
@@ -90,6 +110,14 @@ public class Piece extends BranchGroup {
 
     public Shape3D getPiece() {
         return (Shape3D) ((TransformGroup) getPositionTransform().getChild(0)).getChild(0);
+    }
+
+    public double getRotation() {
+        return rotation;
+    }
+
+    public Obj3D getObjPiece() {
+        return (Obj3D) ((TransformGroup) getPositionTransform().getChild(0)).getChild(0);
     }
 
     public void oldPos() {

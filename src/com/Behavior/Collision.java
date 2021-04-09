@@ -10,8 +10,10 @@
 package com.Behavior;
 
 import Launcher.GameEnd;
+import Launcher.Launcher;
 import com.Main.*;
 import org.jogamp.java3d.*;
+import org.jogamp.vecmath.Vector3d;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,7 +31,6 @@ public class Collision extends Behavior {
     private Overlay overlay;
     public static boolean isColliding;
     public static int collidingIndex = -1;
-    private GameEnd GO;
 
     public Collision(ChessBoard chessBoard, PickBehavior p, BranchGroup removeBG, TransformGroup sceneTG, ArrayList<Piece> whitePiece, ArrayList<Piece> blackPieces, Piece piece) {
         this.chessBoard = chessBoard;
@@ -40,7 +41,6 @@ public class Collision extends Behavior {
         this.oppositePieces = piece.isWhite() ? blackPieces : whitePiece;
         this.positionTransform = piece.getPositionTransform();
         this.piece = piece;
-        this.GO = new GameEnd();
         overlay = MONKEECHESS.overlay;
         isColliding = false;
 
@@ -79,20 +79,28 @@ public class Collision extends Behavior {
         pickBehavior.removeCollisionBehavior(removeBG);
         chessBoard.addIcon(pieceObj);
         if (pieceObj.getName().equals("King")) {
-            win(pieceObj);
-        } else {
-            piece.sounds.validMove();
+            chessBoard.gameOver = true;
         }
+        makeQueen();
+
     }
 
-    public void win(Piece pieceObj) {
-        if (pieceObj.isWhite())
-            System.out.println("GAME OVER, Black team wins");
-        else
-            System.out.println("GAME OVER, White team wins");
-        piece.sounds.gameWon();
-        GO.EndGame();
+    public void makeQueen(){
+        if(piece.getName().equals("Pawn")){
+            double valueToCheck = piece.isWhite() ? -7 : 7;
+            Vector3d pos = piece.getPosition();
+            if(pos.z == valueToCheck){
+                Launcher.chessPieces.changePiece(piece);
+            }
+        }
+        ChessPieces.isChangedPiece = true;
+    }
+    public void setPiece(Piece piece) {
+        this.piece = piece;
+    }
 
+    public BranchGroup getRemoveBG() {
+        return removeBG;
     }
 
     public void processOwnPiece(Piece pieceObj) {
