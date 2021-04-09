@@ -111,7 +111,7 @@ public class Sounds {
             public void run() {
                 soundJOAL.play(soundPath + sound);
                 try {
-                    Thread.sleep(1700);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     System.out.println(e);
                 }

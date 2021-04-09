@@ -91,6 +91,7 @@ public class KeyBoardInput extends Behavior {
                 }
                 if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                     piece.makePieceNormal();
+                    piece.removeHighlight();
                     piece.moveYPos(-Piece.RAISE_AMOUNT);
                     pickBehavior.removeKeyNav(removingBG, piece, pieceIndex);
                 }

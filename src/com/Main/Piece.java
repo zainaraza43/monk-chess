@@ -157,7 +157,6 @@ public class Piece extends BranchGroup {
 
     public void makePieceNormal() {
         setTexture(texture);
-        removeHighlight();
     }
 
 

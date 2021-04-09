@@ -10,6 +10,7 @@
 package com.Main;
 
 import Launcher.Launcher;
+import com.Behavior.CheckKeyboardBehaviour;
 import com.Behavior.Collision;
 import com.Behavior.MouseRotation;
 import com.Behavior.PickBehavior;
@@ -38,7 +39,7 @@ public class ChessBoard {
     public Client client;
     public PickBehavior pickBehavior;
     private GameOver gameOverScreen;
-
+    private CheckKeyboardBehaviour checkKeyboardBeh;
 
     public int turn = TURN_WHITE;
 
@@ -64,6 +65,9 @@ public class ChessBoard {
             enablePicking = client.getPlayerID() == 1;
             overlayCanvas3D.setColor(turn == client.getPlayerID() ? Color.GREEN: Color.RED);
             overlayCanvas3D.setStatus(turn == client.getPlayerID() ? "Your move" : "Their move");
+
+            checkKeyboardBeh = new CheckKeyboardBehaviour(this);
+            overlayCanvas3D.addKeyListener(checkKeyboardBeh);
         }
     }
 
@@ -135,6 +139,11 @@ public class ChessBoard {
             sounds.validMove();
             removeChessPiece(oppList.get(collisionIndex));
             oppList.remove(collisionIndex);
+        }
+
+
+        for (Piece p:pieceList) {
+            p.makePieceNormal();
         }
     }
 
