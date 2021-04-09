@@ -38,6 +38,7 @@ public class ChessBoard {
     public PickBehavior pickBehavior;
     private GameOver gameOverScreen;
 
+
     public int turn = TURN_WHITE;
 
     public ChessBoard(String name, OverlayCanvas3D overlayCanvas3D, BranchGroup sceneBG, TransformGroup sceneTG) {
@@ -50,6 +51,7 @@ public class ChessBoard {
         gameOverScreen = new GameOver();
 
         if (Launcher.isMultiplayer) {
+
             overlayCanvas3D.setStatus("Waiting for players....");
             client = new Client(this);
             client.start();

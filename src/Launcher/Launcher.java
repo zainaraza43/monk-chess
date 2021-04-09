@@ -171,7 +171,6 @@ public class Launcher extends JPanel implements ActionListener {
             @Override
             public void run() {
                 new MONKEECHESS.MyGUI("MONKEECHESS"); // call the game
-
             }
         });
     }

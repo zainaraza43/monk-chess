@@ -4,6 +4,9 @@ import Launcher.Launcher;
 
 import javax.swing.*;
 public class GameOver extends JPanel {
+
+    public GameOver(){
+    }
     public void endGame(){
 
         JFrame frame = new JFrame("GAME OVER");
@@ -20,21 +23,13 @@ public class GameOver extends JPanel {
         JButton exit = new JButton("Exit Game");
 
         restart.setSize(75,75);
-        restart.setBounds(80,100,100,40);
-        exit.setBounds(200,100,100,40);
 
-        add(restart);
+        exit.setBounds(150,100,100,40);
+
         add(exit);
         add(label);
         frame.getContentPane().add(this);
         frame.setVisible(true);
-
-        restart.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                new Launcher();
-            }
-        });
 
         exit.addActionListener(new java.awt.event.ActionListener() {
             @Override
