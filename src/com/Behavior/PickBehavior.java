@@ -197,16 +197,4 @@ public class PickBehavior extends Behavior {
         sceneTG.addChild(collisionBG);
 
     }
-
-    public static Material setMaterial(Color3f clr) {
-        int SH = 100;               // 10
-        Material ma = new Material();
-        ma.setAmbientColor(clr);
-        ma.setEmissiveColor(clr);
-        ma.setDiffuseColor(clr);
-        ma.setSpecularColor(clr);
-        ma.setShininess(SH);
-        ma.setLightingEnable(true);
-        return ma;
-    }
 }

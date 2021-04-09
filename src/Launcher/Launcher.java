@@ -153,7 +153,6 @@ public class Launcher extends JPanel implements ActionListener {
             }
         }
     }
-
     private void startGame() {
         jFrame.dispose(); // dispose of old frame
         chessPieces.loadPieces();
