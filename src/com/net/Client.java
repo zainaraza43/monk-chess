@@ -46,7 +46,7 @@ public class Client extends Thread {
         chessBoard.updateBoard(isWhite, pieceIndex, newX, newZ, collisionIndex, gameOver); // call the update board
     }
 
-    private void handleCheck(String line) { // if check occured
+    private void handleCheck(String line) { // if check occurred
         String[] parts = line.split(" ");
         int id = Integer.parseInt(parts[1]);
         ArrayList<Piece> list = id==1 ? chessBoard.chessPieces.getBlackPieces() : chessBoard.chessPieces.getWhitePieces();
