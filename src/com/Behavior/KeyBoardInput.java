@@ -22,7 +22,7 @@ public class KeyBoardInput extends Behavior {
     private WakeupCondition wakeupCondition;
     private TransformGroup positionTG;
     private boolean isMoving;
-    private Transform3D pieceTransform3D, highlightTransform3D;
+    private Transform3D pieceTransform3D;
     private int[] keyCodes;
     private float[][] moves;
     private PickBehavior pickBehavior;
@@ -39,13 +39,11 @@ public class KeyBoardInput extends Behavior {
         this.chessBoard = cb;
         isMoving = true;
         pieceTransform3D = new Transform3D();
-        highlightTransform3D = new Transform3D();
         keyCodes = new int[]{KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D}; // all possible keyboard inputs
         moves = new float[][]{{2f, 1}, {-2f, -2}, {2f, -1}, {-2f, 2}}; // all possible places to move and their direction
         ArrayList<Piece> pieceList = piece.isWhite() ? chessBoard.chessPieces.getWhitePieces() : chessBoard.chessPieces.getBlackPieces();
         pieceIndex = pieceList.indexOf(piece);
     }
-
 
     @Override
     public void initialize() {

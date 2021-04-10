@@ -122,6 +122,7 @@ public class ChessBoard {
             overlayCanvas3D.setStatus("GameOver " + piece + " won!");
             System.exit(0);
         }
+        pickBehavior.setSendingData(false); // will allow the user to use pickBehaviour again
         swapTurn();
         ArrayList<Piece> pieceList = pieceIsWhite ? chessPieces.getWhitePieces() : chessPieces.getBlackPieces();
         ArrayList<Piece> oppList = pieceIsWhite ? chessPieces.getBlackPieces() : chessPieces.getWhitePieces();

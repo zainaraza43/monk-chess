@@ -24,7 +24,7 @@ public class PickBehavior extends Behavior {
     private WakeupCondition wakeupCondition;
     private TransformGroup sceneTG;
     private Point3d mousePos, center;
-    private boolean isMoving, isWhite;
+    private boolean isMoving, isWhite, isSendingData;
     private Transform3D imWorld3D;
     private OverlayCanvas3D OverlayCanvas3D;
     private PickTool pickTool;
@@ -43,6 +43,7 @@ public class PickBehavior extends Behavior {
         this.OverlayCanvas3D = canvas;
         this.sceneBG = sceneBG;
         isMoving = false;
+        isSendingData = false;
         imWorld3D = new Transform3D();
         mousePos = new Point3d();
         pickTool = new PickTool(this.sceneBG);
@@ -80,7 +81,7 @@ public class PickBehavior extends Behavior {
             int mouseX = mouseEvent.getX(); // used for pickBeh
             int mouseY = mouseEvent.getY();
             if (!isMoving && mouseEvent.getID() == MouseEvent.MOUSE_PRESSED && mouseEvent.getButton() == MouseEvent.BUTTON1) { // if left click
-                if(Launcher.isMultiplayer && chessBoard.enablePicking){
+                if(Launcher.isMultiplayer && !isSendingData && chessBoard.enablePicking){
                     pickBeh(mouseX, mouseY);
                 }
                 if(!Launcher.isMultiplayer){
@@ -140,7 +141,7 @@ public class PickBehavior extends Behavior {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(150);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     System.out.println(e);
                 }
@@ -149,6 +150,7 @@ public class PickBehavior extends Behavior {
                     makeQueen(p);
                 }
                 if (Launcher.isMultiplayer && !Collision.ownPiece && !p.isSameSpot()) { //send msg to server to update board on client side
+                    isSendingData = true; // disable pickBehaviour
                     chessBoard.sendData(pieceIndex);
                 }
             }
@@ -187,5 +189,9 @@ public class PickBehavior extends Behavior {
         collisionBG.addChild(collision);
         sceneTG.addChild(collisionBG);
 
+    }
+
+    public void setSendingData(boolean sendingData) {
+        isSendingData = sendingData;
     }
 }
